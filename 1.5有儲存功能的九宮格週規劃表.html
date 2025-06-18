@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>九宮格週計劃表</title>
+    <style>
+        /* 保持原有的樣式不變 */
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #FFF5E6;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 80%;
+            height: 85%;
+            min-width: 800px;
+            min-height: 600px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        h1 {
+            text-align: center;
+            color: #E65100;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            background-color: #FFE0B2;
+            padding: 10px;
+            border-radius: 10px;
+            flex-grow: 1;
+        }
+        .cell {
+            background-color: #FFD180;
+            border: 1px solid #FFB74D;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: visible;
+        }
+        .cell h3 {
+            margin: 0;
+            color: #E65100;
+        }
+        .cell p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: white;
+        }
+        textarea {
+            width: 100%;
+            flex-grow: 1;
+            margin-top: 5px;
+            border: 1px solid #FFB74D;
+            border-radius: 3px;
+            resize: none;
+            background-color: rgba(255, 255, 255, 0.7);
+            color: #D84315;
+        }
+        .center {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #F57C00;
+        }
+        .center h2 {
+            font-size: 3em;
+            color: white;
+            margin: 0;
+        }
+        .center p {
+            color: white;
+            font-size: 1.5em;
+        }
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            padding: 5px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        }
+        .nav-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .nav-button.left {
+            left: -15px;
+        }
+        .nav-button.right {
+            right: -15px;
+        }
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #F57C00;
+        }
+        @media (max-width: 1000px) {
+            .container {
+                width: 95%;
+                height: 95%;
+                min-width: unset;
+            }
+        }
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .cell:nth-child(5) {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>九宮格週計劃表</h1>
+        <div id="planner-grid" class="grid">
+            <div class="cell"><h3>星期一</h3><p id="date1"></p><textarea id="plan1" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell"><h3>星期二</h3><p id="date2"></p><textarea id="plan2" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell"><h3>星期三</h3><p id="date3"></p><textarea id="plan3" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell"><h3>星期四</h3><p id="date4"></p><textarea id="plan4" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell center">
+                <button class="nav-button left" onclick="changeWeek(-1)">◀</button>
+                <h2 id="currentWeek"></h2>
+                <p id="dateRange"></p>
+                <button class="nav-button right" onclick="changeWeek(1)">▶</button>
+            </div>
+            <div class="cell"><h3>星期五</h3><p id="date5"></p><textarea id="plan5" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell"><h3>星期六</h3><p id="date6"></p><textarea id="plan6" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell"><h3>星期日</h3><p id="date7"></p><textarea id="plan7" placeholder="輸入計劃..."></textarea></div>
+            <div class="cell">
+                <h3>備註</h3>
+                <h3 style="color: #E65100; margin-top: 5px; font-size: 0.9em;">額外說明</h3>
+                <textarea id="note" placeholder="其他備註..."></textarea>
+            </div>
+        </div>
+        <div class="buttons">
+            <button onclick="exportAsPNG()">導出為PNG</button>
+            <button onclick="exportAsPDF()">導出為PDF</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let currentDate = new Date();
+
+        function updateWeekInfo() {
+            const startOfWeek = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1));
+            const weekNumber = getWeekNumber(startOfWeek);
+            document.getElementById('currentWeek').textContent = `第 ${weekNumber} 週`;
+
+            const weekDates = [];
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(startOfWeek);
+                day.setDate(startOfWeek.getDate() + i);
+                weekDates.push(day.toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }));
+                document.getElementById(`date${i+1}`).textContent = weekDates[i];
+            }
+            document.getElementById('dateRange').textContent = `${weekDates[0]} - ${weekDates[6]}`;
+        }
+
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
+        function changeWeek(delta) {
+            currentDate.setDate(currentDate.getDate() + delta * 7);
+            updateWeekInfo();
+            loadPlans();
+        }
+
+        function exportAsPNG() {
+            html2canvas(document.querySelector("#planner-grid")).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'weekly-planner.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function exportAsPDF() {
+            html2canvas(document.querySelector("#planner-grid")).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'landscape',
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+                pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+                pdf.save("weekly-planner.pdf");
+            });
+        }
+
+        function savePlans() {
+            const plans = {};
+            for (let i = 1; i <= 7; i++) {
+                plans[`plan${i}`] = document.getElementById(`plan${i}`).value;
+            }
+            plans.note = document.getElementById('note').value;
+            plans.currentDate = currentDate.toISOString();
+            localStorage.setItem('weeklyPlanner', JSON.stringify(plans));
+        }
+
+        function loadPlans() {
+            const savedPlans = JSON.parse(localStorage.getItem('weeklyPlanner'));
+            if (savedPlans) {
+                for (let i = 1; i <= 7; i++) {
+                    document.getElementById(`plan${i}`).value = savedPlans[`plan${i}`] || '';
+                }
+                document.getElementById('note').value = savedPlans.note || '';
+                if (savedPlans.currentDate) {
+                    currentDate = new Date(savedPlans.currentDate);
+                    updateWeekInfo();
+                }
+            }
+        }
+
+        // 監聽所有文本區域的輸入事件
+        document.querySelectorAll('textarea').forEach(textarea => {
+            textarea.addEventListener('input', savePlans);
+        });
+
+        // 初始化
+        updateWeekInfo();
+        loadPlans();
+    </script>
+</body>
+</html>

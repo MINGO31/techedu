@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校園事件處理程序互動比較分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Visualization & Content Choices: 
+        - Incident Data Storage: JavaScript array of objects, each object representing an incident type and its detailed procedural attributes.
+        - Incident Type Selection: HTML checkboxes styled with Tailwind. JavaScript event listeners trigger updates. Goal: User Control, Filter.
+        - Main Comparison Display: Dynamically generated HTML table. Rows are procedural criteria, columns are selected incident types. JS populates this table. Goal: Compare, Inform.
+        - Investigation Duration Visualization: Chart.js Bar Chart. X-axis: Incident Types, Y-axis: Duration. Dynamically updates with selected incidents. Goal: Compare, Visualize Data. Library: Chart.js (Canvas).
+        - Key Rights/Provisions (e.g., Appeal Rights, Penalties): Displayed within the main comparison table using text or clear Unicode symbols (e.g., ✔, ✘). Goal: Inform, Compare.
+        - Textual Content: Detailed explanations for criteria and incident-specific nuances will be drawn from the report and presented alongside the table/charts, potentially in expandable sections or tooltips if space is constrained, all dynamically updated. Goal: Inform, Provide Context.
+        - Process Flow Example: A simplified HTML/CSS (Tailwind) based flowchart for one incident type (e.g., Gender Incident) to illustrate a typical process. Goal: Organize, Inform.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All visualizations are Chart.js (Canvas) or HTML/CSS.
+    -->
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+        .header-title { color: #2c3e50; }
+        .section-title { color: #34495e; border-bottom: 2px solid #718096; }
+        .card {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .table-header { background-color: #4A5568; color: white; }
+        .table-cell { border: 1px solid #E2E8F0; padding: 0.75rem; vertical-align: top; }
+        .table-sticky-col {
+            position: -webkit-sticky; /* Safari */
+            position: sticky;
+            left: 0;
+            background-color: #f8f9fa; /* Match body background or a slightly different shade for emphasis */
+            z-index: 10;
+            border-right: 2px solid #CBD5E0; /* A bit darker border for separation */
+        }
+        .table-container { max-height: 70vh; /* Adjust as needed */ }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+         @media (min-width: 768px) { .chart-container { height: 400px; } }
+
+        .checkbox-label {
+            background-color: #E2E8F0;
+            color: #2D3748;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            border: 1px solid #CBD5E0;
+        }
+        .checkbox-label:hover { background-color: #CBD5E0; }
+        input[type="checkbox"]:checked + .checkbox-label {
+            background-color: #4A5568;
+            color: white;
+            border-color: #2D3748;
+        }
+        input[type="checkbox"] { display: none; }
+
+        /* Sticky selector panel */
+        #selector-panel-container {
+            position: -webkit-sticky; /* Safari */
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background-color: rgba(248, 249, 250, 0.95); /* Semi-transparent background */
+            backdrop-filter: blur(5px);
+            padding-bottom: 1rem; /* Add some padding at the bottom of the sticky panel */
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold header-title mb-3">校園事件處理程序</h1>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold header-title mb-6">互動比較分析</h2>
+            <p class="text-md md:text-lg text-gray-700 max-w-3xl mx-auto">
+                本應用程式旨在深入分析台灣校園內六類不同事件的調查處理程序。透過互動式比較，您可以清晰了解各類事件在適用法規、調查機制、當事人權利等方面的差異與共通點，協助教育人員更有效地應對複雜的校園事件。
+            </p>
+        </header>
+
+        <div id="selector-panel-container" class="mb-8 py-4 shadow-md rounded-lg">
+            <h3 class="text-xl font-semibold mb-4 text-center section-title px-4">選擇您想比較的事件類型</h3>
+            <div id="incident-selector" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 px-4">
+                </div>
+        </div>
+        
+        <main id="comparison-content">
+            <section id="introduction" class="mb-12 card p-6">
+                <h2 class="text-2xl font-bold mb-4 section-title">前言：法律進入校園的演變</h2>
+                <p class="text-gray-700 leading-relaxed mb-3">
+                    近年來，「法入校園」現象日益顯著，意指法律規範在教育機構內部事務中的影響力與日俱增。這不僅反映了社會對個人權利保護、責任歸屬及正當法律程序的高度重視，也促使教育機構從過去相對封閉的自主管理模式，轉向更加透明化、規範化的運作。
+                </p>
+                <p class="text-gray-700 leading-relaxed">
+                    本互動分析工具旨在對台灣校園內六種主要事件的處理程序進行全面比較，包括校園性別事件、生對生霸凌、師對生體罰霸凌不當管教、職場霸凌、幼教調查以及不適任校長調查。透過選擇上方事件類型，您可以深入探索各類事件從接案、調查、審議到救濟的完整流程，比較其間的共通原則與關鍵差異。
+                </p>
+            </section>
+
+            <section id="comparison-table-section" class="mb-12 card p-0 md:p-6 overflow-hidden">
+                <h2 class="text-2xl font-bold mb-6 section-title px-6 pt-6 md:px-0 md:pt-0">程序細節比較</h2>
+                <p class="text-gray-600 mb-6 px-6 md:px-0">下方表格將根據您選擇的事件類型，展示各項處理程序的詳細比較。若表格內容過寬，可左右滑動查看。</p>
+                <div id="table-container" class="overflow-x-auto table-container">
+                    <table class="min-w-full border-collapse">
+                        <thead id="comparison-table-head">
+                            </thead>
+                        <tbody id="comparison-table-body">
+                            </tbody>
+                    </table>
+                </div>
+                 <p id="table-placeholder" class="text-center text-gray-500 py-10 px-6 md:px-0">請至少選擇一種事件類型以查看比較表。</p>
+            </section>
+
+            <section id="charts-section" class="mb-12 card p-6">
+                <h2 class="text-2xl font-bold mb-6 section-title">視覺化數據比較</h2>
+                <div id="charts-placeholder" class="text-center text-gray-500 py-5">請選擇事件類型以查看相關圖表。</div>
+                <div id="duration-chart-container" class="chart-container hidden">
+                    <h3 class="text-xl font-semibold mb-4 text-center" style="color: #34495e;">調查期程比較 (基本)</h3>
+                    <canvas id="investigationDurationChart"></canvas>
+                    <p class="text-sm text-gray-500 mt-3 text-center">圖表顯示各事件類型基本的調查期程（不含延長）。</p>
+                </div>
+            </section>
+            
+            <section id="flowchart-example" class="mb-12 card p-6">
+                <h2 class="text-2xl font-bold mb-6 section-title">校園性別事件處理流程範例 (簡化)</h2>
+                <p class="text-gray-600 mb-6">以校園性別事件為例，其處理流程涉及多個環節。以下為簡化流程示意：</p>
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2 p-3 bg-slate-100 rounded-md">
+                        <span class="text-xl font-bold text-slate-600">1.</span>
+                        <p class="text-slate-700">接獲申請/檢舉 (學務處)</p>
+                    </div>
+                    <div class="pl-6 text-2xl text-slate-400">↓</div>
+                    <div class="flex items-center space-x-2 p-3 bg-slate-100 rounded-md">
+                        <span class="text-xl font-bold text-slate-600">2.</span>
+                        <p class="text-slate-700">20日內通知是否受理</p>
+                    </div>
+                    <div class="pl-6 text-2xl text-slate-400">↓</div>
+                    <div class="flex items-center space-x-2 p-3 bg-slate-100 rounded-md">
+                        <span class="text-xl font-bold text-slate-600">3.</span>
+                        <p class="text-slate-700">性平會組調查小組 (3或5人，師對生全外聘，女性≥1/2)</p>
+                    </div>
+                    <div class="pl-6 text-2xl text-slate-400">↓</div>
+                    <div class="flex items-center space-x-2 p-3 bg-slate-100 rounded-md">
+                        <span class="text-xl font-bold text-slate-600">4.</span>
+                        <p class="text-slate-700">進行調查 (2個月，可延長2次)</p>
+                    </div>
+                     <div class="pl-6 text-2xl text-slate-400">↓</div>
+                    <div class="flex items-center space-x-2 p-3 bg-slate-100 rounded-md">
+                        <span class="text-xl font-bold text-slate-600">5.</span>
+                        <p class="text-slate-700">完成調查報告提交性平會審議</p>
+                    </div>
+                     <div class="pl-6 text-2xl text-slate-400">↓</div>
+                    <div class="flex items-center space-x-2 p-3 bg-slate-100 rounded-md">
+                        <span class="text-xl font-bold text-slate-600">6.</span>
+                        <p class="text-slate-700">性平會決議後2個月內書面通知結果</p>
+                    </div>
+                </div>
+                <p class="text-sm text-gray-500 mt-4">此流程為簡化示意，實際程序請依相關法規為準。</p>
+            </section>
+
+            <section id="conclusion" class="mb-8 card p-6">
+                <h2 class="text-2xl font-bold mb-4 section-title">結論與建議</h2>
+                <p class="text-gray-700 leading-relaxed mb-3">
+                    本報告透過對六類校園事件處理程序的深入比較分析，揭示了台灣校園事件處理機制的高度複雜性與分散性。儘管各類事件在「法入校園」的趨勢下，均強調了證據保全和行政司法併行調查的重要性，但在具體操作層面，從接案單位、適用法規、調查人員組成與資格、性別比例要求、當事人權利到時程規範，都存在顯著差異。
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-3">
+                    這種異質性帶來了多重挑戰。首先，對於教育人員而言，精準掌握並遵守各類事件的特定程序要求，需要極高的專業法律素養和持續的專業發展。其次，不同事件類型間權利保障的差異，可能導致當事人對處理結果的公正性產生疑慮。
+                </p>
+                <p class="text-gray-700 leading-relaxed font-semibold" style="color: #4A5568;">
+                    建議：強化教育人員法律素養培訓、建立跨事件協作機制、研議程序標準化與簡化、提升資訊透明度，並加強外部專家資源整合，以期有效維護校園安全與各方權益。
+                </p>
+            </section>
+        </main>
+
+        <footer class="text-center text-sm text-gray-600 py-8 border-t border-gray-300">
+            <p>&copy; <span id="currentYear"></span> 校園事件處理程序互動比較分析。內容僅供參考，請以最新法規為準。</p>
+            <p>資料來源：校園事件處理程序深度比較分析報告</p>
+        </footer>
+    </div>
+
+<script>
+    // --- DATA ---
+    const incidentData = [
+        {
+            id: "gender", name: "校園性別事件調查", nameShort: "性別事件",
+            details: {
+                "主體": "師對生、生對生、生對師", "適用法規": "《性別平等教育法》（性平法）及《校園性別事件防治準則》（性平準則）",
+                "接案單位": "學務處", "調查權責獨立性": "性平會獨立調查，其他單位不得另設調查機制", "申請調查期限": "無明確限制",
+                "啟動方式": "申請與檢舉併行", "撤回權（申請人）": "可", "撤回權（檢舉人）": "否",
+                "呈報首長時限": "3個工作日內", "受理通知（對象）": "申請人、被害人或檢舉人", "受理通知時限": "收到申請或檢舉之日起20日內",
+                "審議組織名稱": "性別平等教育委員會（性平會）", "審議組織組成": "常設，5至21人", "審議組織性別比例": "女性委員不得少於1/2",
+                "調查小組人數": "3或5人", "調查小組組成（生對生）": "至少1/3為性平調查專家學者", "調查小組組成（師對生）": "全數外聘",
+                "調查人員資格": "中央與地方雙軌培訓，有資格分級", "調查小組性別比例": "女性成員不得少於1/2",
+                "行為人拒配合調查罰則": "有", "學生轉班規定": "必要時可，需報主管機關備查",
+                "申復權（不受理）": "申請人、被害人、檢舉人", "申復權（調查結果）": "申請人、被害人、行為人 (檢舉人無)",
+                "救濟權利（教師）": "申復後向市申評會", "救濟權利（學生）": "校申訴委員會申訴，可再申訴", "調閱卷宗權利": "有",
+                "調查期程（基本）": "受理後2個月", "調查期程（延長）": "可延長2次，每次1個月", "調查期程延長通知": "所有相關方",
+                "調查報告審議單位": "性平會", "調查人員出席審議": "無明確規定",
+                "調查結果通知對象": "申請人、被害人、行為人 (不提供給檢舉人)", "報告落款": "學校性平會",
+                "最終結果通知時限": "接獲報告後2個月內通知所有相關方", "誣告懲處規定": "無",
+                "訪談紀錄確認": "明確要求需經當事人確認無誤後簽名或蓋章", "調查費用補助": "桃園市政府教育局設有基準表"
+            }
+        },
+        {
+            id: "s2s_bullying", name: "生對生霸凌調查", nameShort: "生對生霸凌",
+            details: {
+                "主體": "學生之間", "適用法規": "《校園霸凌防制準則》（霸凌準則）", "接案單位": "學務處",
+                "初步調查權": "學校可進行初步調查並保全證據", "申請調查期限": "無明確限制", "啟動方式": "檢舉",
+                "撤回權（檢舉人）": "可", "移轉與通知時限": "3個工作日內移轉調查學校並通知行為人及被行為人",
+                "受理通知時限": "接獲檢舉後20個工作日內書面告知是否受理", "審議組織名稱": "審查小組",
+                "審議組織組成": "常設", "審議組織性別比例": "無限制", "調查小組人數": "3或5人",
+                "調查小組組成": "至少一半成員須外聘自「霸凌人才庫」", "調查小組性別比例": "無限制",
+                "行為人拒配合調查罰則": "無", "學生轉班規定": "可暫時轉換學習環境，無需報備，比照性平規定",
+                "申復權（不受理）": "明確刪除", "申復權（調查結果）": "明確刪除",
+                "救濟權利（行為人）": "學校申訴委員會申訴，可再申訴", "救濟權利（被行為人）": "主管機關陳情",
+                "調閱卷宗權利": "原始文書封存且當事人不可調閱", "調查期程（基本）": "第一次調和或調查會議起2個月",
+                "調查期程（延長）": "可延長2次，每次1個月", "調查期程延長通知": "行為人及被行為人",
+                "調查報告審議單位": "防制委員會", "調查人員出席審議": "處理小組應推派代表列席說明",
+                "調查結果通知對象": "行為人及被行為人", "報告落款": "無規定 (原文未提)",
+                "最終結果通知時限": "防制委員會決議日起15個工作日內做出終局實體處理，並於10個工作日內通知相關方",
+                "誣告懲處規定": "無", "訪談紀錄確認": "無明確規定", "調查費用補助": "桃園市政府教育局對於疑似體罰或霸凌事件調查費用設有補助基準表",
+                "司法行政併行": "可"
+            }
+        },
+        {
+            id: "t2s_discipline", name: "師對生體罰霸凌不當管教 (校事會議)", nameShort: "師對生不當管教",
+            details: {
+                "主體": "教師對學生", "適用法規": "《高級中等以下學校教師解聘不續聘停聘或資遣辦法》（解聘辦法）及《公立高級中等以下學校教師成績考核辦法》（考核辦法）",
+                "接案單位": "學務處或教務處", "初步調查權": "學校可先行初步調查並保全證據", "申請調查期限": "無申請調查期限",
+                "啟動方式": "檢舉", "撤回權（檢舉人）": "可", "移轉與通知時限": "3個工作日內移送調查學校並通知行為人及被害人",
+                "受理通知時限": "接獲檢舉後20日內書面告知檢舉人是否受理 (校事會議7日內召開)",
+                "審議組織名稱": "校事會議", "審議組織組成": "常設，5種身分人員", "審議組織性別比例": "單一性別比例限制1/3 (有例外)",
+                "調查小組人數": "3或5人", "調查小組組成": "原則全數外聘 (含1名法律專家學者)。若情節未達解聘等，可校方派員",
+                "調查人員資格": "中央校事會議調查及輔導人才庫", "調查小組性別比例": "無限制",
+                "行為人拒配合調查罰則": "無 (調查小組可逕行作成調查報告)", "學生轉班規定": "可暫時轉換學習環境，無需報備，比照性平規定",
+                "申復權（不受理）": "無", "申復權（調查結果）": "無",
+                "救濟權利（行為人）": "行政争訟", "救濟權利（被害人）": "主管機關陳情",
+                "調閱卷宗權利": "原始文書封存。行為人於教評會陳述意見前，得向學校申請調查報告",
+                "調查期程（基本）": "第一次調查起2個月", "調查期程（延長）": "可延長2次，每次1個月", "調查期程延長通知": "行為人及被害人",
+                "調查報告審議單位": "校事會議", "調查人員出席審議": "調查小組應推派代表列席說明",
+                "調查結果通知對象": "行為人 (若需核准則通知行為人及被害人，並提供報告)。教學不力僅提供給行為人",
+                "報告落款": "無規定 (範例為調查小組成員)", "最終結果通知時限": "終局實體處理後10日內 (若需核准，核准後10日內)",
+                "誣告懲處規定": "無", "訪談紀錄確認": "無", "調查費用補助": "無", "司法行政併行": "可"
+            }
+        },
+        {
+            id: "workplace_bullying", name: "職場霸凌", nameShort: "職場霸凌",
+            details: {
+                "主體": "教育人員對教育人員", "適用法規": "桃園市政府及所屬各機關學校員工職場霸凌防治與申訴作業注意事項",
+                "接案單位": "人事室", "初步調查權": "未明確規定", "申請調查期限": "未明確規定", "啟動方式": "申訴",
+                "撤回權（申訴人）": "可", "受理通知時限": "無明確規定 (專案小組7工作日內組調查小組)",
+                "審議組織名稱": "專案小組", "審議組織組成": "臨時建制，5至9人，外部專家學者不得少於1/2", "審議組織性別比例": "任一性別比例不得低於1/3",
+                "調查小組人數": "3人以上", "調查小組組成": "由專案小組指派", "調查人員資格": "無明確規定", "調查小組性別比例": "任一性別比例不得低於1/3",
+                "行為人拒配合調查罰則": "無明確規定", "學生轉班規定": "無 (不適用)",
+                "申復權（不受理）": "無", "申復權（調查結果）": "無",
+                "救濟權利（當事人）": "視其身分別行使救濟權益", "調閱卷宗權利": "無明確規定",
+                "調查期程（基本）": "受理次日起1個月", "調查期程（延長）": "可延長1次，每次1個月", "調查期程延長通知": "當事人",
+                "調查報告審議單位": "專案小組", "調查人員出席審議": "無規定",
+                "調查結果通知對象": "當事人 (副知上級機關及市府人事處)", "報告落款": "無規定",
+                "最終結果通知時限": "未明確 (申訴決定通知)", "誣告懲處規定": "有 (若申訴人有誣告事實，應作成懲處建議)",
+                "訪談紀錄確認": "無明確規定", "調查費用補助": "由市府處理", "司法行政併行": "可 (專案小組可決議暫緩調查)",
+            }
+        },
+        {
+            id: "ece_investigation", name: "幼教調查", nameShort: "幼教調查",
+            details: {
+                "主體": "教師對學生", "適用法規": "《教保服務人員條例》及《教保相關人員違法事件調查處理辦法》",
+                "接案單位": "縣市主管機關", "初步調查權": "主管機關可命學校先行保全證據", "申請調查期限": "無",
+                "啟動方式": "檢舉", "撤回權（檢舉人）": "無規定", "受理通知時限": "接獲檢舉或通報後10個工作日內書面告知是否受理 (主管機關知悉後2工作日內交委員會處理)",
+                "審議組織名稱": "縣市教育局認定委員會 (下設審查小組)", "審議組織組成": "委員會9-19人，審查小組5人", "審議組織性別比例": "單一性別比例限制1/3",
+                "調查小組人數": "3或5人", "調查小組組成": "應有1名幼教專家學者", "調查人員資格": "中央違法事件調查學者專家人才庫",
+                "調查小組性別比例": "任一性別委員人數不得少於委員總數的1/3", "行為人拒配合調查罰則": "無",
+                "學生轉班規定": "無", "申復權（不受理）": "無", "申復權（調查結果）": "行為人及法代/實際照顧者均無",
+                "救濟權利（行為人）": "依規定辦理", "調閱卷宗權利": "教師於收到決議後可另申請調卷",
+                "調查期程（基本）": "調查小組組成後30日", "調查期程（延長）": "可延長1次，每次30日", "調查期程延長通知": "當事人、檢舉人及教保服務機構",
+                "調查報告審議單位": "認定委員會審議", "調查人員出席審議": "調查小組得推派代表參加審議",
+                "調查結果通知對象": "無明確規定", "報告落款": "無規定 (範例為調查小組成員)",
+                "最終結果通知時限": "無明確規定", "誣告懲處規定": "無", "訪談紀錄確認": "無明確規定",
+                "調查費用補助": "由市府處理", "司法行政併行": "可"
+            }
+        },
+        {
+            id: "unsuitable_principal", name: "不適任校長調查", nameShort: "不適任校長",
+            details: {
+                "主體": "親師生對校長", "適用法規": "《國民小學及國民中學校長不適任事實調查處理辦法》",
+                "接案單位": "縣市主管機關", "初步調查權": "主管機關應先保全證據", "申請調查期限": "無",
+                "啟動方式": "檢舉", "撤回權（檢舉人）": "可", "受理通知時限": "接獲檢舉或通報後10個工作日內書面告知是否受理 (主管機關知悉後2工作日內交審查小組審查)",
+                "審議組織名稱": "縣市教育局審議會 (下設審查小組)", "審議組織組成": "審議會7-15人，審查小組5人 (含特定代表)", "審議組織性別比例": "單一性別比例限制1/3",
+                "調查小組人數": "3或5人", "調查小組組成": "由人才庫挑選，應有1名法律專家學者",
+                "調查人員資格": "教育部校長事件審議會調查人才庫", "調查小組性別比例": "無限制",
+                "行為人拒配合調查罰則": "無 (調查小組可逕行作成調查報告)", "學生轉班規定": "主管機關認定有必要時可將行為人（校長）調離現職",
+                "申復權（不受理）": "無", "申復權（調查結果）": "當事人與檢舉人均無",
+                "救濟權利（行為人）": "校長（行為人）有救濟權利，準用教師相關規定", "調閱卷宗權利": "準用校事會議規定處理",
+                "調查期程（基本）": "第一次調查起2個月", "調查期程（延長）": "可延長2次，每次1個月", "調查期程延長通知": "行為人",
+                "調查報告審議單位": "審議會", "調查人員出席審議": "調查小組應推派代表列席說明",
+                "調查結果通知對象": "準用校事會議規定處理", "報告落款": "調查報告範例未公告",
+                "最終結果通知時限": "準用校事會議規定處理", "誣告懲處規定": "無", "訪談紀錄確認": "無明確規定",
+                "調查費用補助": "由市府處理", "司法行政併行": "可"
+            }
+        }
+    ];
+
+    const comparisonCriteria = [
+        { key: "主體", label: "主體" }, { key: "適用法規", label: "適用法規" }, { key: "接案單位", label: "接案單位" },
+        { key: "調查權責獨立性", label: "調查權責獨立性" }, { key: "初步調查權", label: "初步調查權" },
+        { key: "申請調查期限", label: "申請調查期限" }, { key: "啟動方式", label: "啟動方式" },
+        { key: "撤回權（申請人）", label: "撤回權（申請人）" }, { key: "撤回權（檢舉人）", label: "撤回權（檢舉人）" }, { key: "撤回權（申訴人）", label: "撤回權（申訴人）" },
+        { key: "呈報首長時限", label: "呈報首長時限" }, { key: "移轉與通知時限", label: "移轉與通知時限" },
+        { key: "受理通知（對象）", label: "受理通知（對象）" }, { key: "受理通知時限", label: "受理通知時限" },
+        { key: "審議組織名稱", label: "審議組織名稱" }, { key: "審議組織組成", label: "審議組織組成" },
+        { key: "審議組織性別比例", label: "審議組織性別比例" }, { key: "調查小組人數", label: "調查小組人數" },
+        { key: "調查小組組成", label: "調查小組組成" }, { key: "調查小組組成（生對生）", label: "調查小組組成（生對生）" }, { key: "調查小組組成（師對生）", label: "調查小組組成（師對生）" },
+        { key: "調查人員資格", label: "調查人員資格" }, { key: "調查小組性別比例", label: "調查小組性別比例" },
+        { key: "行為人拒配合調查罰則", label: "行為人拒配合調查罰則" }, { key: "學生轉班規定", label: "學生轉班/行為人調離規定" },
+        { key: "申復權（不受理）", label: "申復權（不受理）" }, { key: "申復權（調查結果）", label: "申復權（調查結果）" },
+        { key: "救濟權利（教師）", label: "救濟權利（教師）" }, { key: "救濟權利（學生）", label: "救濟權利（學生）" },
+        { key: "救濟權利（行為人）", label: "救濟權利（行為人）" }, { key: "救濟權利（被行為人）", label: "救濟權利（被行為人）" }, { key: "救濟權利（當事人）", label: "救濟權利（當事人）" },
+        { key: "調閱卷宗權利", label: "調閱卷宗權利" }, { key: "調查期程（基本）", label: "調查期程（基本）" },
+        { key: "調查期程（延長）", label: "調查期程（延長）" }, { key: "調查期程延長通知", label: "調查期程延長通知" },
+        { key: "調查報告審議單位", label: "調查報告審議單位" }, { key: "調查人員出席審議", label: "調查人員出席審議" },
+        { key: "調查結果通知對象", label: "調查結果通知對象" }, { key: "報告落款", label: "報告落款" },
+        { key: "最終結果通知時限", label: "最終結果通知時限" }, { key: "誣告懲處規定", label: "誣告懲處規定" },
+        { key: "訪談紀錄確認", label: "訪談紀錄確認" }, { key: "調查費用補助", label: "調查費用補助" },
+        { key: "司法行政併行", label: "司法行政併行" }
+    ];
+
+    // --- DOM Elements ---
+    const selectorContainer = document.getElementById('incident-selector');
+    const tableHead = document.getElementById('comparison-table-head');
+    const tableBody = document.getElementById('comparison-table-body');
+    const tablePlaceholder = document.getElementById('table-placeholder');
+    const chartsPlaceholder = document.getElementById('charts-placeholder');
+    const durationChartContainer = document.getElementById('duration-chart-container');
+    let durationChart = null;
+
+    // --- Functions ---
+    function populateSelectors() {
+        incidentData.forEach(incident => {
+            const div = document.createElement('div');
+            const input = document.createElement('input');
+            input.type = 'checkbox';
+            input.id = `checkbox-${incident.id}`;
+            input.value = incident.id;
+            input.className = 'incident-checkbox';
+            input.addEventListener('change', updateComparison);
+
+            const label = document.createElement('label');
+            label.htmlFor = `checkbox-${incident.id}`;
+            label.textContent = incident.nameShort;
+            label.className = 'checkbox-label block w-full text-center text-sm py-2 px-1';
+            
+            div.appendChild(input);
+            div.appendChild(label);
+            selectorContainer.appendChild(div);
+        });
+    }
+
+    function getSelectedIncidentIds() {
+        const selected = [];
+        document.querySelectorAll('.incident-checkbox:checked').forEach(checkbox => {
+            selected.push(checkbox.value);
+        });
+        return selected;
+    }
+    
+    function wrapLabel(label, maxWidth = 8) { // Default for CJK
+        if (typeof label !== 'string' || label.length <= maxWidth) {
+            return label;
+        }
+        const lines = [];
+        let currentLine = '';
+        for (let i = 0; i < label.length; i++) {
+            currentLine += label[i];
+            if (currentLine.length >= maxWidth && i < label.length -1) {
+                lines.push(currentLine);
+                currentLine = '';
+            }
+        }
+        if (currentLine) {
+            lines.push(currentLine);
+        }
+        return lines;
+    }
+
+    const tooltipTitleCallback = function(tooltipItems) {
+        const item = tooltipItems[0];
+        let label = item.chart.data.labels[item.dataIndex];
+        if (Array.isArray(label)) {
+          return label.join(''); 
+        }
+        return label;
+    };
+
+    function updateComparisonTable(selectedIds) {
+        if (selectedIds.length === 0) {
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+            tablePlaceholder.classList.remove('hidden');
+            return;
+        }
+        tablePlaceholder.classList.add('hidden');
+
+        const selectedIncidents = incidentData.filter(inc => selectedIds.includes(inc.id));
+
+        // Update table head
+        let headHTML = '<tr><th class="table-cell table-sticky-col font-semibold">比較項目</th>';
+        selectedIncidents.forEach(incident => {
+            headHTML += `<th class="table-cell text-center font-semibold">${incident.nameShort}</th>`;
+        });
+        headHTML += '</tr>';
+        tableHead.innerHTML = headHTML;
+
+        // Update table body
+        let bodyHTML = '';
+        comparisonCriteria.forEach(criterion => {
+            // Check if this criterion is relevant for any of the selected incidents
+            const isCriterionRelevant = selectedIncidents.some(incident => incident.details[criterion.key] !== undefined && incident.details[criterion.key] !== null && incident.details[criterion.key] !== "");
+
+            if (isCriterionRelevant) {
+                bodyHTML += `<tr><td class="table-cell table-sticky-col font-medium">${criterion.label}</td>`;
+                selectedIncidents.forEach(incident => {
+                    const detailValue = incident.details[criterion.key];
+                    bodyHTML += `<td class="table-cell text-sm">${detailValue !== undefined && detailValue !== null ? detailValue : '---'}</td>`;
+                });
+                bodyHTML += '</tr>';
+            }
+        });
+        tableBody.innerHTML = bodyHTML;
+    }
+
+    function updateCharts(selectedIds) {
+        if (selectedIds.length === 0) {
+            chartsPlaceholder.classList.remove('hidden');
+            durationChartContainer.classList.add('hidden');
+            if (durationChart) {
+                durationChart.destroy();
+                durationChart = null;
+            }
+            return;
+        }
+        chartsPlaceholder.classList.add('hidden');
+        durationChartContainer.classList.remove('hidden');
+
+        const selectedIncidents = incidentData.filter(inc => selectedIds.includes(inc.id));
+
+        // Investigation Duration Chart
+        const durationLabels = selectedIncidents.map(inc => wrapLabel(inc.nameShort, 6));
+        const durationData = selectedIncidents.map(inc => {
+            const durationStr = inc.details['調查期程（基本）'] || "0";
+            // Extract first number, assuming format like "2個月" or "30日"
+            const match = durationStr.match(/(\d+)\s*(個月|日)/);
+            if (match) {
+                let value = parseInt(match[1]);
+                if (match[2] === '日') value = parseFloat((value / 30).toFixed(1)); // Convert days to months
+                return value;
+            }
+            return 0;
+        });
+
+        if (durationChart) {
+            durationChart.data.labels = durationLabels;
+            durationChart.data.datasets[0].data = durationData;
+            durationChart.update();
+        } else {
+            const ctx = document.getElementById('investigationDurationChart').getContext('2d');
+            durationChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: durationLabels,
+                    datasets: [{
+                        label: '基本調查期程 (月)',
+                        data: durationData,
+                        backgroundColor: selectedIncidents.map((_, i) => `hsl(${i * (360 / selectedIncidents.length)}, 70%, 70%)`),
+                        borderColor: selectedIncidents.map((_, i) => `hsl(${i * (360 / selectedIncidents.length)}, 70%, 50%)`),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: selectedIncidents.length > 1 },
+                        tooltip: { callbacks: { title: tooltipTitleCallback } }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            title: { display: true, text: '月數' },
+                            ticks: { font: { family: "'Noto Sans TC', sans-serif" }}
+                        },
+                        x: {
+                            ticks: { 
+                                font: { family: "'Noto Sans TC', sans-serif" },
+                                callback: function(value, index, ticks) {
+                                   const label = this.getLabelForValue(value);
+                                   return Array.isArray(label) ? label : wrapLabel(label, 6);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+    
+    function updateComparison() {
+        const selectedIds = getSelectedIncidentIds();
+        updateComparisonTable(selectedIds);
+        updateCharts(selectedIds);
+    }
+
+    // --- Initialization ---
+    document.addEventListener('DOMContentLoaded', () => {
+        populateSelectors();
+        updateComparison(); // Initial call to set up placeholders
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+    });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google日曆事件連結生成器</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #1a1a2e;
+            color: #e0e0e0;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #4ecca3;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            background-color: #16213e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(78, 204, 163, 0.2);
+        }
+        label {
+            margin: 10px 0 5px;
+            color: #4ecca3;
+        }
+        input, select, textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0f3460;
+            color: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 5px #4ecca3;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            background-color: #4ecca3;
+            color: #1a1a2e;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #45b393;
+        }
+        #resetBtn {
+            background-color: #ff6b6b;
+            margin-right: 10px;
+        }
+        #resetBtn:hover {
+            background-color: #ff5252;
+        }
+        #result {
+            margin-top: 30px;
+            word-break: break-all;
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(78, 204, 163, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .error {
+            color: #ff6b6b;
+            display: none;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
+        a {
+            color: #4ecca3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Google日曆事件連結生成器</h1>
+    <form id="eventForm">
+        <label for="date">日期:</label>
+        <input type="date" id="date" required>
+        
+        <label for="time">時間 (選填, 格式: HHMM, 例如 2310 表示晚上11點10分):</label>
+        <input type="text" id="time" pattern="([01]\d|2[0-3])[0-5]\d" placeholder="HHMM (可留空表示整天事件)">
+        <span id="timeError" class="error">請輸入有效的時間格式 (HHMM) 或留空</span>
+        
+        <label for="duration">持續時間:</label>
+        <select id="duration">
+            <option value="1">1小時</option>
+            <option value="2">2小時</option>
+            <option value="3">3小時</option>
+            <option value="4">4小時</option>
+            <option value="8">8小時</option>
+            <option value="24">全天</option>
+        </select>
+        
+        <label for="event">事件標題:</label>
+        <input type="text" id="event" required>
+        
+        <label for="description">事件說明:</label>
+        <textarea id="description" placeholder="輸入事件的詳細說明"></textarea>
+        
+        <div class="button-group">
+            <button type="button" id="resetBtn">重置</button>
+            <button type="submit">生成連結</button>
+        </div>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const date = document.getElementById('date').value;
+            const time = document.getElementById('time').value;
+            const event = document.getElementById('event').value;
+            const description = document.getElementById('description').value;
+            const duration = document.getElementById('duration').value;
+            
+            // 驗證時間格式（如果有輸入）
+            const timeRegex = /^([01]\d|2[0-3])[0-5]\d$/;
+            if (time && !timeRegex.test(time)) {
+                document.getElementById('timeError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('timeError').style.display = 'none';
+            }
+            
+            let dateTime, endDateTime;
+            
+            if (time) {
+                // 如果有輸入時間，設置為特定時間的事件
+                const formattedTime = time.substring(0, 2) + ':' + time.substring(2);
+                dateTime = moment(date + 'T' + formattedTime);
+                endDateTime = moment(dateTime).add(duration, 'hours');
+            } else {
+                // 如果沒有輸入時間，設置為全天事件
+                dateTime = moment(date);
+                endDateTime = moment(date).add(1, 'days');
+            }
+            
+            const formattedDateTime = dateTime.format('YYYYMMDDTHHmmss');
+            const formattedEndDateTime = endDateTime.format('YYYYMMDDTHHmmss');
+            
+            const link = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event)}&dates=${formattedDateTime}/${formattedEndDateTime}&details=${encodeURIComponent(description)}&sf=true&output=xml`;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <p>您的Google日曆事件連結已生成:</p>
+                <a href="${link}" target="_blank">${link}</a>
+            `;
+        });
+
+        // 重置按鈕功能
+        document.getElementById('resetBtn').addEventListener('click', function() {
+            document.getElementById('eventForm').reset();
+            document.getElementById('timeError').style.display = 'none';
+            document.getElementById('result').innerHTML = '';
+        });
+    </script>
+</body>
+</html>

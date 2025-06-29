@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI輔助國文教學與作文批改實務</title>
+    <style>
+        :root {
+            --primary: #FF7F50; /* 珊瑚色 */
+            --primary-light: #FFA07A; /* 亮鮭紅色 */
+            --primary-dark: #E25822; /* 燃燒的橙色 */
+            --secondary: #FFDAB9; /* 桃色 */
+            --accent: #FF4500; /* 橙紅色 */
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+            --background: #FFF8F0; /* 象牙白背景 */
+            --card-bg: #FFFFFF;
+            --divider: #FFE4C4; /* 陽光米色 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--text-light);
+            padding: 2rem 0;
+            box-shadow: 0 4px 12px rgba(226, 88, 34, 0.2);
+            text-align: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            color: var(--primary-dark);
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            margin: 1.5rem 0 0.5rem;
+            color: var(--primary);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .meta-info {
+            background-color: var(--secondary);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .quote {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .quote p {
+            font-style: italic;
+            font-weight: 500;
+        }
+        
+        .quote .author {
+            text-align: right;
+            font-weight: normal;
+            opacity: 0.8;
+        }
+        
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .key-points {
+            background-color: var(--secondary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .key-points h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .key-points ul {
+            padding-left: 1.5rem;
+        }
+        
+        .key-points li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .example {
+            background-color: var(--divider);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .example h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .example blockquote {
+            margin: 1rem 0;
+            padding: 1rem;
+            background-color: var(--card-bg);
+            border-radius: 4px;
+        }
+        
+        .notes {
+            background-color: #FFF0F0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .notes h4 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .notes ul {
+            padding-left: 1.5rem;
+        }
+        
+        footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .assignments {
+            background-color: #FFF3E0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px dashed var(--primary);
+        }
+        
+        .assignments h3 {
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .assignments ul {
+            padding-left: 1.5rem;
+        }
+        
+        .assignments li {
+            margin-bottom: 0.8rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+            }
+            
+            .container {
+                width: 95%;
+                padding: 1rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>AI輔助國文教學與作文批改實務</h1>
+        <p>透過AI技術提升教學效率與作文批改品質</p>
+    </div>
+</header>
+
+<div class="container">
+    <div class="meta-info">
+        <p><strong>日期和時間：</strong> 2025-05-01 13:31:01</p>
+        <p><strong>關鍵字：</strong> AI教學應用、作文批改、國文教育</p>
+    </div>
+
+    <section id="introduction">
+        <h2>講座主題概述</h2>
+        <p>本講座聚焦於AI在國文教學與作文批改的應用，涵蓋教師專業挑戰、AI平台（如Gemini、Padlet、Felo等）操作實務、AI生成圖片與詩詞、教學資源搜尋、AI影片與Podcast應用，以及教師如何審核AI生成內容。內容兼顧理論與實作，協助教師提升教學效率與專業判斷力。</p>
+    </section>
+
+    <section id="quotes">
+        <h2>金句分享</h2>
+        <div class="quote">
+            <p>"有時候腦袋真的會枯竭，有時候改作文改到後來都覺得自己被學生拖垮了。自己的程度慢慢的會被同化。"</p>
+        </div>
+        
+        <div class="quote">
+            <p>"AI你要跟他溝通，其實是目前為止，他是有一個基礎的一個格式的，基礎的格式，那這個格式呢，最主要是讓AI不會在生成的過程當中，不會跑掉，因為他畢竟他是生成式AI，所以呢，他可以不受控制的去生成他所想要的東西。"</p>
+            <p class="author">— 陳乃成老師</p>
+        </div>
+        
+        <div class="quote">
+            <p>"一個對話只處理一個工作。"</p>
+        </div>
+        
+        <div class="quote">
+            <p>"讓子彈飛久一點它會越來越強，其實免費對目前的老師群來說夠用。"</p>
+        </div>
+        
+        <div class="quote">
+            <p>"AI 出來之後，你知道最先失業的是誰，你知道嗎？算命師。"</p>
+        </div>
+        
+        <div class="quote">
+            <p>"這麼強的平臺到現在還沒有收費，到現在還不收費，這個是強到我不知道該說什麼。"</p>
+        </div>
+        
+        <div class="quote">
+            <p>"唯一真正的智慧，是知道你自己一無所知。"</p>
+        </div>
+    </section>
+
+    <section id="challenges">
+        <h2>教師批改作文的心理與專業挑戰</h2>
+        <p>教師在長期批改學生作文過程中，容易感受到心理壓力與專業能力的下滑，甚至會被學生的語言習慣同化，影響自身的文字能力。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>長期批改會導致腦力枯竭</li>
+                <li>教師可能被學生的語言習慣同化</li>
+                <li>專業能力可能因批改過程而下滑</li>
+            </ul>
+        </div>
+        
+        <p>講者分享自己在批改作文時的感受，認為長期下來會被學生的語言影響，甚至覺得自己的文字能力也會變差。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>講者表示改作文改到後來都覺得自己被學生拖垮了，自己的程度慢慢的會被同化。</p>
+            </blockquote>
+            <ul>
+                <li>教師長期批改學生作文，會受到學生語言表達的影響。</li>
+                <li>這種影響可能導致教師自身的文字能力下滑。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>注意自身專業能力的維持</li>
+                <li>適時調整批改方式，避免被學生語言同化</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-application">
+        <h2>AI在國中作文批改的應用</h2>
+        <p>利用AI協助國中老師進行作文批改，減輕老師批閱負擔，提升批改效率。AI可針對手寫辨識進行運用，雖然尚未達到百分之百精準，但已能協助老師完成部分批改工作。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>AI可協助批改國中會考作文</li>
+                <li>AI能辨識手寫文字，雖未達百分之百精準，但已可運用</li>
+                <li>AI可給予作文優點、建議及參考分數</li>
+                <li>AI可減輕老師批閱負擔</li>
+            </ul>
+        </div>
+        
+        <p>講者分享自己在104年開始將資訊融入國文教學，至今已十年經驗。現今AI技術已能協助老師進行作文批改，尤其在手寫辨識方面，雖然尚未完全精準，但已能大幅減輕老師的工作負擔。AI可根據設定的人設、目標及限制，給予作文優點、建議及分數，並可進行追問以獲得更詳細的建議。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>設定AI為『臺灣國中會考的作文批改老師』，請AI針對圖片中的文章給予批閱，要求給出三個優點、兩個寫作建議及一個參考分數。如需更詳細建議，可追問AI針對某一點詳加說明。</p>
+            </blockquote>
+            <ul>
+                <li>設定人設：你是臺灣國中會考的作文批改老師。</li>
+                <li>設定目標：請針對圖片中的文章給予批閱。</li>
+                <li>設定限制：請給三個優點、兩個寫作建議及一個參考分數。</li>
+                <li>如需更詳細說明，進行追問。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>AI辨識手寫文字尚未百分之百精準，需人工檢查</li>
+                <li>AI批改建議需老師判斷其適用性</li>
+                <li>AI平台帳號權限可能影響功能開啟</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果AI辨識結果不準確，老師需手動修正或補充。</li>
+                <li>如果AI給出的建議不夠清楚，可進行追問要求更詳細說明。</li>
+                <li>如果學校帳號AI功能未開啟，需聯絡管理員協助開啟。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="padlet">
+        <h2>AI平台padlet的操作與功能</h2>
+        <p>padlet是一個支援AI功能的數位平臺，適合用於即時回饋、共編、上傳多媒體（影片、圖片、錄音、錄影）及AI生成圖片等教學活動。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>padlet支援共用、共編功能</li>
+                <li>可上傳影片、圖片、錄音、錄影</li>
+                <li>內建AI文字生成圖片功能</li>
+                <li>適合用於即時回饋與協作學習</li>
+            </ul>
+        </div>
+        
+        <p>講者介紹padlet平臺的操作方式，包括新增區段、輸入名字、繳交作業、AI生成圖片等。padlet平臺支援多種媒體上傳，並可即時回饋，適合老師進行分組協作與互助學習。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>老師在padlet平台新增區段，輸入名字，於名字下方按加號繳交作業。作業可包括AI生成圖片，並可發布於平台上供大家觀看。</p>
+            </blockquote>
+            <ul>
+                <li>新增區段，輸入名字</li>
+                <li>於名字下方按加號新增貼文</li>
+                <li>選擇2.0模組，輸入指令生成圖片。</li>
+                <li>確認生成內容為圖片而非照片。</li>
+                <li>下載圖片至本地端。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>避免指令中出現『照片』字樣</li>
+                <li>根據使用頻率選擇模組</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果生成內容為照片，需檢查指令是否正確。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="download-upload">
+        <h2>圖片下載與上傳方式</h2>
+        <p>Gemini生成的圖片可透過右上角下載鈕或點擊圖片右鍵另存圖片兩種方式下載，支援JPG與PNG格式。上傳作業時，於成果區選擇上傳鈕，點選圖片即可完成。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>下載方式：右上角下載鈕、右鍵另存圖片</li>
+                <li>支援格式：JPG、PNG</li>
+                <li>上傳方式：成果區加號→上傳鈕→選擇圖片</li>
+            </ul>
+        </div>
+        
+        <p>根據個人習慣選擇下載與上傳方式，確保圖片格式正確。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>確認圖片格式為JPG或PNG</li>
+                <li>下載後檢查檔案是否完整</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果圖片無法上傳，檢查檔案格式是否為JPG或PNG。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="one-task">
+        <h2>對話框一對一工作原則</h2>
+        <p>每個對話框僅處理一項工作，避免多項任務混雜於同一對話，便於日後查找與管理。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>一個對話處理一個任務</li>
+                <li>新任務需開啟新對話</li>
+                <li>對話紀錄自動保存</li>
+            </ul>
+        </div>
+        
+        <p>養成每個任務開新對話的習慣，有助於資料整理與後續查詢。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>避免多項任務混用同一對話</li>
+                <li>定期整理對話紀錄</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果多項任務混雜於同一對話，日後查找會困難，建議重新分開。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="padlet-poetry">
+        <h2>Padlet練習與AI詩詞創作</h2>
+        <p>將生成的圖片上傳後，設定AI人設（如唐代詩人李白），請AI根據圖片內容創作七言絕句並進行解析。國文老師需特別指定『繁體中文』與『臺灣用語』。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>設定AI人設與目標</li>
+                <li>明確限制語言與用語</li>
+                <li>要求AI創作並解析詩詞</li>
+            </ul>
+        </div>
+        
+        <p>透過人設與目標設定，提升AI生成內容的相關性與品質。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>人設：唐代大詩人李白，指令：依照圖片中的風景，寫一首七言絕句，用繁體中文呈現，並加以解析。</p>
+            </blockquote>
+            <ul>
+                <li>上傳臺北101夜景圖片</li>
+                <li>設定人設與語言限制</li>
+                <li>AI生成詩詞並附解析</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>明確指定語言與用語</li>
+                <li>檢查AI生成內容是否符合要求</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果AI未使用繁體中文或臺灣用語，需重新設定指令。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="conversation-history">
+        <h2>對話紀錄保存與管理</h2>
+        <p>Gemini平台會自動保存所有對話紀錄，除非手動刪除。目前尚無資料夾分類功能，所有對話以無限格方式排列。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>對話自動保存</li>
+                <li>無資料夾分類功能</li>
+                <li>可手動刪除對話</li>
+            </ul>
+        </div>
+        
+        <p>需自行管理對話數量，避免過多對話造成查找困難。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>定期整理與刪除不需要的對話</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果對話過多難以查找，建議手動刪除或標記重點。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="copy-share">
+        <h2>複製與分享對話內容</h2>
+        <p>Gemini提供複製與分享對話內容的功能。個人帳號可直接分享對話連結，學校帳號則可匯出至Google文件並分享連結。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>複製功能保留格式（如markdown）</li>
+                <li>個人帳號可直接分享對話連結</li>
+                <li>學校帳號需匯出至Google文件</li>
+            </ul>
+        </div>
+        
+        <p>根據帳號類型選擇合適的分享方式，確保內容完整傳遞。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>確認帳號類型以選擇分享方式</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果無法直接分享對話，改用Google文件匯出並設定權限。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="mobile-sync">
+        <h2>Gemini手機App與電腦同步操作</h2>
+        <p>Gemini手機App與電腦端可同步操作，帳號一致時，所有對話與紀錄皆可互通。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>手機與電腦端資料同步</li>
+                <li>帳號需一致</li>
+            </ul>
+        </div>
+        
+        <p>方便跨裝置操作與資料查詢。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>確保手機與電腦登入同一帳號</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果資料未同步，檢查帳號是否一致。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="vertical-text">
+        <h2>Gemini 2.5模組直式文字辨識能力</h2>
+        <p>Gemini 2.5模組具備優秀的直式文字辨識能力，適合用於手機拍攝直式文件的文字解讀。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>2.5模組可讀取直式文字</li>
+                <li>部分平台僅支援橫式文字</li>
+            </ul>
+        </div>
+        
+        <p>選擇合適模組提升文字辨識準確度。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>拍攝時盡量保持文件正直</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果直式文字無法辨識，確認是否使用2.5模組。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="feedback-design">
+        <h2>作文批改引導語設計</h2>
+        <p>設計AI作文批改引導語時，需明確要求AI給出三個優點、兩個寫作建議與一個參考分數，並以國中會考作文批改老師的角色進行。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>明確指定批改標準</li>
+                <li>設定AI角色與任務</li>
+            </ul>
+        </div>
+        
+        <p>提升AI批改作文的針對性與實用性。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>我是國中會考的作文批改老師，請你依照圖片當中的文章，給他三個優點，兩個寫作建議，跟一個參考性的分數。</p>
+            </blockquote>
+            <ul>
+                <li>設定AI角色</li>
+                <li>明確列出批改要求</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>引導語需具體明確</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果AI回覆內容不完整，需檢查引導語是否明確。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="essay-correction">
+        <h2>AI在國中作文批改的應用</h2>
+        <p>利用AI（如Gemini、康軒AI高手）協助國中作文批改，能自動讀取學生作文內容，給予三個優點、兩個寫作建議及一個參考性分數，並可生成範文供教師參考。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>AI可讀取圖片或PDF檔案中的作文內容</li>
+                <li>可自動生成優點、建議與分數</li>
+                <li>可根據教師回饋調整回應內容</li>
+                <li>可生成範文供教師參考</li>
+            </ul>
+        </div>
+        
+        <p>教師只需拍照上傳作文，AI會自動分析內容並給出三個優點、兩個建議及一個參考分數。教師可針對AI建議進行追問或要求生成範文。AI具備記憶功能，能根據教師的偏好調整回饋內容。若作文有兩面，部分平台（如康軒AI高手）可支援多張圖片上傳，Gemini目前僅支援一張圖片，需轉為PDF檔案處理。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>教師將學生雙面作文正反面拍照上傳至康軒AI高手平台，平台可辨識並批改兩面內容，給予分數與回饋。</p>
+            </blockquote>
+            <ul>
+                <li>教師將作文正反面分別拍照</li>
+                <li>在平台新增頁面上傳兩張圖片</li>
+                <li>AI自動分析並給出回饋與分數</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>AI批改結果需教師審核後再給學生</li>
+                <li>AI回饋內容會根據教師互動逐漸個人化</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果遇到作文超過一頁，Gemini僅支援一張圖片，建議將作文轉為PDF檔案再上傳。</li>
+                <li>如果AI辨識錯誤，可針對特定段落單獨拍照上傳。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-platforms">
+        <h2>AI平台功能與付費差異</h2>
+        <p>不同AI平台（如Gemini、康軒AI高手）在圖片上傳數量、功能完整度及是否需付費等方面有所差異。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>Gemini目前僅支援一張圖片上傳</li>
+                <li>康軒AI高手可支援多張圖片（雙面作文）</li>
+                <li>康軒AI高手因有付費，功能較完整</li>
+                <li>AI平台功能會隨時間逐步增強</li>
+            </ul>
+        </div>
+        
+        <p>Gemini目前僅能處理一張圖片，若作文有多頁需轉為PDF檔案。康軒AI高手因有付費，支援多張圖片上傳，適合批改雙面作文。AI平台功能會隨技術進步逐步提升，建議教師可先使用免費功能，待功能成熟再考慮付費。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>Gemini僅支援單張圖片，康軒AI高手可支援多張圖片並有付費功能，教師可根據需求選擇平台。</p>
+            </blockquote>
+            <ul>
+                <li>教師根據作文頁數選擇合適平台</li>
+                <li>如需多頁批改，優先考慮康軒AI高手</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>教師不需急於購買AI服務，免費功能已足夠日常使用</li>
+                <li>AI平台功能會持續更新，建議觀察發展再決定是否付費</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果平台尚未支援多圖片，建議將多頁內容合併為PDF檔案上傳</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-memory">
+        <h2>AI記憶功能與個人化回饋</h2>
+        <p>AI平台具備記憶功能，能根據教師的互動與回饋調整生成內容，提升個人化程度。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>AI會記住教師的偏好與常用回饋</li>
+                <li>教師可透過給予大拇指或大讚調整AI回應</li>
+                <li>AI生成內容會越來越貼近教師需求</li>
+            </ul>
+        </div>
+        
+        <p>教師與AI互動越多，AI會學習教師的評語風格與偏好，未來生成的回饋會更符合教師需求。教師可透過平台的評價功能（如大拇指、大讚）反饋AI回應品質。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>教師需多與AI互動以提升個人化回饋品質</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="teacher-responsibility">
+        <h2>教師在使用AI批改時的審核責任</h2>
+        <p>AI批改僅供參考，教師需審核AI回饋內容後再給學生，確保回饋品質與正確性。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>AI回饋內容可能有誤，需教師審核</li>
+                <li>教師應根據自身專業判斷調整AI建議</li>
+            </ul>
+        </div>
+        
+        <p>AI生成的批改建議與分數僅供參考，教師需根據自身專業經驗審核內容，避免錯誤資訊傳遞給學生。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>AI回饋需經教師審核後才能給學生</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="felo">
+        <h2>Felo專業搜尋平台介紹與操作</h2>
+        <p>Felo是一個日本開發的專業AI搜尋平台，能協助教師快速搜尋教學資料，支援學術、新聞等多種來源，每日免費用戶可進行五次深入研究。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>Felo可取代Google進行教學資料搜尋</li>
+                <li>支援學術、新聞（X/Twitter）等多種來源</li>
+                <li>每日免費用戶可進行五次深入研究</li>
+                <li>需帳號登錄，建議用Google帳號</li>
+            </ul>
+        </div>
+        
+        <p>教師只需登錄Felo平台，輸入關鍵字即可自動搜尋並彙整多個來源的資料，節省備課時間。平台支援學術、新聞等多種來源，適合不同教學需求。建議教師用Google帳號登錄並開啟同步，方便資料記錄與跨裝置使用。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>教師在Felo平台輸入『登冠雀樓』，選擇研究模式，平台自動搜尋並彙整相關資料，支援學術與新聞來源。</p>
+            </blockquote>
+            <ul>
+                <li>登錄Felo平台</li>
+                <li>輸入關鍵字『登冠雀樓』</li>
+                <li>選擇研究模式並送出</li>
+                <li>平台自動搜尋並彙整多個來源資料</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>需帳號登錄並開啟同步以保存操作記錄</li>
+                <li>免費用戶每日有五次深入研究次數限制</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="teaching-background">
+        <h2>AI生成教學點子與背景設定</h2>
+        <p>AI平台可根據教師填寫的背景資訊，生成更符合需求的教學點子與答案。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>教師可在AI平台填寫自身背景與教學需求</li>
+                <li>AI會根據背景資訊生成更精準的內容</li>
+            </ul>
+        </div>
+        
+        <p>教師在AI平台（如確GVT）填寫自身背景（如任教科目、年級、教學需求），AI會根據這些資訊生成更貼合需求的教學點子與答案，提升教學效率。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>建議教師完整填寫背景資訊以提升AI回應精準度</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="felo-functions">
+        <h2>Felo 平臺的功能與應用</h2>
+        <p>Felo 平臺具備搜尋、閱讀、反思、寫作、來源標註等功能，並可自動生成心智圖、組織圖、時間軸、魚骨圖、AI 圖表、簡報、網頁、小海報等多種教學與知識管理工具，支援 Notion、Canva 串接，並可分門別類收集資料。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>自動化搜尋、閱讀、反思、寫作流程</li>
+                <li>資料來源標註，提升可信度</li>
+                <li>支援 App 下載，具語音辨識與文字辨識</li>
+                <li>自訂 ChatGPT 功能，深入研究資料</li>
+                <li>自動生成多種圖表與心智圖</li>
+                <li>30 秒生成 AI 圖表，3 分鐘生成互動網頁</li>
+                <li>支援 Notion、Canva 串接與編輯</li>
+                <li>簡報每日最多生成 3 次</li>
+                <li>可自訂簡報風格、字體大小</li>
+                <li>分門別類主題收集資料</li>
+            </ul>
+        </div>
+        
+        <p>講者詳細介紹 Felo 平臺的各項功能，從資料搜尋到自動生成圖表、簡報、網頁，並強調其資料來源標註與多平台串接能力，適合教學、知識管理與簡報製作。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>老師在課堂上實際操作 Felo，將搜尋到的詩歌資料自動生成心智圖，再進一步生成簡報，並將簡報串接到 Canva 進行編輯，最後將簡報公開分享。</p>
+            </blockquote>
+            <ul>
+                <li>搜尋詩歌資料，Felo 自動閱讀、反思、寫作並標註來源。</li>
+                <li>點選新製圖功能，將資料自動生成心智圖。</li>
+                <li>使用 AI 圖表功能，30 秒內將文章轉為圖表。</li>
+                <li>生成簡報，每天最多 3 次，並可選擇模板與風格。</li>
+                <li>將簡報串接到 Canva 進行進一步編輯。</li>
+                <li>將簡報公開分享，複製連結或下載。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>網路速度會影響生成速度</li>
+                <li>每日簡報生成次數有限（3 次）</li>
+                <li>需選擇繁體中文作為回應與介面語言</li>
+                <li>App 語音辨識功能適合小型會議錄音</li>
+                <li>Coin Pro 占卜功能每日僅限 5 次</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>若網路較慢，需耐心等待生成結果</li>
+                <li>若不滿意生成內容，可重新生成</li>
+                <li>若後台未選擇正確輸出語言，需手動設定</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="napkin">
+        <h2>進階心智圖工具「餐巾紙」</h2>
+        <p>「餐巾紙」支援 Markdown 貼上、SVG 下載、圖文並茂、可編輯字與圖大小，適合知識圖卡、簡報、學習單製作。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>支援 Markdown 格式貼上</li>
+                <li>可下載 SVG 檔，適合簡報使用</li>
+                <li>圖文並茂，內容可編輯</li>
+                <li>可調整圖與字體大小</li>
+                <li>可記錄曾經做過的內容</li>
+            </ul>
+        </div>
+        
+        <p>講者介紹「餐巾紙」的操作流程，強調其圖文並茂與可編輯性，適合教師製作知識圖卡與簡報。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>老師將 Felo 搜尋到的燈冠確鑼資料複製貼到餐巾紙，選擇王之煥風格，生成多種圖文並茂的心智圖，並下載 SVG 檔用於簡報。</p>
+            </blockquote>
+            <ul>
+                <li>登錄餐巾紙，開啟空白頁面。</li>
+                <li>將 Felo 文件以 Markdown 格式貼上。</li>
+                <li>選擇心智圖風格，點選閃電生成圖文並茂內容。</li>
+                <li>可編輯字體與圖大小，下載 SVG 檔。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>需先註冊登錄</li>
+                <li>目前平台一年內免費，建議趁免費期間多加利用</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>若遇到選擇困難，可多次生成比較</li>
+                <li>若需高畫質，下載時可選擇三倍畫質</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="cloud-ai">
+        <h2>Cloud AI 平臺應用</h2>
+        <p>Cloud AI 由原 CheckGPT 團隊成員創立，強調安全性與中文處理，適合教案、課程計畫、題目出題與劇本寫作。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>不聯網，提升安全性</li>
+                <li>中文處理能力強</li>
+                <li>支援劇本寫作，可將文章改寫為 1000 字校園劇本</li>
+                <li>可調整語氣，適合教育用途</li>
+            </ul>
+        </div>
+        
+        <p>講者說明 Cloud AI 的註冊、登錄流程，並以燈冠確鑼資料為例，將其改寫為校園劇本，強調其中文處理與安全性。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>老師將燈冠確鑼相關資料貼入 Cloud AI，請其改寫為 1000 字校園劇本，並調整語氣為教育版。</p>
+            </blockquote>
+            <ul>
+                <li>登錄 Cloud AI，進入操作介面。</li>
+                <li>貼上文章內容，設定改寫需求（如 1000 字校園劇本）。</li>
+                <li>選擇教育語氣，送出請求。</li>
+                <li>取得改寫後的劇本內容。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>需先註冊登錄</li>
+                <li>不支援聯網，無法即時查詢網路資料</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>若內容過長，可以附件方式貼上</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-video">
+        <h2>AI 影片與測驗平台應用</h2>
+        <p>介紹 Storyteller、Motion 等 AI 影片平台，支援教育版申請，影片可自動生成小測驗，並可將組織稿抓下來出選擇題。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>AI 影片平台支援教育帳號登錄</li>
+                <li>影片可自動生成 5 題選擇題</li>
+                <li>組織稿可用於自動出題</li>
+                <li>適合彈性課程與大量影片教學</li>
+            </ul>
+        </div>
+        
+        <p>講者說明如何利用 AI 影片平台製作教學影片，並自動生成小測驗，減少教師出題負擔。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>老師將教學內容製作成 2-3 分鐘影片，利用 AI 平台自動生成 5 題選擇題，並將組織稿抓下來做彙整。</p>
+            </blockquote>
+            <ul>
+                <li>登錄 AI 影片平台，選擇教育帳號。</li>
+                <li>上傳教學影片，平台自動生成小測驗。</li>
+                <li>抓取組織稿，進行彙整與出題。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>需申請教育版帳號</li>
+                <li>影片長度建議 2-3 分鐘</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>若無法實作，可錄影操作流程供日後參考</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-script">
+        <h2>AI劇本與影片生成平台操作</h2>
+        <p>介紹如何使用AI平台進行劇本生成、影片製作，包括免費與付費功能、點數制度、字幕與配音處理、影片輸出等完整流程。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>免費帳號有16幕限制，初次登入有200點，每次操作消耗20點，用完可換帳號。</li>
+                <li>付費方案如一個月一千點，費用約三百多塊。</li>
+                <li>腳本生成可選語言（預設英文，需改為繁體中文），可簡化或擴寫內容。</li>
+                <li>字幕需手動切割，字幕後不加標點。</li>
+                <li>配音可試聽多種聲音，配樂可調整音量與風格。</li>
+                <li>影片生成速度快，約2-3分鐘完成，檔案大小約五六十MB。</li>
+                <li>影片可直接下載MP4檔案，音檔亦可下載。</li>
+            </ul>
+        </div>
+        
+        <p>課堂中詳細示範從文字複製、Cloud改寫、Motion貼劇本、選擇生成影片的完整步驟，強調操作簡單、效率高，適合短影片與教學素材快速產出。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>講者以哈利波特風格為例，展示如何選擇風格、語言、配音、配樂，並生成影片。</p>
+            </blockquote>
+            <ul>
+                <li>選擇哈利波特風格，將腳本貼上，選擇繁體中文語言。</li>
+                <li>試聽配音與配樂，調整音量，選擇適合的組合。</li>
+                <li>生成影片，約2分鐘完成，下載MP4檔案。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>字幕需手動切割，避免字幕後有標點。</li>
+                <li>語言預設為英文，需手動改為繁體中文。</li>
+                <li>免費帳號有點數與幕數限制，需注意用量。</li>
+                <li>生成內容需教師自行判斷品質。</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果字幕未切割，會影響觀看效果，需手動調整。</li>
+                <li>若點數用完，可更換帳號繼續使用。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-podcast">
+        <h2>AI Podcast中文版本應用</h2>
+        <p>介紹AI Podcast中文版本的推出及其在教學上的應用，特別適合主題式教學與快速理解課文內容。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>Podcast中文版本於2025-04-30推出，原本僅有英文版本。</li>
+                <li>每集約五至六分鐘，適合課堂前播放。</li>
+                <li>內容包含課文分析、作者背景、練習題等。</li>
+                <li>有不同語音風格（老成、年輕），可依學生喜好選擇。</li>
+            </ul>
+        </div>
+        
+        <p>建議教師可於課堂前發下平板，讓學生聽Podcast，快速掌握課文重點，提升教學效率。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>以《背影》為例，Podcast內容涵蓋課文分析、作者背景、相關練習題，並以對話方式呈現。</p>
+            </blockquote>
+            <ul>
+                <li>教師將Podcast連結發給學生，學生於課前聆聽。</li>
+                <li>Podcast內容分析文章情感、寫作背景、父子關係等。</li>
+                <li>學生可透過Podcast快速理解課文主旨。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>選擇適合學生年齡的語音風格。</li>
+                <li>Podcast內容需與教學主題相符。</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果學生對Podcast語音風格不適應，可切換至台灣年輕版Podcast。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="background-analysis">
+        <h2>朱自清《背影》文本分析</h2>
+        <p>分析《背影》一文的寫作背景、情感表達與教學應用，強調文章是在事件發生八年後回憶而成，並以背影意象貫穿全文，表達父愛。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>文章於事件發生八年後寫成，非當下記錄。</li>
+                <li>作者與父親關係經歷起伏，家庭狀況不佳。</li>
+                <li>背影意象貫穿全文，含蓄表達父愛。</li>
+                <li>典型的借事抒情，透過生活小事表達深層情感。</li>
+            </ul>
+        </div>
+        
+        <p>課堂中以Podcast與對話方式，讓學生從不同角度理解文章情感與寫作背景，並結合練習題深化學習。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>以兩人對話方式討論《背影》主題、作者心境與父子關係，並提出學生常見疑問。</p>
+            </blockquote>
+            <ul>
+                <li>學生提問：『朱自清跟他爸爸的關係真的像文章裡寫的那麼像嗎？』</li>
+                <li>教師解釋：『其實朱自清跟他爸爸的關係，並沒有表面上看起來那麼和樂。』</li>
+                <li>透過對話引導學生深入思考文本內容。</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>強調文章非即時記錄，需理解其回憶性質。</li>
+                <li>引導學生從多角度分析文本情感。</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果學生對文本情感理解困難，可輔以Podcast或多媒體教學輔助。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-judgment">
+        <h2>AI生成內容的判斷與教師專業能力</h2>
+        <p>強調教師需具備基本判斷AI生成內容品質的能力，不能完全依賴AI，需有專業素養。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>AI生成內容多元且快速，但品質需教師把關。</li>
+                <li>教師需具備基本能力判斷內容優劣。</li>
+                <li>AI工具為輔助，非取代教師專業。</li>
+            </ul>
+        </div>
+        
+        <p>課堂中提醒教師，雖然AI工具方便，但仍需花時間研究與熟悉，並以專業判斷內容是否適合教學使用。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>教師需持續學習AI工具，提升專業能力。</li>
+                <li>不可完全依賴AI，需自行審核內容。</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果AI生成內容不符合教學需求，需自行修改或補充。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="assignments">
+        <h2>作業與實踐建議</h2>
+        <div class="assignments">
+            <h3>即時實作練習</h3>
+            <ul>
+                <li>於padlet平台輸入自己的名字，並在名字下方新增貼文，利用AI影像功能描述自己，請AI生成圖片並發布。</li>
+                <li>多次練習AI生成圖片功能，嘗試不同描述內容與風格。</li>
+                <li>使用Gemini生成一張臺灣風景圖片（如日月潭、阿里山、臺北101夜景等），並上傳至成果區。</li>
+                <li>將AI生成的詩詞（如七言絕句）內容，透過複製或分享連結的方式，上傳至成果區。</li>
+                <li>依照圖片內容，設計作文批改引導語，要求AI給出三個優點、兩個寫作建議與一個參考分數，並上傳成果。</li>
+            </ul>
+            
+            <h3>課後實踐任務</h3>
+            <ul>
+                <li>實際操作AI作文批改平台（如Gemini或康軒AI高手），拍攝並上傳學生作文圖片，體驗批改流程。</li>
+                <li>登錄Felo專業搜尋平台，嘗試以『登冠雀樓』等課內主題進行資料搜尋，體驗AI輔助備課功能。</li>
+                <li>練習Felo平臺的深度搜尋功能，並嘗試生成心智圖。</li>
+                <li>使用Felo的AI圖表功能，將搜尋到的內容轉為圖表。</li>
+                <li>操作Felo平臺生成簡報，並嘗試與Canva串接編輯。</li>
+                <li>試用Felo的主題分類與每日占卜功能（Coin Pro每日限5次）。</li>
+                <li>註冊並操作餐巾紙平臺，將Felo文件轉為心智圖並下載SVG檔。</li>
+                <li>嘗試使用Cloud AI平臺將文章改寫為1000字校園劇本。</li>
+                <li>有空時試用AI影片平台（Storyteller、Mootion），並申請教育版帳號。</li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <div class="container">
+        <p>© 2025 AI輔助國文教學與作文批改實務</p>
+        <p>講座日期：2025-05-01</p>
+    </div>
+</footer>
+
+</body>
+</html>AI影像功能，描述內容生成圖片</li>
+                <li>發布作業於平台</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>操作時需注意共用、共編可能導致資料被覆蓋</li>
+                <li>AI生成圖片需明確描述，避免生成不符預期的圖像</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果不小心覆蓋他人資料，可重新新增區段或貼文。</li>
+                <li>如果AI生成圖片不滿意，可修改描述內容再生成。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-image">
+        <h2>AI生成圖片（文生圖）教學</h2>
+        <p>利用AI平台的文字生成圖片功能，讓使用者描述自己或其他主題，由AI自動繪製圖像。可設定性別、國籍、動作、場景、時間、藝術風格等細節。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>描述內容需具體明確，包含性別、國籍、動作、場景、時間、藝術風格等</li>
+                <li>關鍵字之間以空格分隔</li>
+                <li>AI約20秒生成四張圖，可選擇最滿意者發布</li>
+                <li>可多次練習，調整描述內容</li>
+            </ul>
+        </div>
+        
+        <p>講者指導老師們利用AI平台的文生圖功能，描述自己或其他主題，讓AI自動生成圖片。建議描述時明確指出性別、國籍（如臺灣）、動作、場景、時間、藝術風格等，以獲得更符合預期的圖像。生成後可多次嘗試，選擇最滿意的圖片發布。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>描述內容如『臺灣男生，30歲，坐在書桌前寫字，湖邊，夜晚，滿月，梵谷風格』，AI約20秒生成四張圖，選擇最滿意者發布。</p>
+            </blockquote>
+            <ul>
+                <li>輸入描述內容，包含性別、國籍、動作、場景、時間、藝術風格</li>
+                <li>按下生成鍵，等待AI生成圖片</li>
+                <li>從四張圖中選擇最滿意者發布</li>
+                <li>如不滿意可修改描述內容再生成</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>描述內容需明確，否則AI可能生成不符預期的圖像</li>
+                <li>平台預設外國人形象，需特別註明亞洲或臺灣</li>
+                <li>男老師需註明性別，否則可能生成女性形象</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果AI生成的圖片不符合預期，應調整描述內容再嘗試。</li>
+                <li>如果描述過於簡略，AI可能無法準確生成所需圖像。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="ai-communication">
+        <h2>AI溝通指令格式（人設、目標、限制、追問）</h2>
+        <p>與AI溝通時，建議採用『人設、目標、限制、追問』的格式，讓AI生成內容更聚焦且符合需求。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>人設：設定AI的角色與身份</li>
+                <li>目標：明確告知AI要完成的任務</li>
+                <li>限制：規範AI生成內容的範圍與格式</li>
+                <li>追問：針對生成內容進一步詢問細節</li>
+            </ul>
+        </div>
+        
+        <p>講者強調與AI溝通時，應先設定人設（如國中會考作文批改老師），再明確給出目標（如針對圖片中的文章給予批閱），接著設定限制（如給三個優點、兩個建議、一個分數），最後如需更詳細內容可進行追問。此格式可讓AI生成內容更聚焦且符合需求。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>人設：你是臺灣國中會考的作文批改老師。目標：請針對圖片中的文章給予批閱。限制：請給三個優點、兩個寫作建議及一個參考分數。追問：請針對第二點建議詳加說明。</p>
+            </blockquote>
+            <ul>
+                <li>設定人設，明確AI角色</li>
+                <li>設定目標，明確任務內容</li>
+                <li>設定限制，規範生成內容格式</li>
+                <li>如需更詳細內容，進行追問</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>指令需明確，避免AI生成內容偏離主題</li>
+                <li>限制條件應具體，方便AI聚焦生成內容</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果AI生成內容不夠詳細，可進行追問要求補充。</li>
+                <li>如果AI未能聚焦主題，應檢查指令是否明確。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="gemini">
+        <h2>Google Gemini平台介紹與圖片辨識功能</h2>
+        <p>Google Gemini平台具備優秀的圖片辨識與文字功能，適合用於AI作文批改與教學應用。建議使用個人帳號，因部分學校帳號預設關閉AI功能。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>Google Gemini圖片辨識文字功能優異</li>
+                <li>部分學校帳號預設關閉AI功能，需管理員開啟</li>
+                <li>未滿18歲帳號可能無法使用部分AI功能</li>
+            </ul>
+        </div>
+        
+        <p>講者推薦Google Gemini平台，因其圖片辨識與文字功能表現優異。提醒老師若使用學校帳號，需確認AI功能是否開啟，部分帳號因安全考量預設關閉，需管理員協助開啟。未滿18歲帳號亦可能受限。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>老師使用Google Gemini平台進行圖片辨識與作文批改，若學校帳號無法使用，建議改用個人帳號或聯絡管理員協助開啟AI功能。</p>
+            </blockquote>
+            <ul>
+                <li>登入Google Gemini平台</li>
+                <li>上傳圖片進行辨識與批改</li>
+                <li>如遇帳號權限問題，聯絡管理員協助</li>
+            </ul>
+        </div>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>確認帳號AI功能是否開啟</li>
+                <li>未滿18歲帳號可能無法使用部分功能</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果帳號AI功能未開啟，需聯絡管理員協助。</li>
+                <li>如果學生帳號受限，建議老師使用個人帳號操作。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="google-login">
+        <h2>Google帳號與Gemini平台登入操作</h2>
+        <p>建議老師們使用Google帳號（如Gmail）登入Gemini平台，教育部Go帳號與臺北市帳號也可能適用。登入後可於gmail.google.com進行操作，付費版與非付費版僅有彩色符號等小差異，初學者建議使用非付費版。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>Google帳號、Gmail帳號皆可登入Gemini</li>
+                <li>教育部Go帳號、臺北市帳號需實際測試</li>
+                <li>付費版多彩色符號，功能差異不大</li>
+                <li>初學者不需付費</li>
+            </ul>
+        </div>
+        
+        <p>老師們可依照自身帳號類型選擇登入方式，若遇到無法登入的情況，建議嘗試不同帳號。</p>
+        
+        <div class="notes">
+            <h4>注意事項</h4>
+            <ul>
+                <li>確認帳號類型是否支援Gemini登入</li>
+                <li>初期不建議付費</li>
+            </ul>
+        </div>
+        
+        <div class="card">
+            <h4>特殊情況處理</h4>
+            <ul>
+                <li>如果臺北市帳號無法登入，建議改用Gmail或教育部Go帳號。</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="gemini-image">
+        <h2>Gemini圖片生成與模組選擇</h2>
+        <p>Gemini平台可根據指令生成圖片，常用2.0模組，2.5模組雖號稱最聰明但有次數限制。生成圖片時需明確指令，避免誤生成照片。</p>
+        
+        <div class="key-points">
+            <h4>關鍵點</h4>
+            <ul>
+                <li>2.0模組無次數限制，適合一般使用</li>
+                <li>2.5模組有次數限制，適合進階需求</li>
+                <li>指令需明確指定生成『圖片』而非『照片』</li>
+            </ul>
+        </div>
+        
+        <p>根據需求選擇模組，並在指令中明確說明生成內容，避免系統誤判。</p>
+        
+        <div class="example">
+            <h4>實例</h4>
+            <blockquote>
+                <p>指令：請幫我生成一張臺灣日月潭夜景的圖片。</p>
+            </blockquote>
+            <ul>
+                <li>選擇

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025年生成式AI學習指南</title>
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FFF9F5;
+        }
+        
+        h1 {
+            color: #FF6B35;
+            text-align: center;
+            border-bottom: 3px solid #FF6B35;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #FF8C61;
+            border-left: 5px solid #FF8C61;
+            padding-left: 15px;
+            margin-top: 30px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(255, 107, 53, 0.1);
+        }
+        
+        .section:hover {
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.2);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        li:before {
+            content: "•";
+            color: #FF8C61;
+            font-weight: bold;
+            position: absolute;
+            left: -15px;
+        }
+        
+        .tools {
+            background: #FFF0E6;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #FFD5C2;
+        }
+    </style>
+</head>
+<body>
+    <h1>2025年生成式AI學習路線圖 - 9大核心領域</h1>
+    
+    <div class="section">
+        <h2>1. AI基礎 (Foundations)</h2>
+        <ul>
+            <li>AI vs ML vs DL的區別</li>
+            <li>監督式vs非監督式學習</li>
+            <li>神經網路與激活函數</li>
+            <li>損失函數與優化器</li>
+            <li>梯度下降與反向傳播</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>2. 資料處理與預處理 (Data & Preprocessing)</h2>
+        <ul>
+            <li>資料標記與清理</li>
+            <li>文本正規化</li>
+            <li>分詞與詞形還原</li>
+            <li>特徵工程</li>
+            <li>資料集平衡</li>
+        </ul>
+        <div class="tools">
+            主要工具：Pandas、NumPy、NLTK、spaCy、Roboflow
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>3. 語言模型 (LLMs)</h2>
+        <ul>
+            <li>BERT vs GPT架構</li>
+            <li>Transformers與自注意力機制</li>
+            <li>嵌入模型</li>
+            <li>模型縮放定律</li>
+        </ul>
+        <div class="tools">
+            重要工具：OpenAI (GPT-4)、HuggingFace Transformers
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. 提示工程 (Prompt Engineering)</h2>
+        <ul>
+            <li>提示鏈接</li>
+            <li>系統vs使用者提示</li>
+            <li>提示模板</li>
+            <li>零樣本vs少樣本提示</li>
+            <li>溫度與最大token調整</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>5. 微調與訓練 (Fine-tuning & Training)</h2>
+        <ul>
+            <li>遷移學習</li>
+            <li>指令微調</li>
+            <li>PEFT、LoRA</li>
+            <li>RLHF (人類反饋強化學習)</li>
+            <li>參數高效訓練</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>6. 多模態與生成模型</h2>
+        <ul>
+            <li>文字生成圖像（擴散模型）</li>
+            <li>圖像描述</li>
+            <li>影片與音樂生成</li>
+            <li>語音合成與識別</li>
+        </ul>
+        <div class="tools">
+            主要工具：Midjourney、DALL-E、Stable Diffusion、Pika Labs
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>7. RAG與向量資料庫</h2>
+        <ul>
+            <li>向量相似度搜索</li>
+            <li>混合搜索（詞法+語義）</li>
+            <li>分塊與元數據過濾</li>
+        </ul>
+        <div class="tools">
+            工具：Pinecone、Weaviate、ChromaDB、FAISS
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>8. 部署與實際應用</h2>
+        <ul>
+            <li>Serverless vs 容器化推理</li>
+            <li>使用限制與速率限制</li>
+            <li>成本優化</li>
+            <li>監控與日誌</li>
+        </ul>
+        <div class="tools">
+            工具：FastAPI、Flask、Docker、Kubernetes
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>9. 道德與負責任的AI</h2>
+        <ul>
+            <li>AI可解釋性</li>
+            <li>資料隱私與同意</li>
+            <li>公平性、問責制、透明度</li>
+            <li>偏見檢測</li>
+        </ul>
+        <div class="tools">
+            工具：IBM AI Fairness 360、SHAP、LIME
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>這份學習地圖提供了一個全面的生成式AI學習框架，從基礎理論到實際應用，再到道德考量，形成了一個完整的知識體系。建議根據個人興趣和職業發展需求，選擇相關領域深入學習。</p>
+    </div>
+</body>
+</html>

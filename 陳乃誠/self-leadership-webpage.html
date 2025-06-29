@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自我領導力彈性課程設計</title>
+    <style>
+        :root {
+            --primary-color: #2ecc71;
+            --secondary-color: #3498db;
+            --accent-color: #9b59b6;
+            --light-bg: #f9f9f9;
+            --dark-bg: #34495e;
+            --text-color: #333;
+            --light-text: #fff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: '微軟正黑體', 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text);
+            text-align: center;
+            padding: 2rem 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .date-time {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+        
+        .tag {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(5px);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        section {
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin: 1.5rem 0 1rem;
+            color: var(--secondary-color);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        .theme-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: justify;
+            background-color: rgba(46, 204, 113, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .key-point {
+            background-color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .key-point:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .key-point-number {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .quote {
+            background-color: rgba(155, 89, 182, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+        }
+        
+        .chapter {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .chapter-header {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            padding: 1rem;
+        }
+        
+        .chapter-content {
+            padding: 1.5rem;
+        }
+        
+        .chapter-desc {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .key-points-list {
+            margin-bottom: 1.5rem;
+        }
+        
+        .explanation {
+            margin-bottom: 1.5rem;
+        }
+        
+        .examples {
+            background-color: rgba(155, 89, 182, 0.1);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .examples p {
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+        
+        .examples ul {
+            margin-left: 2rem;
+            margin-bottom: 0;
+        }
+        
+        .notes, .special-cases {
+            background-color: rgba(52, 152, 219, 0.1);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+        
+        .notes h4, .special-cases h4 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .assignments {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .assignment-item {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .assignment-item::before {
+            content: "•";
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 0;
+            top: -0.2rem;
+        }
+        
+        footer {
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .key-points {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="date-time">日期和時間： 2025-05-21 15:33:21</div>
+            <h1>自我領導力彈性課程設計</h1>
+            <div class="tags">
+                <span class="tag">自我領導力</span>
+                <span class="tag">教育科技</span>
+                <span class="tag">多元評量</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <section id="theme">
+            <h2>主題概述</h2>
+            <div class="theme-description">
+                本講座聚焦於自我領導力彈性課程設計，結合教育科技工具（如心智圖、AI語音、edcafe、NotebookLM等）於教學創新與多元評量。內容涵蓋課程設計實踐、教學工具應用、題型設計、資料庫建立等，並提供具體案例與操作建議，協助教師提升教學成效與學生學習動機。課程中強調動態調整課程內容、靈活運用科技工具，以及針對學生需求設計多元評量方式，並介紹實際操作流程與注意事項。
+            </div>
+        </section>
+
+        <section id="key-points">
+            <h2>講座重點</h2>
+            <div class="key-points">
+                <div class="key-point">
+                    <span class="key-point-number">1</span>自我領導力彈性課程設計與實踐
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">2</span>教育科技工具應用於教學創新
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">3</span>心智圖動態分析與知識拆解
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">4</span>AI語音摘要與語音檔產生
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">5</span>edcafe平台的測驗題設計與應用
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">6</span>YouTube影片轉換為測驗題流程
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">7</span>NotebookLM上傳MP3與語音轉文字
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">8</span>Podcast與測驗結合的教學策略
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">9</span>Quizlet與edcafe測驗題型差異
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">10</span>多元題型設計（多選題、素養導向題）
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">11</span>教學工具設定與語言調整技巧
+                </div>
+                <div class="key-point">
+                    <span class="key-point-number">12</span>教學資源資料庫建立與運用
+                </div>
+            </div>
+        </section>
+
+        <section id="quotes">
+            <h2>金句分享</h2>
+            <div class="quote">
+                "不要害怕失敗，成功的祕訣在於堅持不懈的追求。"
+            </div>
+        </section>
+
+        <section id="chapters">
+            <h2>章節內容</h2>
+            
+            <div class="chapter">
+                <div class="chapter-header">
+                    <h3>自我領導力彈性課程設計與實踐</h3>
+                </div>
+                <div class="chapter-content">
+                    <div class="chapter-desc">
+                        以新竹市立竹光國中陳乃誠老師的自我領導力彈性課程為例，融合國文背景與教育科技專長，進行教學創新，設計課程並實踐，強調理念與實作結合。
+                    </div>
+                    
+                    <div class="key-points-list">
+                        <h4>關鍵點</h4>
+                        <ul>
+                            <li>課程設計結合國文與教育科技</li>
+                            <li>強調自我領導力的培養</li>
+                            <li>課程內容動態調整與創新</li>
+                            <li>實踐理念與教學現場結合</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>講解</h4>
+                        <p>課程設計以學生為中心，融合不同學科專長，透過彈性課程安排，讓學生能夠在實際操作中培養自我領導力。課程內容會根據學生需求與學習狀況進行動態調整，並結合教育科技工具提升教學成效。老師會根據學生的反饋與學習成果，持續調整課程內容與教學策略，確保課程設計貼近學生實際需求。</p>
+                    </div>
+                    
+                    <div class="examples">
+                        <h4>實例</h4>
+                        <p>陳乃誠老師設計的自我領導力彈性課程，將國文素養與教育科技結合，讓學生透過心智圖、AI語音、edcafe測驗等多元方式進行學習與評量。</p>
+                        <ul>
+                            <li>分析學生需求，設計課程主題與內容。</li>
+                            <li>運用心智圖工具進行知識拆解與動態分析，快速分析知識點並靈活調整教學內容。</li>
+                            <li>結合AI語音摘要與edcafe平台設計形成性評量，讓學生能以多元方式展現學習成果。</li>
+                            <li>根據學生回饋與學習成果，持續調整課程內容與題目難度。</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="notes">
+                        <h4>注意事項</h4>
+                        <ul>
+                            <li>課程設計需考量學生程度與需求</li>
+                            <li>教學工具需適時調整語言與題型設定（如預設語言需改為繁體中文）</li>
+                            <li>評量方式需兼顧形成性與總結性</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="special-cases">
+                        <h4>特殊情況</h4>
+                        <ul>
+                            <li>如果學生程度差異大，如何調整課程內容？可根據學生回饋進行動態調整，設計不同難度的題目。</li>
+                            <li>如果教學工具預設語言錯誤，如何處理？需及時修改設定，確保輸出內容語言正確，並刪除錯誤內容後重新產生。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chapter">
+                <div class="chapter-header">
+                    <h3>教育科技工具應用於教學創新</h3>
+                </div>
+                <div class="chapter-content">
+                    <div class="chapter-desc">
+                        運用心智圖、AI語音、edcafe、NotebookLM等教育科技工具，提升教學效率與學習成效，並結合多元評量方式。
+                    </div>
+                    
+                    <div class="key-points-list">
+                        <h4>關鍵點</h4>
+                        <ul>
+                            <li>心智圖可動態拆解知識點，協助學生理解複雜內容</li>
+                            <li>AI語音可將文字轉為語音檔，支援語音摘要與語音檔產生</li>
+                            <li>edcafe可設計多元測驗題型，支援圖片、影片、文字等多種來源</li>
+                            <li>NotebookLM可上傳MP3並進行語音轉文字，適合處理無字幕影片或音檔</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>講解</h4>
+                        <p>教師可根據教學需求選擇合適的教育科技工具，進行知識點拆解、語音摘要、測驗題設計等，提升學生學習動機與成效。操作時需注意工具的語言設定、題型選擇及學生程度設定，並可根據不同來源（如YouTube影片、Podcast、圖片等）靈活運用工具功能。</p>
+                    </div>
+                    
+                    <div class="examples">
+                        <h4>實例</h4>
+                        <p>將YouTube影片連結貼入edcafe，選擇題型與語言設定，系統自動生成選擇題，適合八年級學生。</p>
+                        <ul>
+                            <li>複製YouTube影片連結，貼入edcafe平台，選擇題型（如多選題）、題數（如五題）、學生程度（如八年級）、語言（繁體中文）。</li>
+                            <li>系統自動生成擷取訊息型選擇題，並可附加說明（如素養導向題、題目字數限制）。</li>
+                            <li>檢查題目與答案正確性，必要時手動修正答案。</li>
+                            <li>若YouTube影片無字幕，可將影片轉為MP3音源檔，再上傳至NotebookLM進行語音轉文字，產生文字內容後再設計測驗題。</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="notes">
+                        <h4>注意事項</h4>
+                        <ul>
+                            <li>工具設定需正確（如語言、題型、學生程度）</li>
+                            <li>題目生成後需檢查答案正確性，避免答案設定錯誤</li>
+                            <li>音檔長度需符合平台限制（如NotebookLM不超過3小時）</li>
+                            <li>若遇到平台異常（如edcafe出現異常畫面），可嘗試回首頁或重新操作</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="special-cases">
+                        <h4>特殊情況</h4>
+                        <ul>
+                            <li>如果YouTube影片無字幕，如何處理？可將影片轉為音源檔（MP3），再上傳至NotebookLM進行語音轉文字。</li>
+                            <li>如果題目答案設定錯誤，如何修正？需手動檢查並修正答案，確保評量準確。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chapter">
+                <div class="chapter-header">
+                    <h3>形成性評量與多元題型設計</h3>
+                </div>
+                <div class="chapter-content">
+                    <div class="chapter-desc">
+                        利用edcafe、Quizlet等平台設計形成性評量，題型包括多選題、素養導向題，並根據學生需求調整題數與難度。
+                    </div>
+                    
+                    <div class="key-points-list">
+                        <h4>關鍵點</h4>
+                        <ul>
+                            <li>edcafe適合設計擷取訊息型選擇題，適用於影片、文字等多種來源</li>
+                            <li>Quizlet適合設計較深入的題目，適合進行深度理解與複習</li>
+                            <li>題目可依需求設計三題、五題或更多，靈活調整題數</li>
+                            <li>素養導向題可設定四十字左右，提升題目深度</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>講解</h4>
+                        <p>教師可根據教學目標與學生程度，靈活運用不同平台設計題型，形成性評量有助於即時掌握學生學習狀況，並進行教學調整。可針對不同學習目標設計題目數量與難度，並區分成績與排次作答，提升評量效度。</p>
+                    </div>
+                    
+                    <div class="examples">
+                        <h4>實例</h4>
+                        <p>將Podcast音檔作為來源檔，學生聽完後需完成策略性測驗，第一次作答記錄成績，後續作答記錄為排次。</p>
+                        <ul>
+                            <li>將Podcast音檔上傳為來源檔，設計測驗題，要求學生聽完後作答。</li>
+                            <li>第一次作答記錄成績，後續作答記錄為排次，便於追蹤學生學習進度。</li>
+                            <li>分析學生作答結果，調整教學策略與題目設計。</li>
+                            <li>可將作文考題圖片丟入AI工具（如TradeBP），自動改寫並調整難度，設計不同層次的題目。</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="notes">
+                        <h4>注意事項</h4>
+                        <ul>
+                            <li>題型設計需符合學生程度</li>
+                            <li>題目數量可依學習目標調整</li>
+                            <li>需明確區分成績與排次作答，確保評量公平</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="special-cases">
+                        <h4>特殊情況</h4>
+                        <ul>
+                            <li>如果學生僅大略瀏覽內容，如何設計題目？可設計三至五題，讓學生快速掌握重點。</li>
+                            <li>如果需深入理解內容，如何設計題目？可增加題數並提升題目深度，或使用Quizlet進行深度評量。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chapter">
+                <div class="chapter-header">
+                    <h3>資料庫建立與專業資料運用</h3>
+                </div>
+                <div class="chapter-content">
+                    <div class="chapter-desc">
+                        將線上課程音檔、Podcast等資源建立成專業資料庫，便於知識管理與教學應用。
+                    </div>
+                    
+                    <div class="key-points-list">
+                        <h4>關鍵點</h4>
+                        <ul>
+                            <li>音檔可作為專業資料庫資源，支援多元教學活動</li>
+                            <li>可針對特定知識點自定義語音摘要，靈活運用於教學</li>
+                            <li>資料庫有助於知識管理與教學創新，方便教師隨時調用</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="explanation">
+                        <h4>講解</h4>
+                        <p>教師可將各類教學資源（如線上課程音檔、Podcast）整理成資料庫，並運用於知識點整理、語音摘要、測驗題設計等多元教學活動。可針對不同主題建立專屬資料庫，提升教學效率與資源利用率。</p>
+                    </div>
+                    
+                    <div class="notes">
+                        <h4>注意事項</h4>
+                        <ul>
+                            <li>音檔長度需符合平台限制（如NotebookLM不超過3小時）</li>
+                            <li>資料庫需定期更新與維護，確保內容時效性與完整性</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="special-cases">
+                        <h4>特殊情況</h4>
+                        <ul>
+                            <li>如果音檔過長，如何處理？可裁切音檔，確保長度不超過平台限制，方便上傳與處理。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="assignments">
+            <h2>作業與建議</h2>
+            <div class="assignments">
+                <div class="assignment-item">
+                    請老師們自行測試edcafe平台的測驗題設計功能，設定題型、題數、學生程度與語言，並檢查題目與答案正確性。
+                </div>
+                <div class="assignment-item">
+                    請老師們嘗試將YouTube影片轉為音源檔（MP3），上傳至NotebookLM進行語音轉文字，並設計相關測驗題。
+                </div>
+                <div class="assignment-item">
+                    請老師們將Podcast音檔作為來源檔，設計策略性測驗，並記錄學生第一次與後續作答結果。
+                </div>
+                <div class="assignment-item">
+                    請老師們運用心智圖工具，針對特定知識點進行動態拆解與語音摘要。
+                </div>
+                <div class="assignment-item">
+                    請老師們嘗試將作文考題圖片丟入AI工具，進行自動改寫與難度調整。
+                </div>
+                <div class="assignment-item">
+                    建議老師們熟悉各平台的語言與題型設定，遇到設定錯誤時及時修正，並多加測試不同來源（如影片、音檔、圖片）之處理流程，以提升教學靈活度與創新力。
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 新竹市立新科國民中學 - 自我領導力彈性課程設計</p>
+        </div>
+    </footer>
+</body>
+</html>

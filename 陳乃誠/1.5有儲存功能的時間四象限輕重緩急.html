@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>時間四象限</title>
+    <style>
+        body, html {
+            font-family: Arial, sans-serif;
+            background-color: #FFF0E6;
+            margin: 0;
+            padding: 0;
+            color: #D35400;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            width: 85%;
+            height: 85%;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 2vh 2vw;
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #D35400;
+            margin: 1vh 0;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2vh;
+            flex-wrap: wrap;
+        }
+        .week-control button, .reset-btn {
+            background-color: #F39C12;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .input-container {
+            display: flex;
+            margin-bottom: 2vh;
+            flex-wrap: wrap;
+        }
+        .task-input {
+            flex-grow: 1;
+            padding: 10px;
+            margin: 5px;
+            min-width: 200px;
+        }
+        .add-btn, .reset-btn {
+            background-color: #F39C12;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+        }
+        .quadrants {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 2vh 2vw;
+            flex-grow: 1;
+            min-height: 0;
+        }
+        .quadrant {
+            padding: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .quadrant h2 {
+            margin-top: 0;
+            color: #D35400;
+            font-size: 2.5vh;
+            margin-bottom: 10px;
+        }
+        .task-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(5, 1fr);
+            gap: 10px;
+            height: calc(100% - 40px);
+        }
+        .q1 { background-color: #f0f0f0; grid-area: 1 / 2 / 2 / 3; }
+        .q2 { background-color: #F39C12; grid-area: 1 / 1 / 2 / 2; }
+        .q3 { background-color: #f0f0f0; grid-area: 2 / 1 / 3 / 2; }
+        .q4 { background-color: #f0f0f0; grid-area: 2 / 2 / 3 / 3; }
+        .task {
+            background-color: white;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: move;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+        .q2 h2 { color: white; }
+        
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+                height: 95%;
+            }
+            .quadrants {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(4, 1fr);
+            }
+            .q1 { grid-area: 1 / 1 / 2 / 2; }
+            .q2 { grid-area: 2 / 1 / 3 / 2; }
+            .q3 { grid-area: 3 / 1 / 4 / 2; }
+            .q4 { grid-area: 4 / 1 / 5 / 2; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>時間四象限</h1>
+        <div class="controls">
+            <div class="week-control">
+                <button onclick="changeWeek(-1)">上一週</button>
+                <span id="current-week"></span>
+                <button onclick="changeWeek(1)">下一週</button>
+            </div>
+            <div id="current-date"></div>
+        </div>
+        <div class="input-container">
+            <input type="text" id="task-input" class="task-input" placeholder="輸入新任務 (最多10個中文字)">
+            <button onclick="resetTasks()" class="reset-btn">重置</button>
+        </div>
+        <div class="quadrants">
+            <div class="quadrant q1">
+                <h2>重要又緊急</h2>
+                <div class="task-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+            <div class="quadrant q2">
+                <h2>重要不緊急</h2>
+                <div class="task-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+            <div class="quadrant q3">
+                <h2>不重要不緊急</h2>
+                <div class="task-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+            <div class="quadrant q4">
+                <h2>緊急不重要</h2>
+                <div class="task-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
+        function getWeekDates(d) {
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1); // 調整週日
+            const monday = new Date(d.setDate(diff));
+            const sunday = new Date(d.setDate(diff + 6));
+            return {
+                start: monday,
+                end: sunday
+            };
+        }
+
+        function formatDate(date) {
+            return `${date.getMonth() + 1}/${date.getDate()}`;
+        }
+
+        function updateDateTime() {
+            const weekNumber = getWeekNumber(currentDate);
+            const weekDates = getWeekDates(new Date(currentDate));
+            document.getElementById('current-week').textContent = `第 ${weekNumber} 週`;
+            document.getElementById('current-date').textContent = `${formatDate(weekDates.start)}-${formatDate(weekDates.end)}`;
+        }
+
+        function changeWeek(delta) {
+            currentDate.setDate(currentDate.getDate() + delta * 7);
+            updateDateTime();
+            loadTasks();
+        }
+
+        function addTask() {
+            const input = document.getElementById('task-input');
+            if (input.value.trim() !== '') {
+                const quadrant = document.querySelector('.q2 .task-container');
+                if (quadrant.children.length < 10) {
+                    const task = document.createElement('div');
+                    task.className = 'task';
+                    task.draggable = true;
+                    task.ondragstart = drag;
+                    task.textContent = input.value.slice(0, 10);
+                    task.id = 'task-' + Date.now();
+                    quadrant.appendChild(task);
+                    input.value = '';
+                    rearrangeAllQuadrants();
+                    saveTasks();
+                } else {
+                    alert('此象限已達到最大任務數量（10個）');
+                }
+            }
+        }
+
+        function rearrangeAllQuadrants() {
+            document.querySelectorAll('.task-container').forEach(arrangeTasksInQuadrant);
+        }
+
+        function arrangeTasksInQuadrant(quadrant) {
+            const tasks = Array.from(quadrant.children);
+            tasks.forEach((task, index) => {
+                const row = index % 5;
+                const column = index < 5 ? 0 : 1;
+                task.style.gridColumn = column + 1;
+                task.style.gridRow = row + 1;
+            });
+        }
+
+        function resetTasks() {
+            document.querySelectorAll('.task-container').forEach(container => {
+                container.innerHTML = '';
+            });
+            try {
+                localStorage.removeItem('timeQuadrantTasks_' + getWeekNumber(currentDate));
+            } catch (e) {
+                console.error('無法訪問 localStorage:', e);
+            }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const data = ev.dataTransfer.getData("text");
+            const draggedTask = document.getElementById(data);
+            const targetContainer = ev.target.closest('.task-container');
+            
+            if (targetContainer.children.length < 10) {
+                targetContainer.appendChild(draggedTask);
+                rearrangeAllQuadrants();
+                saveTasks();
+            } else {
+                alert('目標象限已達到最大任務數量（10個）');
+            }
+        }
+
+        function saveTasks() {
+            const tasks = {};
+            document.querySelectorAll('.quadrant').forEach(quadrant => {
+                const quadrantId = quadrant.className.split(' ')[1];
+                tasks[quadrantId] = Array.from(quadrant.querySelectorAll('.task')).map(task => ({
+                    id: task.id,
+                    content: task.textContent
+                }));
+            });
+            try {
+                localStorage.setItem('timeQuadrantTasks_' + getWeekNumber(currentDate), JSON.stringify(tasks));
+            } catch (e) {
+                console.error('無法保存到 localStorage:', e);
+            }
+        }
+
+        function loadTasks() {
+            try {
+                const tasks = JSON.parse(localStorage.getItem('timeQuadrantTasks_' + getWeekNumber(currentDate)));
+                document.querySelectorAll('.task-container').forEach(container => {
+                    container.innerHTML = '';
+                });
+                if (tasks) {
+                    Object.keys(tasks).forEach(quadrantId => {
+                        const quadrant = document.querySelector(`.${quadrantId} .task-container`);
+                        tasks[quadrantId].forEach(taskData => {
+                            if (quadrant.children.length < 10) {
+                                const task = document.createElement('div');
+                                task.className = 'task';
+                                task.draggable = true;
+                                task.ondragstart = drag;
+                                task.textContent = taskData.content;
+                                task.id = taskData.id;
+                                quadrant.appendChild(task);
+                            }
+                        });
+                    });
+                    rearrangeAllQuadrants();
+                }
+            } catch (e) {
+                console.error('無法從 localStorage 讀取:', e);
+            }
+        }
+
+        document.getElementById('task-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        updateDateTime();
+        loadTasks();
+        
+        // 在頁面關閉或刷新時保存任務
+        window.addEventListener('beforeunload', saveTasks);
+    </script>
+</body>
+</html>

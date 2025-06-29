@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國民中小學生成式AI學習評量指引</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            margin: 0 5px;
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-tab.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .principle-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .principle-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .principle-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+
+        .principle-card .icon {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .expandable {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .expandable::after {
+            content: '▼';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            transition: transform 0.3s ease;
+        }
+
+        .expandable.collapsed::after {
+            transform: translateY(-50%) rotate(-90deg);
+        }
+
+        .collapsible-content {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .collapsible-content.collapsed {
+            max-height: 0;
+        }
+
+        .usage-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .usage-table th {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .usage-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            vertical-align: top;
+        }
+
+        .usage-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .usage-table tr:hover {
+            background: #e3f2fd;
+            transition: background 0.3s ease;
+        }
+
+        .ai-type-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ai-type-btn {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ai-type-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .ai-type-btn:hover::before {
+            left: 100%;
+        }
+
+        .ai-type-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        .ai-type-btn.active {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .ai-type-content {
+            display: none;
+        }
+
+        .ai-type-content.active {
+            display: block;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #f39c12;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            border: 1px solid #ffcdd2;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .warning-box::before {
+            content: '⚠️';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #e74c3c;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1) rotate(360deg);
+            box-shadow: 0 6px 25px rgba(231, 76, 60, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-tabs {
+                justify-content: flex-start;
+            }
+            
+            .content-section {
+                padding: 20px;
+            }
+            
+            .ai-type-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 生成式AI教學應用指引</h1>
+            <div class="subtitle">國民中小學學生學習評量及作業使用規範</div>
+            <div class="badge">教育部 114年3月3日 正式發布</div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">📋 總覽</button>
+            <button class="nav-tab" onclick="showSection('principles')">🎯 基本原則</button>
+            <button class="nav-tab" onclick="showSection('teacher-guide')">👨‍🏫 教師指引</button>
+            <button class="nav-tab" onclick="showSection('student-guide')">👨‍🎓 學生指引</button>
+            <button class="nav-tab" onclick="showSection('ai-types')">🛠️ AI類型應用</button>
+        </div>
+
+        <!-- 總覽頁面 -->
+        <div class="content-section active" id="overview">
+            <h2>📊 指引總覽</h2>
+            
+            <div class="highlight-box">
+                <h3>🎯 指引目標</h3>
+                <p>本指引旨在協助教師和學生安全、有效地運用生成式AI進行學習評量和作業創作，在享受AI帶來的便利的同時，培養批判思維和創造能力。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">🔒</span>安全第一</h3>
+                <p>重視隱私保護、避免偏見與歧視，確保AI使用的倫理性和安全性。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">🎨</span>創意提升</h3>
+                <p>將AI視為創作工具，強調學生的主體性和原創思維。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">📚</span>學習深化</h3>
+                <p>透過AI輔助，促進高層次思考和批判性分析能力的發展。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">⚖️</span>公平評量</h3>
+                <p>確保所有學生都能在公平的環境下使用AI工具進行學習。</p>
+            </div>
+        </div>
+
+        <!-- 基本原則頁面 -->
+        <div class="content-section" id="principles">
+            <h2>🎯 基本使用原則</h2>
+
+            <div class="warning-box">
+                <h3>⚠️ 風險防範重點</h3>
+                <p>教師應認識並避免生成式AI在安全、人權、隱私、倫理及法律等方面的潛在風險，並審視其生成內容的多元觀點，確保對不同文化或價值觀保持客觀公正的態度。</p>
+            </div>
+
+            <div class="principle-card expandable" onclick="toggleSection(this)">
+                <h3><span class="icon">🔍</span>資訊查證原則</h3>
+                <div class="collapsible-content">
+                    <ul>
+                        <li>將AI生成內容視為參考資料，不可直接採用</li>
+                        <li>引導學生辨識資訊來源</li>
+                        <li>運用可信賴的網站或文獻進行多方查證</li>
+                        <li>確保資料的正確性及真實性</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card expandable" onclick="toggleSection(this)">
+                <h3><span class="icon">🛡️</span>隱私保護原則</h3>
+                <div class="collapsible-content">
+                    <ul>
+                        <li>僅分享非關隱私的必要資料</li>
+                        <li>避免將個人資訊輸入AI系統</li>
+                        <li>不上傳未公開文件或機密資料</li>
+                        <li>保護自己及他人的個資安全</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card expandable" onclick="toggleSection(this)">
+                <h3><span class="icon">📝</span>標註記錄原則</h3>
+                <div class="collapsible-content">
+                    <ul>
+                        <li>在作品中明確標註AI產出內容</li>
+                        <li>備註所使用的AI工具名稱</li>
+                        <li>記錄生成過程（截圖、連結、儲存）</li>
+                        <li>證明AI僅是創作過程的工具之一</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="principle-card expandable" onclick="toggleSection(this)">
+                <h3><span class="icon">🤝</span>協作學習原則</h3>
+                <div class="collapsible-content">
+                    <ul>
+                        <li>善用AI協作與共學</li>
+                        <li>增強個人思考能力及創造力</li>
+                        <li>透過自身思考完成學習</li>
+                        <li>注意人際溝通禮節，使用禮貌且尊重的用語</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 教師指引頁面 -->
+        <div class="content-section" id="teacher-guide">
+            <h2>👨‍🏫 教師使用指引</h2>
+
+            <div class="highlight-box">
+                <h3>🎯 核心理念</h3>
+                <p>教師應以自身教育專業設計及執行課程，可使用生成式AI工具輔佐設計符應教學目標的教學材料及策略建議，但不宜過度依賴AI工具。</p>
+            </div>
+
+            <h3>📚 教學輔助應用</h3>
+            
+            <div class="principle-card">
+                <h4><span class="icon">📊</span>評量規準設計</h4>
+                <p>利用AI輔助訂定評量規準，對學生說明評量標準，幫助學生掌握評量重點，提升學習成效。</p>
+            </div>
+
+            <div class="principle-card">
+                <h4><span class="icon">🎯</span>教學目標強化</h4>
+                <p>增強教學目標訂定，增加問題思辨性及學習評量深度，讓學生無法僅依靠AI產生答案，激發高層次思考、創造力及學習動機。</p>
+            </div>
+
+            <div class="principle-card">
+                <h4><span class="icon">🔍</span>評量結果分析</h4>
+                <p>運用AI輔助進行簡易篩選判斷，注意學生隱私保護，清楚掌握學生須表現的重要概念，結合教師專業意見提供綜整回饋。</p>
+            </div>
+
+            <div class="principle-card">
+                <h4><span class="icon">🎭</span>多元評量設計</h4>
+                <p>依教學目標設計實作、展演或口頭報告等多元評量方式，避免AI對評量形式的過度取代或干擾。</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚖️ 公平性確保</h3>
+                <p>確保學生使用AI的能力及軟硬體資源，建立相應的輔助及配套措施。若班級學生未均可取得軟硬體或具操作能力，不宜使用該AI工具，以維持學習評量公平性。</p>
+            </div>
+
+            <h3>🎨 教學活動應用</h3>
+
+            <table class="usage-table">
+                <thead>
+                    <tr>
+                        <th>應用方式</th>
+                        <th>具體做法</th>
+                        <th>注意事項</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>批判思維培養</td>
+                        <td>明定AI操作步驟及規範，以培養學生批判性思維、問題解決能力及創造力</td>
+                        <td>注重學生高層次思考能力培養，辨識AI生成內容的正確性</td>
+                    </tr>
+                    <tr>
+                        <td>創作輔助</td>
+                        <td>AI僅作為提供靈感及輔助修改的工具</td>
+                        <td>強調學生自主完成創作</td>
+                    </tr>
+                    <tr>
+                        <td>架構指導</td>
+                        <td>教師自行或指導學生擬訂架構後，利用AI產出內容並進一步修改完善</td>
+                        <td>確保學生理解創作流程</td>
+                    </tr>
+                    <tr>
+                        <td>共同討論</td>
+                        <td>師生共同討論指令，由教師執行AI工具或在教師指導下由學生操作</td>
+                        <td>維持教師的主導地位</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 學生指引頁面 -->
+        <div class="content-section" id="student-guide">
+            <h2>👨‍🎓 學生使用指引</h2>
+
+            <div class="highlight-box">
+                <h3>🎯 核心觀念</h3>
+                <p>將生成式AI視為輔助學習的其中一個工具，避免過度依賴，並依教學目的規範使用原則。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">✅</span>評量結果應用</h3>
+                <p>可使用生成式AI進行訂正及重點學習，但需要經過自己的思考和判斷。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">📚</span>學習歷程整理</h3>
+                <p>利用AI協助整理歸納學習歷程重點，深化學習反思，完善作品呈現，作為調整學習目標及進度的參考。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">🔍</span>評量結果分析</h3>
+                <p>運用AI輔助進行簡易篩選判斷，但要注意隱私保護，並清楚掌握重要概念，結合自己的專業判斷。</p>
+            </div>
+
+            <div class="principle-card">
+                <h3><span class="icon">🎨</span>多元學習方式</h3>
+                <p>配合教學目標使用實作、展演或口頭報告等多元方式，避免AI對學習形式的過度取代。</p>
+            </div>
+
+            <div class="warning-box">
+                <h3>⚠️ 重要提醒</h3>
+                <ul>
+                    <li>確保具備使用AI的能力及軟硬體資源</li>
+                    <li>遵循教師建立的輔助及配套措施</li>
+                    <li>維持學習的公平性和誠信</li>
+                    <li>培養批判性思維和獨立思考能力</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- AI類型應用頁面 -->
+        <div class="content-section" id="ai-types">
+            <h2>🛠️ 各類型AI應用指引</h2>
+
+            <div class="ai-type-selector">
+                <button class="ai-type-btn active" onclick="showAIType('text')">📝 文本AI</button>
+                <button class="ai-type-btn" onclick="showAIType('music')">🎵 音樂AI</button>
+                <button class="ai-type-btn" onclick="showAIType('image')">🎨 圖像AI</button>
+                <button class="ai-type-btn" onclick="showAIType('video')">🎬 影片AI</button>
+            </div>
+
+            <!-- 文本AI -->
+            <div class="ai-type-content active" id="text">
+                <h3>📝 文本生成式AI應用</h3>
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>對象</th>
+                            <th>應用重點</th>
+                            <th>具體做法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>教師</strong></td>
+                            <td>教學設計</td>
+                            <td>利用AI輔助設計文字評量，鼓勵學生進行高層次思考，如批判性寫作或創意寫作</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>使用規範</td>
+                            <td>指導學生適當使用AI工具生成文本，包括引用規範與學術誠信等</td>
+                        </tr>
+                        <tr>
+                            <td><strong>學生</strong></td>
+                            <td>作品標註</td>
+                            <td>詳實記錄生成過程，分別標註由AI產生的內容與自行創作的部分，並標註使用的AI工具及對話記錄</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>反思調整</td>
+                            <td>利用AI進行文本反思與調整，進一步提升寫作能力</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <h4>📋 標註範例</h4>
+                    <p>〔學生姓名：文本撰擬及潤飾／AI工具名稱：寫作方向引導〕</p>
+                </div>
+            </div>
+
+            <!-- 音樂AI -->
+            <div class="ai-type-content" id="music">
+                <h3>🎵 音樂生成式AI應用</h3>
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>對象</th>
+                            <th>應用重點</th>
+                            <th>具體做法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>教師</strong></td>
+                            <td>創意培養</td>
+                            <td>利用AI輔助學生進行音樂創作，強調創作意圖及音樂理論與個人創意的結合</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>工具選擇</td>
+                            <td>針對不同音樂創作階段，指導學生使用不同的AI工具，如曲調或樂曲風格生成等</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>倫理議題</td>
+                            <td>教導學生使用AI生成音樂的智慧財產權議題，維護他人權益</td>
+                        </tr>
+                        <tr>
+                            <td><strong>學生</strong></td>
+                            <td>作品標註</td>
+                            <td>詳實記錄生成過程，並標註使用的AI工具及對話記錄</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>創作過程</td>
+                            <td>強調對音樂創作流程的理解，在學習基礎上使用AI輔助，避免完全依賴</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="highlight-box">
+                    <h4>📋 標註範例</h4>
+                    <p>〔學生姓名：旋律設計及歌詞撰擬／AI工具名稱：音樂編曲〕</p>
+                </div>
+            </div>
+
+            <!-- 圖像AI -->
+            <div class="ai-type-content" id="image">
+                <h3>🎨 圖像生成式AI應用</h3>
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>對象</th>
+                            <th>應用重點</th>
+                            <th>具體做法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>教師</strong></td>
+                            <td>圖像生成引導</td>
+                            <td>指導學生利用AI工具進行圖像創作，強調視覺藝術理論的應用</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>倫理議題</td>
+                            <td>教導學生使用AI生成圖像的智慧財產權、個人隱私、偏見與歧視等倫理議題</td>
+                        </tr>
+                        <tr>
+                            <td><strong>學生</strong></td>
+                            <td>作品標註</td>
+                            <td>詳實記錄生成過程，並標註使用的AI工具及對話記錄</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>創意發揮</td>
+                            <td>運用AI生成圖像的同時，需將個人風格融入作品中，強調個人化表現與藝術性</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="warning-box">
+                    <h4>⚠️ 特別注意</h4>
+                    <p>使用圖像AI時需特別留意合成影像或虛擬人物的真實性問題，避免產生誤導或不當內容。</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4>📋 標註範例</h4>
+                    <p>〔學生姓名：圖片風格及元素／AI工具名稱：圖片生成〕</p>
+                </div>
+            </div>
+
+            <!-- 影片AI -->
+            <div class="ai-type-content" id="video">
+                <h3>🎬 影片生成式AI應用</h3>
+                <table class="usage-table">
+                    <thead>
+                        <tr>
+                            <th>對象</th>
+                            <th>應用重點</th>
+                            <th>具體做法</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>教師</strong></td>
+                            <td>教學與創作</td>
+                            <td>使用AI輔助設計視覺故事或短片的腳本，讓學生在此基礎上進行剪輯與修改</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>倫理議題</td>
+                            <td>教導學生使用AI生成影片的智慧財產權、個人隱私、偏見與歧視等倫理議題</td>
+                        </tr>
+                        <tr>
+                            <td><strong>學生</strong></td>
+                            <td>作品標註</td>
+                            <td>詳實記錄生成過程，並標註使用的AI工具及對話記錄</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>自主創作</td>
+                            <td>運用AI輔助製作影片時，應自主設計創作出具敘事性與原創性的動態影片</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="warning-box">
+                    <h4>⚠️ 特別注意</h4>
+                    <p>影片AI涉及更複雜的智慧財產權和真實性問題，使用時需格外謹慎，避免侵犯他人權益或產生不當內容。</p>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4>📋 標註範例</h4>
+                    <p>〔學生姓名：影片人物對白及元素／AI工具名稱：影片及其背景音樂生成〕</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="floating-action" onclick="scrollToTop()" title="回到頂端">↑</button>
+
+    <script>
+        function showSection(sectionId) {
+            // 隱藏所有內容區塊
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // 移除所有導航標籤的活動狀態
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // 顯示選中的內容區塊
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 設置對應導航標籤為活動狀態
+            event.target.classList.add('active');
+        }
+
+        function showAIType(typeId) {
+            // 隱藏所有AI類型內容
+            const contents = document.querySelectorAll('.ai-type-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // 移除所有AI類型按鈕的活動狀態
+            const buttons = document.querySelectorAll('.ai-type-btn');
+            buttons.forEach(button => button.classList.remove('active'));
+            
+            // 顯示選中的AI類型內容
+            document.getElementById(typeId).classList.add('active');
+            
+            // 設置對應按鈕為活動狀態
+            event.target.classList.add('active');
+        }
+
+        function toggleSection(element) {
+            const content = element.querySelector('.collapsible-content');
+            const isCollapsed = content.classList.contains('collapsed');
+            
+            if (isCollapsed) {
+                content.classList.remove('collapsed');
+                element.classList.remove('collapsed');
+            } else {
+                content.classList.add('collapsed');
+                element.classList.add('collapsed');
+            }
+        }
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 頁面載入時的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 為可展開的卡片添加初始動畫
+            const expandableCards = document.querySelectorAll('.principle-card.expandable');
+            expandableCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(10px)';
+                });
+            });
+        });
+
+        // 滾動時的視差效果
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.header');
+            const speed = scrolled * 0.5;
+            
+            if (parallax) {
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
+        });
+    </script>
+</body>
+</html>

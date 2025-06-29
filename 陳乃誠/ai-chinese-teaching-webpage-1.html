@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI在國文教學中的應用與轉變</title>
+    <style>
+        :root {
+            --primary-color: #FF8C42;
+            --secondary-color: #FFC15E;
+            --accent-color: #FF5733;
+            --text-color: #333333;
+            --light-bg: #FFF4E6;
+            --white: #FFFFFF;
+            --shadow: rgba(255, 140, 66, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px var(--shadow);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 3rem 0;
+        }
+        
+        .section {
+            background-color: var(--white);
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+        
+        .section-header {
+            background-color: var(--secondary-color);
+            padding: 1rem 2rem;
+            border-left: 6px solid var(--accent-color);
+        }
+        
+        .section-header h2 {
+            color: var(--text-color);
+            font-size: 1.8rem;
+        }
+        
+        .section-content {
+            padding: 2rem;
+        }
+        
+        h3 {
+            color: var(--accent-color);
+            margin: 1.5rem 0 1rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+        
+        h4 {
+            margin: 1.2rem 0 0.8rem;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        th, td {
+            border: 1px solid var(--secondary-color);
+            padding: 0.8rem;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(255, 193, 94, 0.1);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 140, 66, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .navigation {
+            position: sticky;
+            top: 0;
+            background-color: var(--white);
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px var(--shadow);
+            z-index: 1000;
+        }
+        
+        .nav-list {
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .nav-item {
+            margin-right: 1.5rem;
+            white-space: nowrap;
+        }
+        
+        .nav-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            h3 {
+                font-size: 1.3rem;
+            }
+            
+            .section-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>AI在國文教學中的應用與轉變</h1>
+            <p class="subtitle">從單篇課文到主題式學習的教學創新</p>
+        </div>
+    </header>
+    
+    <nav class="navigation">
+        <div class="container">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="#tools" class="nav-link">AI工具比較</a></li>
+                <li class="nav-item"><a href="#system" class="nav-link">知識管理系統</a></li>
+                <li class="nav-item"><a href="#learning" class="nav-link">生成式學習</a></li>
+                <li class="nav-item"><a href="#reading" class="nav-link">閱讀解碼</a></li>
+                <li class="nav-item"><a href="#integration" class="nav-link">整合應用</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="content">
+        <div class="container">
+            <section id="tools" class="section">
+                <div class="section-header">
+                    <h2>1. AI工具比較與特性</h2>
+                </div>
+                <div class="section-content">
+                    <h3>ChatGPT與NotebookLM功能比較</h3>
+                    <table>
+                        <tr>
+                            <th>項目</th>
+                            <th>ChatGPT (OpenAI)</th>
+                            <th>NotebookLM (Google)</th>
+                        </tr>
+                        <tr>
+                            <td>產品定位</td>
+                            <td>通用型聊天機器人、人工智慧助手</td>
+                            <td>關聯與知識整理為核心的AI筆記工具</td>
+                        </tr>
+                        <tr>
+                            <td>語言模型</td>
+                            <td>GPT-3.5 (免費) 升級版付費</td>
+                            <td>Gemini 2.0 (目前免費使用)</td>
+                        </tr>
+                        <tr>
+                            <td>支援格式</td>
+                            <td>可直接貼上文字或上傳文件/圖片</td>
+                            <td>多模態閱讀：Google文件、簡報、PDF、文字檔、YouTube/網頁連結 (不支援圖片)</td>
+                        </tr>
+                        <tr>
+                            <td>處理模式</td>
+                            <td>「對話」為主，每輪可重設或接續</td>
+                            <td>以「筆記本」為單位，整合來源檔案、記事與提問，具備持續累積與組織能力</td>
+                        </tr>
+                        <tr>
+                            <td>處理限制</td>
+                            <td>有token限制</td>
+                            <td>每份來源文件上限500,000字元，每本筆記本最多50檔案、1,000則記事</td>
+                        </tr>
+                        <tr>
+                            <td>共用功能</td>
+                            <td>GPTs可建立並分享 (Plus以上)</td>
+                            <td>可與同網域50人共用筆記本@gmail.com</td>
+                        </tr>
+                        <tr>
+                            <td>知識來源</td>
+                            <td>OpenAI模型訓練資料</td>
+                            <td>完全依據使用者上傳或連結的來源資料</td>
+                        </tr>
+                        <tr>
+                            <td>核心功能</td>
+                            <td>對話、寫作、翻譯、摘要、資料生成、程式協助</td>
+                            <td>上傳/連結文件後進行摘要、知識問答、生成記事、跨檔比對、思維整理</td>
+                        </tr>
+                        <tr>
+                            <td>使用場景</td>
+                            <td>對話問答、寫故事、寫信、改寫文章、寫程式、語言練習等</td>
+                            <td>閱讀一本書、彙整研究資料、做學習摘要、提問討論文章內容、建立主題筆記本</td>
+                        </tr>
+                    </table>
+                    
+                    <h3>兩者核心差異與特點</h3>
+                    <h4>互動模式差異</h4>
+                    <ul>
+                        <li><strong>ChatGPT:</strong> 對話接龍、發散創意、問答聚焦、建構路線</li>
+                        <li><strong>NotebookLM:</strong> 閱讀檔案、聚斂整理、交叉比對、網狀地圖</li>
+                    </ul>
+                    
+                    <h4>教學應用差異</h4>
+                    <ul>
+                        <li>ChatGPT更適合創意寫作、即時問答和個別指導</li>
+                        <li>NotebookLM更適合文本分析、主題整合和知識連結</li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <p>選擇AI工具時，應考慮教學目標、文本特性和學生需求，兩種工具可相輔相成，共同創造豐富的學習體驗。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="system" class="section">
+                <div class="section-header">
+                    <h2>2. 「應援團」知識管理系統架構</h2>
+                </div>
+                <div class="section-content">
+                    <h3>四大功能模組詳解</h3>
+                    
+                    <h4>多模態應援（閱讀檔案）</h4>
+                    <ul>
+                        <li>處理多種格式的資料輸入：文字文件、圖表、音訊、視訊、網頁</li>
+                        <li>教學應用：使教師可導入多元教材，突破格式限制，提升備課效率</li>
+                        <li>延伸應用：跨媒體素材整合，建立豐富的學習資源庫</li>
+                    </ul>
+                    
+                    <h4>全方位應援（聚斂整理）</h4>
+                    <ul>
+                        <li>資訊的系統性組織：自動分類重點、建立主題階層、提煉核心概念</li>
+                        <li>教學應用：減少課程準備時間，確保教材邏輯清晰、結構完整</li>
+                        <li>延伸應用：協助建立單元教學架構，優化知識呈現順序</li>
+                    </ul>
+                    
+                    <h4>應援團主打歌（交叉比對）</h4>
+                    <ul>
+                        <li>資料關聯性分析：識別連結、比對概念、發現差異、建立橫向關聯</li>
+                        <li>教學應用：協助發展跨學科教案，探索主題在不同文本間的呈現</li>
+                        <li>延伸應用：促進文本間的對話與比較，深化文本理解層次</li>
+                    </ul>
+                    
+                    <h4>應援團「帶路去！」（網狀地圖）</h4>
+                    <ul>
+                        <li>知識導航與視覺化：建立網絡連結、視覺化知識架構、提供學習路徑</li>
+                        <li>教學應用：設計直觀教學路徑，協助學生建立完整知識地圖</li>
+                        <li>延伸應用：發展主題式學習脈絡，展現知識間的有機連結</li>
+                    </ul>
+                    
+                    <h3>教育應用價值</h3>
+                    <ol>
+                        <li><strong>差異化教學支援：</strong>根據不同學生需求提供客製化學習資源</li>
+                        <li><strong>跨領域課程設計：</strong>促進不同學科知識整合與連結</li>
+                        <li><strong>協作式教學準備：</strong>提升教師團隊資源共享效率</li>
+                        <li><strong>深度學習促進：</strong>轉向理解概念間的關聯與網絡</li>
+                        <li><strong>自主學習輔助：</strong>培養學生探索知識的能力</li>
+                    </ol>
+                    
+                    <div class="highlight">
+                        <p>「應援團」模式將AI視為教學團隊中的重要成員，不只提供資源，更協助教師組織知識、連結概念，創造更有意義的學習環境。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="learning" class="section">
+                <div class="section-header">
+                    <h2>3. 生成式學習教學轉變</h2>
+                </div>
+                <div class="section-content">
+                    <h3>從「單篇課文」到「主題學習」的三階段</h3>
+                    
+                    <h4>多模態閱讀階段</h4>
+                    <ul>
+                        <li>國文學科閱讀與寫作多元試題結合</li>
+                        <li>課內外材料整合與多媒體資源融入</li>
+                        <li>突破單一課文限制，豐富學生閱讀視野</li>
+                        <li>延伸應用：建立課文與現實生活的連結，增強學習意義性</li>
+                    </ul>
+                    
+                    <h4>議題互動階段</h4>
+                    <ul>
+                        <li>整合不同形式的文本和媒體資源</li>
+                        <li>設計多元寫作任務，強化閱讀與寫作連結</li>
+                        <li>學生從被動接受到主動參與的轉變</li>
+                        <li>延伸應用：發展以議題為中心的探究活動，培養批判思考能力</li>
+                    </ul>
+                    
+                    <h4>核心思維階段</h4>
+                    <ul>
+                        <li>鼓勵學生跨出舒適圈，進行自主探索</li>
+                        <li>發展獨立思考能力，主動跨越知識邊界</li>
+                        <li>從知識獲取到知識創造的轉變</li>
+                        <li>延伸應用：建立學生主導的研究專案，深化學習主體性</li>
+                    </ul>
+                    
+                    <h3>教育意義與價值</h3>
+                    <ol>
+                        <li><strong>從單一到多元：</strong>拓展學習素材與形式，使學習更加立體全面</li>
+                        <li><strong>從被動到主動：</strong>培養學生主動探索、建構知識的能力</li>
+                        <li><strong>從分散到整合：</strong>將獨立課文整合成系統性知識網絡</li>
+                        <li><strong>從記憶到思維：</strong>重點從記憶內容轉向培養批判思考能力</li>
+                        <li><strong>從學科到跨域：</strong>打破學科界限，增強學習實用性和意義性</li>
+                    </ol>
+                    
+                    <div class="highlight">
+                        <p>生成式學習鼓勵學生不只是知識的消費者，更成為知識的建構者，透過主題連結與整合，培養21世紀所需的綜合思考能力。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="reading" class="section">
+                <div class="section-header">
+                    <h2>4. 閱讀解碼與學習模組</h2>
+                </div>
+                <div class="section-content">
+                    <h3>三層閱讀理解進程</h3>
+                    
+                    <h4>What (結構層)</h4>
+                    <ul>
+                        <li>概覽全文結構和取材方式</li>
+                        <li>識別文本組織形式與基本架構</li>
+                        <li>掌握文本的表層意義與主題</li>
+                        <li>延伸應用：建立文本分析框架，提升文本識讀能力</li>
+                    </ul>
+                    
+                    <h4>How (脈絡層)</h4>
+                    <ul>
+                        <li>掌握段落重點和邏輯脈絡</li>
+                        <li>分析作者論證與敘事方式</li>
+                        <li>理解文本內部的因果關係</li>
+                        <li>延伸應用：培養學生分析文本內在邏輯的能力，強化閱讀理解深度</li>
+                    </ul>
+                    
+                    <h4>Why (目的層)</h4>
+                    <ul>
+                        <li>統整寫作目的和深層意義</li>
+                        <li>探究作者意圖與文本價值</li>
+                        <li>發展個人省思與批判視角</li>
+                        <li>延伸應用：引導學生反思文本與自身經驗的連結，建立個人詮釋</li>
+                    </ul>
+                    
+                    <h3>AI輔助學習模組應用</h3>
+                    
+                    <h4>學習難點突破</h4>
+                    <ul>
+                        <li>運用AI助手協助學生克服文本分析障礙</li>
+                        <li>提供結構化的閱讀引導與提問</li>
+                        <li>延伸應用：設計階梯式的學習鷹架，循序漸進提升分析能力</li>
+                    </ul>
+                    
+                    <h4>科技工具整合</h4>
+                    <ul>
+                        <li>QR碼連結AI輔助工具，提供即時學習支援</li>
+                        <li>結合線上與線下學習體驗，創造混合式學習環境</li>
+                        <li>延伸應用：發展個人化學習歷程檔案，記錄學生成長軌跡</li>
+                    </ul>
+                    
+                    <h4>閱讀素養提升</h4>
+                    <ul>
+                        <li>從表層文字理解到深層意義探究的全方位培養</li>
+                        <li>建立系統性的閱讀方法論，強化終身學習能力</li>
+                        <li>延伸應用：培養學生成為自主的閱讀者，具備文本分析與評價能力</li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <p>「閱讀解碼」提供了一個系統化的文本分析框架，讓學生能依循「結構→脈絡→目的」的層次，逐步深入理解文本，AI輔助工具則提供適時支援，降低學習門檻。</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="integration" class="section">
+                <div class="section-header">
+                    <h2>5. AI輔助國文教學的整合應用</h2>
+                </div>
+                <div class="section-content">
+                    <h3>教學實踐建議</h3>
+                    
+                    <h4>主題式學習單元設計</h4>
+                    <ul>
+                        <li>圍繞核心概念或議題整合多元文本</li>
+                        <li>運用AI工具協助文本間的關聯分析</li>
+                        <li>設計由淺入深的階段性學習活動</li>
+                        <li>建立跨文本的比較與對話機會</li>
+                    </ul>
+                    
+                    <h4>多模態閱讀教學策略</h4>
+                    <ul>
+                        <li>整合傳統文本與數位媒體資源</li>
+                        <li>運用AI工具處理與分析不同媒介的文本</li>
+                        <li>引導學生理解不同媒介的表達特性</li>
+                        <li>培養學生跨媒介的轉譯與詮釋能力</li>
+                    </ul>
+                    
+                    <h4>AI輔助差異化教學</h4>
+                    <ul>
+                        <li>根據學生能力提供不同層次的學習支援</li>
+                        <li>運用AI工具進行學習診斷與個別化建議</li>
+                        <li>設計適性化的學習路徑與資源</li>
+                        <li>提升每位學生的學習參與度與成就感</li>
+                    </ul>
+                    
+                    <h3>未來發展方向</h3>
+                    
+                    <h4>建立學科專用AI教學助手</h4>
+                    <ul>
+                        <li>發展專為國文教學設計的AI工具</li>
+                        <li>整合文本分析、寫作指導與閱讀診斷功能</li>
+                        <li>累積教學經驗與學生學習資料，持續優化系統</li>
+                    </ul>
+                    
+                    <h4>教師專業成長與AI素養</h4>
+                    <ul>
+                        <li>培養教師運用AI工具的專業能力</li>
+                        <li>發展AI輔助教學的最佳實踐與案例分享</li>
+                        <li>建立教師社群共同探索AI教學應用</li>
+                    </ul>
+                    
+                    <h4>跨學科整合與創新</h4>
+                    <ul>
+                        <li>探索國文與其他學科的跨領域學習模式</li>
+                        <li>運用AI工具促進知識間的連結與整合</li>
+                        <li>培養學生的系統思考與跨域應用能力</li>
+                    </ul>
+                    
+                    <div class="highlight">
+                        <p>AI輔助教學的核心價值在於促進學生從單一文本閱讀到主題式學習的轉變，並培養他們成為具備批判思考能力的終身學習者。教師在這個過程中扮演設計者、引導者與啟發者的角色，而非被AI取代。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>AI在國文教學中的應用與轉變 © 2025</p>
+            <p>從單篇課文到主題式學習的教學創新</p>
+        </div>
+    </footer>
+</body>
+</html>

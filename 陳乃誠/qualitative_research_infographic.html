@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教師數位工具應用質性研究分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe8d6 100%);
+            padding: 20px;
+            color: #2c1810;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff8c42 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .research-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .research-section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+            border-left: 5px solid #ff6b35;
+            transition: transform 0.3s ease;
+        }
+        
+        .research-section:hover {
+            transform: translateY(-5px);
+        }
+        
+        .research-section h2 {
+            color: #e55100;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #ffcc80;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: scale(1.05);
+            border-color: #ff8c42;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #e65100;
+            display: block;
+        }
+        
+        .stat-label {
+            color: #bf360c;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .theme-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid #ff8c42;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .theme-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.2);
+        }
+        
+        .theme-title {
+            color: #e65100;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .theme-description {
+            color: #5d4037;
+            line-height: 1.6;
+        }
+        
+        .key-findings {
+            background: linear-gradient(135deg, #fff8f3 0%, #ffeccb 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid #ffab40;
+        }
+        
+        .findings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .finding-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 3px solid #ff8c42;
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.1);
+        }
+        
+        .finding-category {
+            background: #ff6b35;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+        
+        .methodology {
+            background: linear-gradient(135deg, #e8f5e8 0%, #fff3e0 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid #81c784;
+        }
+        
+        .method-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .method-step {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #66bb6a;
+            position: relative;
+        }
+        
+        .step-number {
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #4caf50;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        
+        .recommendations {
+            background: linear-gradient(135deg, #f3e5f5 0%, #fff3e0 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 2px solid #ba68c8;
+        }
+        
+        .rec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .rec-item {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #ab47bc;
+            transition: all 0.3s ease;
+        }
+        
+        .rec-item:hover {
+            transform: translateX(5px);
+            background: #fce4ec;
+        }
+        
+        .rec-item::before {
+            content: "💡";
+            margin-right: 0.8rem;
+            font-size: 1.2rem;
+        }
+        
+        .analysis-chart {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+            border-left: 5px solid #ff6b35;
+        }
+        
+        .chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: end;
+            height: 300px;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: linear-gradient(135deg, #fff8f3 0%, #ffe8d6 100%);
+            border-radius: 10px;
+        }
+        
+        .bar {
+            background: linear-gradient(to top, #ff6b35, #ff8c42);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .bar:hover {
+            transform: scale(1.05);
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #e65100;
+            text-align: center;
+            width: max-content;
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #e65100;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .timeline {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+            border-left: 5px solid #ff6b35;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: #fff8f3;
+            border-radius: 10px;
+            border-left: 3px solid #ff8c42;
+        }
+        
+        .timeline-time {
+            background: #ff6b35;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 1rem;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .research-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2rem;
+            }
+            .chart-container {
+                height: 250px;
+            }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header fade-in">
+            <h1>📊 教師數位工具應用講座</h1>
+            <p>質性研究分析報告</p>
+            <small>研究對象：新竹市竹光國中陳乃誠老師分享會 | 日期：2025-05-23</small>
+        </div>
+
+        <!-- 研究基本數據 -->
+        <div class="stats-container fade-in">
+            <div class="stat-card">
+                <span class="stat-number">300+</span>
+                <div class="stat-label">參與者提問數</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">85</span>
+                <div class="stat-label">分享時間(分鐘)</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">21</span>
+                <div class="stat-label">章節主題數</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">10</span>
+                <div class="stat-label">核心要點</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">6</span>
+                <div class="stat-label">推薦工具</div>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">8</span>
+                <div class="stat-label">金句精選</div>
+            </div>
+        </div>
+
+        <div class="research-grid">
+            <!-- 研究方法 -->
+            <div class="research-section fade-in">
+                <h2>🔬 研究設計</h2>
+                <div class="method-steps">
+                    <div class="method-step">
+                        <div class="step-number">1</div>
+                        <strong>資料收集</strong>
+                        <p>線上講座全程錄音記錄，參與者即時提問互動</p>
+                    </div>
+                    <div class="method-step">
+                        <div class="step-number">2</div>
+                        <strong>主題編碼</strong>
+                        <p>將內容分為21個章節，提取核心概念</p>
+                    </div>
+                    <div class="method-step">
+                        <div class="step-number">3</div>
+                        <strong>內容分析</strong>
+                        <p>歸納10項要點，分析金句與建議</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 參與者特徵 -->
+            <div class="research-section fade-in">
+                <h2>👥 研究對象</h2>
+                <div class="theme-card">
+                    <div class="theme-title">主講人背景</div>
+                    <div class="theme-description">新竹市竹光國中資訊組陳乃誠老師，具備豐富數位教學經驗</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">參與者群體</div>
+                    <div class="theme-description">全國各級學校教師，對數位工具應用有強烈學習需求</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">互動程度</div>
+                    <div class="theme-description">高度參與，收到超過300則提問，顯示議題關注度極高</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主題分析 -->
+        <div class="key-findings fade-in">
+            <h2 style="color: #e65100; margin-bottom: 1rem;">🎯 主要研究發現</h2>
+            <div class="findings-grid">
+                <div class="finding-item">
+                    <div class="finding-category">工具客製化</div>
+                    <p><strong>核心發現：</strong>「Notion這個東西啊一定要是自己做出來的你才會用得久」- 強調個人化設計的重要性</p>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-category">AI溝通技巧</div>
+                    <p><strong>核心發現：</strong>引導語(Prompt)設計是AI工具應用成功的關鍵因素</p>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-category">工作生活平衡</div>
+                    <p><strong>核心發現：</strong>「人生不是隻有工作而已」- 數位工具應服務於生活品質提升</p>
+                </div>
+                <div class="finding-item">
+                    <div class="finding-category">實作學習</div>
+                    <p><strong>核心發現：</strong>「不要想太多做就對了」- 強調實作與持續練習的重要性</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 內容主題分析圖表 -->
+        <div class="analysis-chart fade-in">
+            <h2 style="color: #e65100; margin-bottom: 1rem;">📈 內容主題分布分析</h2>
+            <div class="chart-container">
+                <div class="bar" style="height: 80%; width: 60px;">
+                    <div class="bar-value">38%</div>
+                    <div class="bar-label">AI工具<br>應用</div>
+                </div>
+                <div class="bar" style="height: 70%; width: 60px;">
+                    <div class="bar-value">33%</div>
+                    <div class="bar-label">Notion<br>管理</div>
+                </div>
+                <div class="bar" style="height: 45%; width: 60px;">
+                    <div class="bar-value">19%</div>
+                    <div class="bar-label">時間<br>管理</div>
+                </div>
+                <div class="bar" style="height: 25%; width: 60px;">
+                    <div class="bar-value">10%</div>
+                    <div class="bar-label">其他<br>工具</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: #e65100; font-weight: bold;">
+                分析顯示：AI工具應用與Notion管理佔講座內容71%，為教師最關注領域
+            </p>
+        </div>
+
+        <!-- 講座時程分析 -->
+        <div class="timeline fade-in">
+            <h2 style="color: #e65100; margin-bottom: 1rem;">⏰ 講座流程時間分配</h2>
+            <div class="timeline-item">
+                <div class="timeline-time">開場 (5分)</div>
+                <div>活動介紹與講師背景</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">AI應用 (30分)</div>
+                <div>ChatGPT、Prong優化大師等工具實際操作示範</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">Notion教學 (25分)</div>
+                <div>教育版申請、模板應用、專案管理</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">工具整合 (10分)</div>
+                <div>Dola、Line機器人、時間管理工具</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-time">Q&A (15分)</div>
+                <div>現場問題解答與經驗分享</div>
+            </div>
+        </div>
+
+        <!-- 質性主題歸納 -->
+        <div class="methodology fade-in">
+            <h2 style="color: #2e7d32; margin-bottom: 1rem;">🔍 質性主題歸納</h2>
+            <div class="themes-grid">
+                <div class="theme-card">
+                    <div class="theme-title">1. 個人化工具設計</div>
+                    <div class="theme-description">強調根據個人需求客製化數位工具，而非盲目套用他人模板，這是長期使用的關鍵</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">2. AI溝通策略</div>
+                    <div class="theme-description">重視與AI的有效溝通技巧，特別是引導語的設計與個人化背景設定</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">3. 效率提升導向</div>
+                    <div class="theme-description">所有工具應用都以提升工作效率、減少重複性作業為核心目標</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">4. 持續學習精神</div>
+                    <div class="theme-description">強調實作練習的重要性，建議「做中學」的學習方式</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">5. 工作生活平衡</div>
+                    <div class="theme-description">數位工具的最終目的是提升生活品質，而非增加工作負擔</div>
+                </div>
+                <div class="theme-card">
+                    <div class="theme-title">6. 教育情境應用</div>
+                    <div class="theme-description">所有示範案例都以教育現場實際需求為出發點，貼近教師工作情境</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 研究建議 -->
+        <div class="recommendations fade-in">
+            <h2 style="color: #7b1fa2; margin-bottom: 1rem;">💡 質性研究建議</h2>
+            <div class="rec-grid">
+                <div class="rec-item">
+                    <strong>對教師的建議：</strong>從個人需求出發選擇工具，避免盲目跟風
+                </div>
+                <div class="rec-item">
+                    <strong>對學校的建議：</strong>提供數位工具培訓，支持教師個人化發展
+                </div>
+                <div class="rec-item">
+                    <strong>對政策的建議：</strong>重視教師數位素養，提供長期支援機制
+                </div>
+                <div class="rec-item">
+                    <strong>對研究的建議：</strong>持續追蹤教師使用成效，建立最佳實務案例
+                </div>
+                <div class="rec-item">
+                    <strong>對平台的建議：</strong>開發更貼近教育需求的功能與介面
+                </div>
+                <div class="rec-item">
+                    <strong>對社群的建議：</strong>建立教師間的數位工具分享與支援網絡
+                </div>
+            </div>
+        </div>
+
+        <!-- 研究限制與未來方向 -->
+        <div class="research-section fade-in" style="width: 100%; margin: 2rem 0;">
+            <h2>🔮 研究限制與未來方向</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h3 style="color: #e65100; margin-bottom: 1rem;">研究限制</h3>
+                    <ul style="color: #5d4037; line-height: 1.8;">
+                        <li>單一場次資料，缺乏長期追蹤</li>
+                        <li>參與者背景多元，需更細緻分析</li>
+                        <li>工具應用成效需實證研究驗證</li>
+                        <li>數位落差因素未深入探討</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="color: #e65100; margin-bottom: 1rem;">未來研究方向</h3>
+                    <ul style="color: #5d4037; line-height: 1.8;">
+                        <li>追蹤教師工具使用的長期效果</li>
+                        <li>分析不同學科領域的應用差異</li>
+                        <li>探討學生學習成效的影響</li>
+                        <li>建立數位工具應用評估指標</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 添加滾動動畫
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(element);
+        });
+
+        // 圖表互動效果
+        document.querySelectorAll('.bar').forEach(bar => {
+            bar.addEventListener('click', () => {
+                bar.style.filter = 'brightness(1.2)';
+                setTimeout(() => {
+                    bar.style.filter = 'brightness(1)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>

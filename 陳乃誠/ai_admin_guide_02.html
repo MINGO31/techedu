@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI工具在學校行政工作應用指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tools-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .tool-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tool-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .scenarios {
+            margin-bottom: 50px;
+        }
+
+        .scenarios h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .scenario-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .scenario-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .scenario-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .scenario-features {
+            list-style: none;
+        }
+
+        .scenario-features li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #555;
+        }
+
+        .scenario-features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .interactive-demo {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 50px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .demo-tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .demo-tab.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .demo-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .demo-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .prompt-example {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+            font-family: 'Courier New', monospace;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #ff9a9e, #fecfef);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .warning-box h4 {
+            color: #c0392b;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .steps-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .step:hover {
+            background: #e9ecef;
+            transform: translateX(10px);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 2s ease;
+            border-radius: 3px;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 20px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .tools-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 AI賦能學校行政工作</h1>
+            <p>運用Gemini與Notebook LM，讓繁重的行政工作變得輕鬆高效，為教育工作者節省寶貴時間，專注於教學核心。</p>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="tools-overview">
+            <div class="tool-card" onclick="showToolDetails('gemini')">
+                <h3>
+                    <div class="tool-icon">G</div>
+                    Gemini Workspace
+                </h3>
+                <p>整合於Gmail、文件、試算表中的AI助手，協助信件撰寫、行程安排、文件生成等日常行政工作。</p>
+                <ul class="scenario-features">
+                    <li>智慧信件撰寫與回覆</li>
+                    <li>自動行程安排至日曆</li>
+                    <li>表格與文件快速生成</li>
+                </ul>
+            </div>
+
+            <div class="tool-card" onclick="showToolDetails('notebook')">
+                <h3>
+                    <div class="tool-icon">N</div>
+                    Notebook LM
+                </h3>
+                <p>強大的文件分析工具，可處理法規、會議記錄、研習影片等多元資料，成為您的專業知識助手。</p>
+                <ul class="scenario-features">
+                    <li>法規專家查詢系統</li>
+                    <li>會議錄音轉逐字稿</li>
+                    <li>研習影片內容整理</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="scenarios">
+            <h2>🎯 五大應用情境</h2>
+            <div class="scenario-grid">
+                <div class="scenario-card">
+                    <div class="scenario-title">📋 法規專家助手</div>
+                    <ul class="scenario-features">
+                        <li>快速查詢教育法規</li>
+                        <li>法規條文智慧比對</li>
+                        <li>合規性檢查建議</li>
+                        <li>法規更新同步提醒</li>
+                    </ul>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">📝 公文寫作助手</div>
+                    <ul class="scenario-features">
+                        <li>公文格式自動生成</li>
+                        <li>用語規範智慧建議</li>
+                        <li>簽呈範本快速產生</li>
+                        <li>發函格式自動調整</li>
+                    </ul>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">👥 學生事務管理</div>
+                    <ul class="scenario-features">
+                        <li>校規智慧查詢系統</li>
+                        <li>懲處建議自動生成</li>
+                        <li>家長通知書製作</li>
+                        <li>學生手冊快速檢索</li>
+                    </ul>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">🎤 會議記錄處理</div>
+                    <ul class="scenario-features">
+                        <li>錄音自動轉逐字稿</li>
+                        <li>發言者智慧辨識</li>
+                        <li>會議重點摘要</li>
+                        <li>決議事項整理</li>
+                    </ul>
+                </div>
+
+                <div class="scenario-card">
+                    <div class="scenario-title">📚 研習資料整理</div>
+                    <ul class="scenario-features">
+                        <li>YouTube影片內容提取</li>
+                        <li>研習重點快速摘要</li>
+                        <li>專業知識庫建立</li>
+                        <li>學習資源分類管理</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="interactive-demo">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">💡 實用提示詞範例</h2>
+            <div class="demo-tabs">
+                <button class="demo-tab active" onclick="switchTab('law')">法規查詢</button>
+                <button class="demo-tab" onclick="switchTab('document')">公文寫作</button>
+                <button class="demo-tab" onclick="switchTab('meeting')">會議記錄</button>
+                <button class="demo-tab" onclick="switchTab('research')">研習整理</button>
+            </div>
+
+            <div class="demo-content active" id="law">
+                <h4>📖 法規查詢實用提示詞</h4>
+                <div class="prompt-example">
+                    <strong>情境：</strong>查詢課業輔導收費規定<br>
+                    <strong>提示詞：</strong><br>
+                    請幫我整理學校在辦理課業輔導課的時候應該注意的事項，特別是收費規定的部分。
+                </div>
+                <div class="prompt-example">
+                    <strong>情境：</strong>計算開班成本<br>
+                    <strong>提示詞：</strong><br>
+                    如果班級人數是20人，參加課業輔導課，每週上4節，教師每節鐘點費550元，請問每位學生應收取多少費用才能收支平衡？
+                </div>
+            </div>
+
+            <div class="demo-content" id="document">
+                <h4>📄 公文寫作實用提示詞</h4>
+                <div class="prompt-example">
+                    <strong>情境：</strong>撰寫邀請函<br>
+                    <strong>提示詞：</strong><br>
+                    幫我寫一封邀請講師到學校演講的信件，主題是「AI在教育上的應用」，日期：112年12月15日，時間：下午2:00-4:00。
+                </div>
+                <div class="prompt-example">
+                    <strong>情境：</strong>需求簽呈<br>
+                    <strong>提示詞：</strong><br>
+                    你是一位高中學校行政人員，學校最近有一個黑板的採購案，需要寫需求簽呈，請提供範本。
+                </div>
+            </div>
+
+            <div class="demo-content" id="meeting">
+                <h4>🎤 會議記錄實用提示詞</h4>
+                <div class="prompt-example">
+                    <strong>情境：</strong>製作會議記錄<br>
+                    <strong>提示詞：</strong><br>
+                    請幫我將來源資料建立成一個正式詳細的會議記錄，包含會議名稱、出席人員、討論事項、決議內容。
+                </div>
+                <div class="prompt-example">
+                    <strong>情境：</strong>逐字稿整理<br>
+                    <strong>提示詞：</strong><br>
+                    請幫我將來源檔案製作成會議逐字稿，以表格輸出，欄位要有角色、逐字稿內容，角色以A、B、C、D呈現。
+                </div>
+            </div>
+
+            <div class="demo-content" id="research">
+                <h4>📹 研習整理實用提示詞</h4>
+                <div class="prompt-example">
+                    <strong>情境：</strong>整理研習重點<br>
+                    <strong>提示詞：</strong><br>
+                    請幫我整理出校園網路管理的重點，並以條列方式輸出主要管理策略。
+                </div>
+                <div class="prompt-example">
+                    <strong>情境：</strong>學習載具管理<br>
+                    <strong>提示詞：</strong><br>
+                    請幫我列出這場研習中，講師分享的學習載具管理重點和實務經驗。
+                </div>
+            </div>
+        </div>
+
+        <div class="steps-container">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">🔧 Notebook LM 操作步驟</h2>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>建立Google文件</h4>
+                    <p>將法規內容複製到Google文件中，第一行放置來源網址，方便日後更新。避免使用PDF格式，以便快速同步更新。</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>匯入Notebook LM</h4>
+                    <p>開啟新筆記本，選擇Google文件匯入。系統會自動分析文件內容，建立可查詢的知識庫。</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h4>智慧提問查詢</h4>
+                    <p>使用具體明確的問句進行查詢，避免使用「可不可以」、「好不好」等決定性問題，讓AI提供參考而非決策。</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h4>分享與協作</h4>
+                    <p>將有用的筆記本分享給同事，設定適當權限。付費版可使用聊天機器人模式，提供更簡潔的查詢介面。</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <h4>⚠️ 重要提醒事項</h4>
+            <p><strong>資訊安全原則：</strong>機敏會議內容（如IEP、霸凌案件、個資相關）絕對不可上傳至AI工具。</p>
+            <p><strong>決策原則：</strong>不要將決定權交給AI，可請其提供參考資料和建議，但最終判斷仍需人工確認。</p>
+            <p><strong>準確性檢核：</strong>AI生成的內容需要人工檢視，特別是涉及法規條文或重要決策的部分。</p>
+        </div>
+    </div>
+
+    <button class="floating-action" onclick="scrollToTop()" title="回到頂部">↑</button>
+
+    <div class="modal" id="toolModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // 進度條動畫
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.progress-fill').style.width = '100%';
+            }, 500);
+        });
+
+        // 分頁切換
+        function switchTab(tabName) {
+            // 移除所有active類別
+            document.querySelectorAll('.demo-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.demo-content').forEach(content => content.classList.remove('active'));
+            
+            // 添加active到選中的分頁
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // 工具詳情模態框
+        function showToolDetails(tool) {
+            const modal = document.getElementById('toolModal');
+            const content = document.getElementById('modalContent');
+            
+            if (tool === 'gemini') {
+                content.innerHTML = `
+                    <h2>🔥 Gemini Workspace 整合功能</h2>
+                    <h3>Gmail 智慧助手</h3>
+                    <ul>
+                        <li><strong>智慧寫信：</strong>根據需求自動生成邀請函、通知信</li>
+                        <li><strong>快速回覆：</strong>分析來信內容，建議回覆方式</li>
+                        <li><strong>行程整合：</strong>直接將信件內容加入Google日曆</li>
+                        <li><strong>摘要功能：</strong>長信件自動摘要重點</li>
+                    </ul>
+                    
+                    <h3>Google文件協作</h3>
+                    <ul>
+                        <li><strong>文件生成：</strong>會議記錄、報告範本自動生成</li>
+                        <li><strong>內容優化：</strong>改善文件結構和用語</li>
+                        <li><strong>格式調整：</strong>符合公文規範的格式建議</li>
+                    </ul>
+                    
+                    <h3>試算表數據處理</h3>
+                    <ul>
+                        <li><strong>表格生成：</strong>保險表、調查表快速建立</li>
+                        <li><strong>數據整合：</strong>結合現有學生名單資料</li>
+                        <li><strong>計算輔助：</strong>費用計算、統計分析</li>
+                    </ul>
+                `;
+            } else if (tool === 'notebook') {
+                content.innerHTML = `
+                    <h2>📚 Notebook LM 強大功能</h2>
+                    <h3>多元資料來源</h3>
+                    <ul>
+                        <li><strong>文件格式：</strong>PDF、Word、Google文件</li>
+                        <li><strong>音訊處理：</strong>MP3錄音檔、會議記錄</li>
+                        <li><strong>影片分析：</strong>YouTube研習影片內容提取</li>
+                        <li><strong>網頁資料：</strong>法規網站、資料庫內容</li>
+                    </ul>
+                    
+                    <h3>智慧分析功能</h3>
+                    <ul>
+                        <li><strong>精準檢索：</strong>引用出處標示，可追溯來源</li>
+                        <li><strong>內容摘要：</strong>自動生成重點整理</li>
+                        <li><strong>交叉比對：</strong>多份文件間關聯分析</li>
+                        <li><strong>語音辨識：</strong>會議錄音轉逐字稿</li>
+                    </ul>
+                    
+                    <h3>協作分享機制</h3>
+                    <ul>
+                        <li><strong>權限管理：</strong>檢視、編輯權限分別設定</li>
+                        <li><strong>機器人模式：</strong>簡化介面，專注問答</li>
+                        <li><strong>團隊共享：</strong>知識庫全校共用</li>
+                    </ul>
+                `;
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('toolModal').style.display = 'none';
+        }
+
+        // 滾動到頂部
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 點擊模態框外部關閉
+        window.onclick = function(event) {
+            const modal = document.getElementById('toolModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // 滾動動畫效果
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.scenario-card, .step');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // 初始化動畫狀態
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.scenario-card, .step');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'all 0.6s ease';
+            });
+        });
+    </script>
+</body>
+</html>

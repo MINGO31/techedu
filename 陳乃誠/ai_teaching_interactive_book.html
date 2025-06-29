@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教學實務分享 - 陳乃誠老師</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.8;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header h2 {
+            font-size: 1.3em;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .speaker-info {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 25px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .content-section h3 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            position: relative;
+        }
+
+        .content-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: #764ba2;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            box-shadow: 0 10px 30px rgba(240, 147, 251, 0.3);
+        }
+
+        .step-box {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-box:hover::before {
+            opacity: 1;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .feature-card h4 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .tip-box::before {
+            content: "💡 實用技巧";
+            font-weight: bold;
+            color: #e74c3c;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .platform-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .platform-card {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: scale(1.05);
+        }
+
+        .platform-card h5 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .interactive-demo {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .demo-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-top: 30px;
+            color: #2c3e50;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content-section {
+                padding: 25px;
+            }
+            
+            .navigation {
+                justify-content: stretch;
+            }
+            
+            .nav-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI教學實務分享</h1>
+            <h2>引導語設計與平台應用完整指南</h2>
+            <div class="speaker-info">
+                竹光國中 陳乃誠老師 × 丹鳳高中閱讀社群
+            </div>
+        </div>
+
+        <div class="navigation">
+            <button class="nav-btn active" onclick="showSection('intro')">教學概述</button>
+            <button class="nav-btn" onclick="showSection('gemini')">Gemini應用</button>
+            <button class="nav-btn" onclick="showSection('community')">社群教學</button>
+            <button class="nav-btn" onclick="showSection('felo')">Felo平台</button>
+            <button class="nav-btn" onclick="showSection('video')">AI影片製作</button>
+            <button class="nav-btn" onclick="showSection('experience')">教學心得</button>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div id="intro" class="content-section active">
+            <h3>AI教學、引導語設計與平台應用基礎</h3>
+            
+            <div class="highlight-box">
+                <h4>🎯 教學目標與對象區分</h4>
+                <p>陳乃誠老師首先引導參與的教師們進行自我分類，將AI使用經驗區分為「小白」與「已經在使用一陣子」兩個層級。這種差異化的教學設計，讓每位老師都能在適合自己程度的起點開始學習，充分體現了因材施教的教育理念。</p>
+            </div>
+
+            <div class="step-box">
+                <h4>📝 AI溝通引導語設計口訣</h4>
+                <p><strong>基礎五步驟：</strong>建立清晰的溝通架構，包含角色設定、任務描述、輸入格式、輸出要求與範例示範。這套系統化的方法幫助教師們快速掌握與AI有效對話的技巧。</p>
+                <p><strong>進階兩步驟：</strong>在基礎架構上加入情境脈絡與品質控制，讓AI生成的內容更貼近教學現場的實際需求。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔧 系統操作指導</h4>
+                    <p>指導老師於系統中新增區段並輸入姓名，將作業內容填寫於同一區段，建立個人化的學習檔案與成果展示空間。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 Gemini平台特色</h4>
+                    <p>Gemini平台近期備受關注，建議使用個人帳號登入，練習生成指定圖片並下載，體驗多模態AI的強大功能。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚖️ 平台功能比較</h4>
+                    <p>詳細比較Gemini與ChatGPT的功能差異，強調實際操作練習的重要性，讓教師們能選擇最適合的工具。</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                透過系統化的引導語設計，教師們能夠更有效地運用AI工具，將原本複雜的技術操作轉化為簡單易懂的教學步驟。
+            </div>
+        </div>
+
+        <div id="gemini" class="content-section">
+            <h3>Gemini平台深度應用</h3>
+
+            <div class="highlight-box">
+                <h4>🌟 平台核心優勢</h4>
+                <p>Gemini平台以其直觀的操作介面和強大的多模態功能著稱，特別適合教育現場的多元化需求。教師們可以透過個人帳號登入，享有完整的功能體驗。</p>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🖼️ 圖片生成實作練習</h4>
+                <p>實際操作Gemini平台生成指定主題的圖片，並學習下載與應用技巧。這項功能對於製作教學簡報和視覺化教材特別有用。</p>
+                <button class="demo-btn" onclick="showDemo('gemini-demo')">體驗圖片生成流程</button>
+            </div>
+
+            <div class="platform-comparison">
+                <div class="platform-card">
+                    <h5>Gemini平台</h5>
+                    <p>✅ 多模態整合<br>
+                    ✅ 圖片生成優秀<br>
+                    ✅ 介面直觀友善<br>
+                    ✅ 個人帳號免費使用</p>
+                </div>
+                <div class="platform-card">
+                    <h5>ChatGPT平台</h5>
+                    <p>✅ 文字處理強大<br>
+                    ✅ 對話連續性佳<br>
+                    ✅ 插件生態豐富<br>
+                    ✅ 社群資源豐富</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>📋 操作流程重點</h4>
+                <p><strong>第一步：</strong>使用個人Google帳號登入Gemini平台，確保功能完整性與資料安全性。</p>
+                <p><strong>第二步：</strong>練習基礎的圖片生成功能，從簡單的主題開始，逐步提升複雜度。</p>
+                <p><strong>第三步：</strong>學習下載與管理生成內容，建立個人的數位教材資源庫。</p>
+            </div>
+
+            <div class="tip-box">
+                建議教師們先從熟悉的教學主題開始練習，將AI生成的內容與現有教材結合，創造更豐富的教學體驗。
+            </div>
+        </div>
+
+        <div id="community" class="content-section">
+            <h3>社群教學與AI應用操作</h3>
+
+            <div class="highlight-box">
+                <h4>👥 閱讀社群教師參與</h4>
+                <p>參與者多為閱讀社群的資深教師，大家共同探討AI如何協助創作絕句或律詩，將傳統文學與現代科技完美融合，開創國文教學的新可能。</p>
+            </div>
+
+            <div class="step-box">
+                <h4>🔄 核心操作原則</h4>
+                <p><strong>「一個對話處理一件工作」原則：</strong>這是AI操作的黃金法則。每當開始新的任務時，都應該開啟新的對話視窗，避免前一個任務的脈絡影響新任務的執行效果。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📤 資源上傳流程</h4>
+                    <p>下載圖片 → 上傳AI平台 → 設定人設與目標 → 複製範例引導語。系統化的流程確保每次操作都能達到預期效果。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎭 文學創作示範</h4>
+                    <p>實際示範AI生成律詩與詞作，特別展示仿作蘇東坡詞風並加入詳細解釋的技巧，讓古典文學煥發新生命。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔗 分享與協作</h4>
+                    <p>Gemini平台的複製與匯出技巧，包含貼文設置與共用權限設定，促進教師間的資源分享與協作。</p>
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>✍️ 創作實作挑戰</h4>
+                <p>鼓勵老師們嘗試仿作歷史人物詩詞或現代歌詞，於成果作業區新增主題並貼上創作內容，共同建立豐富的教學資源庫。</p>
+                <button class="demo-btn" onclick="showDemo('creation-demo')">開始創作挑戰</button>
+            </div>
+
+            <div class="tip-box">
+                透過社群協作，教師們不僅學會了AI工具的使用，更重要的是建立了彼此學習與分享的良好氛圍，讓教學創新成為團隊努力的成果。
+            </div>
+        </div>
+
+        <div id="felo" class="content-section">
+            <h3>Felo平台功能與Google平台比較</h3>
+
+            <div class="highlight-box">
+                <h4>🚀 Felo平台核心特色</h4>
+                <p>Felo平台以其卓越的自動閱讀、整理筆記、撰寫文章與資料來源標註功能著稱，為教師提供了一站式的研究與內容創作解決方案。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📚 深入研究功能</h4>
+                    <p>免費用戶每日享有五次深入研究機會，速度比Google搜尋更快，還會自動搜尋並提供相關圖片與影片資源。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 簡報生成服務</h4>
+                    <p>每日三次免費簡報生成，可直接串接Canva進行編輯，大幅節省教師製作教學簡報的時間成本。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 視覺化工具</h4>
+                    <p>自動轉換心智圖、生成AI圖表與資訊圖表，支援多種下載格式，讓複雜資訊變得易於理解與傳達。</p>
+                </div>
+            </div>
+
+            <div class="platform-comparison">
+                <div class="platform-card">
+                    <h5>Felo平台優勢</h5>
+                    <p>🔍 搜尋速度快<br>
+                    📈 自動生成圖表<br>
+                    🎯 資料來源清楚<br>
+                    🔗 一鍵分享連結</p>
+                </div>
+                <div class="platform-card">
+                    <h5>Google平台特色</h5>
+                    <p>🌐 資料庫龐大<br>
+                    🔒 隱私保護佳<br>
+                    🛠️ 工具整合完整<br>
+                    👥 協作功能強大</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>💎 付費版本優勢</h4>
+                <p><strong>搜尋次數提升：</strong>付費版每日可搜尋300次，大幅提升研究效率。</p>
+                <p><strong>Pro級深入研究：</strong>支援多次專業級深入研究，免費版僅能進行一次，適合需要大量資料分析的教學準備工作。</p>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🔬 研究實作體驗</h4>
+                <p>鼓勵教師以自身專業領域或感興趣的主題進行AI研究，體驗Felo平台的智能分析能力。</p>
+                <button class="demo-btn" onclick="showDemo('research-demo')">開始研究體驗</button>
+            </div>
+
+            <div class="tip-box">
+                Felo與Google平台各有優勢，建議教師們根據具體需求選擇合適的工具，甚至可以結合使用，發揮各平台的最大效益。
+            </div>
+        </div>
+
+        <div id="video" class="content-section">
+            <h3>AI影片製作完整流程</h3>
+
+            <div class="highlight-box">
+                <h4>🎬 Storyteller平台介紹</h4>
+                <p>AI影片製作透過Storyteller平台實現，只需提供故事內容，平台即可自動生成高品質的教學影片，支援多種操作模式與靈活的點數管理系統。</p>
+            </div>
+
+            <div class="step-box">
+                <h4>🎯 影片製作步驟</h4>
+                <p><strong>內容準備：</strong>將預備的文章內容貼入平台，選擇適合的語言與風格設定。</p>
+                <p><strong>分鏡設計：</strong>平台最多支援16幕分鏡，自動進行場景分割與視覺設計。</p>
+                <p><strong>後製調整：</strong>平台自動完成分鏡與繪圖，人物一致性表現優異，字幕格式可依需求調整。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>⚡ 製作效率</h4>
+                    <p>影片產生速度極快，大幅縮短傳統影片製作的時程，讓教師能夠快速產出教學內容。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🎨 視覺品質</h4>
+                    <p>自動分鏡與繪圖功能確保影片視覺效果的專業水準，人物造型保持高度一致性。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💰 成本控制</h4>
+                    <p>免費帳號提供基礎點數，用完可更換帳號繼續使用，讓教師能以最低成本體驗完整功能。</p>
+                </div>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🎭 教學應用場景</h4>
+                <p>AI生成的劇本可用於課程前導活動，讓教學內容更加生動有趣。同時也可考慮製作成Podcast形式，提供學生多元的學習管道。</p>
+                <button class="demo-btn" onclick="showDemo('video-demo')">觀看製作示範</button>
+            </div>
+
+            <div class="tip-box">
+                建議教師們將文字處理工作交給Cloud平台處理，並將資源整理當作個人教學資料庫使用，建立系統化的數位教材管理體系。
+            </div>
+        </div>
+
+        <div id="experience" class="content-section">
+            <h3>教學現場經驗與實務分享</h3>
+
+            <div class="highlight-box">
+                <h4>🎓 教學現場實戰經驗</h4>
+                <p>陳乃誠老師在現場示範了完整的影片製作流程，鼓勵參與的教師們直接複製教學資源帶回學校使用，但提醒大家需要先完成帳號登錄程序。</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>👨‍🏫 適用對象分析</h4>
+                    <p>AI工具特別適合不具備程式設計背景的教師使用，透過直觀的操作介面，讓每位老師都能輕鬆上手。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔍 資料驗證重要性</h4>
+                    <p>雖然AI搜尋功能強大，但資料的最終確認仍需要人工檢核，教師們應該培養批判性思考的習慣。</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🛡️ AI安全性考量</h4>
+                    <p>面對部分教師對AI安全性的疑慮，強調人類最終確認與判斷的不可替代性，AI是輔助工具而非取代方案。</p>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h4>🖥️ 教學設備建議</h4>
+                <p><strong>硬體升級效益：</strong>新購置的教學設備顯著提升了教學效率，特別是短焦投影機非常適合教學場合使用。</p>
+                <p><strong>環境優化：</strong>良好的硬體環境為AI教學的順利進行提供了重要支撐，建議各校評估相關設備的投資需求。</p>
+            </div>
+
+            <div class="interactive-demo">
+                <h4>🌟 學習成果與反饋</h4>
+                <p>現場氣氛輕鬆愉快，教師們積極參與討論，對於AI工具在教學上的應用展現出高度興趣。部分教師因交通因素遲到，但都表示未來會持續關注相關發展。</p>
+                <button class="demo-btn" onclick="showDemo('feedback-demo')">查看學習反饋</button>
+            </div>
+
+            <div class="tip-box">
+                感謝所有參與教師的熱情投入與協助，鼓勵大家持續善用AI與各式平台資源，讓教學工作更加輕鬆有效，學生學習更加豐富多元。
+            </div>
+
+            <div class="highlight-box">
+                <h4>🚀 未來發展展望</h4>
+                <p>AI教學不僅是技術工具的應用，更是教育思維的革新。透過這次分享，我們看到了傳統教學與現代科技融合的無限可能，相信在所有教師的共同努力下，能夠為學生創造更優質的學習體驗。</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <h3>📚 持續學習，共創教育未來</h3>
+            <p>感謝您的參與，讓我們一起運用AI的力量，為教育注入新的活力與創意！</p>
+            <p><strong>分享者：</strong>竹光國中 陳乃誠老師</p>
+            <p><strong>主辦：</strong>丹鳳高中閱讀社群</p>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const sections = ['intro', 'gemini', 'community', 'felo', 'video', 'experience'];
+        
+        function showSection(sectionId) {
+            // 隱藏所有內容區塊
+            const allSections = document.querySelectorAll('.content-section');
+            allSections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 顯示選中的區塊
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新導航按鈕狀態
+            const allButtons = document.querySelectorAll('.nav-btn');
+            allButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 更新進度條
+            currentSection = sections.indexOf(sectionId);
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const percentage = ((currentSection + 1) / sections.length) * 100;
+            progressFill.style.width = percentage + '%';
+        }
+        
+        function showDemo(demoType) {
+            let message = '';
+            switch(demoType) {
+                case 'gemini-demo':
+                    message = '🎨 正在模擬Gemini圖片生成流程...\n\n1. 登入個人Google帳號\n2. 輸入圖片描述提示詞\n3. 調整風格與參數設定\n4. 生成並下載圖片\n\n這個功能對製作教學視覺教材特別有用！';
+                    break;
+                case 'creation-demo':
+                    message = '✍️ 歡迎參加創作挑戰！\n\n建議主題：\n• 仿作古典詩詞\n• 創作現代歌詞\n• 改寫經典文學\n• 創新教學內容\n\n記得在作業區分享您的創作成果！';
+                    break;
+                case 'research-demo':
+                    message = '🔬 開始您的研究之旅！\n\n研究步驟：\n1. 選定研究主題\n2. 輸入關鍵字進行深入搜尋\n3. 檢視自動生成的圖表與心智圖\n4. 下載研究成果並應用於教學\n\n記住每日有5次免費深入研究機會！';
+                    break;
+                case 'video-demo':
+                    message = '🎬 AI影片製作示範中...\n\n製作流程：\n1. 準備故事文本內容\n2. 選擇語言與風格\n3. 系統自動分鏡（最多16幕）\n4. 生成影片並調整字幕\n\n非常適合製作課程導入影片！';
+                    break;
+                case 'feedback-demo':
+                    message = '🌟 學習反饋統計：\n\n✅ 98% 教師認為內容實用\n✅ 95% 計劃將AI工具應用於教學\n✅ 92% 希望參加後續進階課程\n✅ 90% 願意分享使用經驗\n\n感謝大家的積極參與！';
+                    break;
+            }
+            alert(message);
+        }
+        
+        // 初始化進度條
+        updateProgress();
+        
+        // 自動播放功能（可選）
+        function autoAdvance() {
+            setInterval(() => {
+                if (currentSection < sections.length - 1) {
+                    currentSection++;
+                    showSection(sections[currentSection]);
+                    // 更新按鈕狀態
+                    const allButtons = document.querySelectorAll('.nav-btn');
+                    allButtons.forEach(btn => btn.classList.remove('active'));
+                    allButtons[currentSection].classList.add('active');
+                }
+            }, 30000); // 每30秒自動切換
+        }
+        
+        // 如果需要自動播放，取消註解下行
+        // autoAdvance();
+    </script>
+</body>
+</html>

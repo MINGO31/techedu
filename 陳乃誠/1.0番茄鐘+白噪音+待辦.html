@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>番茄鐘、待辦事項與 YouTube 播放器</title>
+    <style>
+        :root {
+            --primary-color: #FF7F50;  /* 珊瑚色 */
+            --secondary-color: #FFA07A;  /* 淺鮭魚色 */
+            --accent-color: #FF4500;  /* 橙紅色 */
+            --background-color: #FFF5EE;  /* 海貝色 */
+            --text-color: #333333;
+            --card-background: #FFFFFF;
+        }
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        .card {
+            background-color: var(--card-background);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .timer {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 25px;
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        input[type="text"], input[type="url"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="url"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background-color: #FFF0E6;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        li:hover {
+            background-color: #FFE4D6;
+        }
+        li input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .volume-control {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .volume-control input[type="range"] {
+            flex-grow: 1;
+            margin-right: 10px;
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: var(--secondary-color);
+            outline: none;
+        }
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        #youtubePlayer {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 0 10px;
+            }
+            .card {
+                padding: 15px;
+            }
+            .timer {
+                font-size: 48px;
+            }
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>番茄鐘計時器</h2>
+            <div id="timer" class="timer">25:00</div>
+            <div class="button-group">
+                <button id="toggleTimer">開始</button>
+                <button id="resetTimer">重置</button>
+            </div>
+            <div class="button-group">
+                <button id="decreaseTime">-1分鐘</button>
+                <button id="increaseTime">+1分鐘</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>待辦事項</h2>
+            <form id="todoForm">
+                <input type="text" id="newTodo" placeholder="新增待辦事項 (按 Enter 新增)" required>
+            </form>
+            <ul id="todoList"></ul>
+            <button id="resetTodos" style="display: none;">重置待辦事項</button>
+        </div>
+
+        <div class="card">
+            <h2>YouTube 播放器</h2>
+            <input type="url" id="playlistInput" placeholder="輸入 YouTube 播放清單連結">
+            <button id="loadPlaylist">載入播放清單</button>
+            <div id="youtubePlayer"></div>
+            <div class="volume-control">
+                <input type="range" id="volumeControl" min="0" max="100" step="1" value="50">
+                <span id="volumeDisplay">50%</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        let time = 25 * 60;
+        let timerInterval;
+        let isRunning = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtubePlayer', {
+                height: '200',
+                width: '100%',
+                playerVars: {
+                    'playsinline': 1
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            document.getElementById('loadPlaylist').addEventListener('click', loadPlaylist);
+            document.getElementById('volumeControl').addEventListener('input', updateVolume);
+        }
+
+        function loadPlaylist() {
+            const playlistUrl = document.getElementById('playlistInput').value;
+            const playlistId = extractPlaylistId(playlistUrl);
+            if (playlistId) {
+                player.loadPlaylist({list: playlistId, listType: 'playlist'});
+            } else {
+                alert('無效的播放清單連結。請確保您輸入了正確的 YouTube 播放清單 URL。');
+            }
+        }
+
+        function extractPlaylistId(url) {
+            const regex = /[?&]list=([^#\&\?]+)/;
+            const match = url.match(regex);
+            return match && match[1];
+        }
+
+        function updateVolume() {
+            const volume = document.getElementById('volumeControl').value;
+            player.setVolume(volume);
+            document.getElementById('volumeDisplay').textContent = volume + '%';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const timerDisplay = document.getElementById('timer');
+            const toggleTimerBtn = document.getElementById('toggleTimer');
+            const resetTimerBtn = document.getElementById('resetTimer');
+            const decreaseTimeBtn = document.getElementById('decreaseTime');
+            const increaseTimeBtn = document.getElementById('increaseTime');
+            const todoForm = document.getElementById('todoForm');
+            const newTodoInput = document.getElementById('newTodo');
+            const todoList = document.getElementById('todoList');
+            const resetTodosBtn = document.getElementById('resetTodos');
+
+            function updateTimerDisplay() {
+                const minutes = Math.floor(time / 60);
+                const seconds = time % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+
+            function toggleTimer() {
+                if (isRunning) {
+                    clearInterval(timerInterval);
+                    toggleTimerBtn.textContent = '開始';
+                } else {
+                    timerInterval = setInterval(() => {
+                        if (time > 0) {
+                            time--;
+                            updateTimerDisplay();
+                        } else {
+                            clearInterval(timerInterval);
+                            isRunning = false;
+                            toggleTimerBtn.textContent = '開始';
+                        }
+                    }, 1000);
+                    toggleTimerBtn.textContent = '暫停';
+                }
+                isRunning = !isRunning;
+            }
+
+            function resetTimer() {
+                clearInterval(timerInterval);
+                time = 25 * 60;
+                isRunning = false;
+                toggleTimerBtn.textContent = '開始';
+                updateTimerDisplay();
+            }
+
+            function adjustTime(minutes) {
+                time = Math.max(0, time + minutes * 60);
+                updateTimerDisplay();
+            }
+
+            function addTodo(e) {
+                e.preventDefault();
+                const todoText = newTodoInput.value.trim();
+                if (todoText) {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <input type="checkbox">
+                        <span>${todoText}</span>
+                    `;
+                    todoList.appendChild(li);
+                    newTodoInput.value = '';
+                    updateResetTodosBtn();
+                }
+            }
+
+            function toggleTodo(e) {
+                if (e.target.type === 'checkbox') {
+                    e.target.parentElement.querySelector('span').style.textDecoration = 
+                        e.target.checked ? 'line-through' : 'none';
+                }
+            }
+
+            function resetTodos() {
+                todoList.innerHTML = '';
+                updateResetTodosBtn();
+            }
+
+            function updateResetTodosBtn() {
+                resetTodosBtn.style.display = todoList.children.length ? 'block' : 'none';
+            }
+
+            toggleTimerBtn.addEventListener('click', toggleTimer);
+            resetTimerBtn.addEventListener('click', resetTimer);
+            decreaseTimeBtn.addEventListener('click', () => adjustTime(-1));
+            increaseTimeBtn.addEventListener('click', () => adjustTime(1));
+            todoForm.addEventListener('submit', addTodo);
+            todoList.addEventListener('change', toggleTodo);
+            resetTodosBtn.addEventListener('click', resetTodos);
+
+            updateTimerDisplay();
+        });
+    </script>
+</body>
+</html>

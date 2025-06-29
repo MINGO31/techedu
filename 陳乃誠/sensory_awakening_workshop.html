@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>感官覺醒與美的體驗 - 線上互動研習</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', '微軟正黑體', sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1.5" fill="rgba(255,255,255,0.1)"/></svg>');
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 3px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .navigation {
+            background: #f8f9ff;
+            padding: 20px;
+            border-bottom: 1px solid #e0e6ed;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .nav-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-item:hover {
+            border-color: #4a90e2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.2);
+        }
+
+        .nav-item.active {
+            border-color: #4a90e2;
+            background: linear-gradient(135deg, #4a90e2, #7b68ee);
+            color: white;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid #4a90e2;
+        }
+
+        .card h3 {
+            color: #4a90e2;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        .interactive-exercise {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .exercise-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .exercise-button:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .reflection-area {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .reflection-input {
+            width: 100%;
+            min-height: 100px;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 1em;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        .reflection-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .timer-display {
+            font-size: 3em;
+            font-weight: bold;
+            color: #4a90e2;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .key-points {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .key-points h4 {
+            color: #2d3436;
+            margin-bottom: 10px;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            background: rgba(255,255,255,0.7);
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 4px solid #e17055;
+        }
+
+        .example-box {
+            background: linear-gradient(135deg, #a8e6cf, #7fcdcd);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 5px solid #00b894;
+        }
+
+        .notes-section {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            transform: translateX(320px);
+            transition: transform 0.3s ease;
+        }
+
+        .notes-section.open {
+            transform: translateX(0);
+        }
+
+        .notes-toggle {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            z-index: 1001;
+            transition: background 0.3s ease;
+        }
+
+        .notes-toggle:hover {
+            background: #357abd;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .notes-section {
+                position: relative;
+                right: auto;
+                top: auto;
+                width: 100%;
+                margin: 20px 0;
+                transform: none;
+            }
+            
+            .notes-toggle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 感官覺醒與美的體驗</h1>
+            <p>線上互動研習 - 喚醒生活中的美感與幸福</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="navigation">
+            <div class="nav-grid">
+                <div class="nav-item active" onclick="showSection(0, this)">
+                    <strong>🎯 研習概覽</strong>
+                    <br><small>課程介紹與目標</small>
+                </div>
+                <div class="nav-item" onclick="showSection(1, this)">
+                    <strong>👁️ 感官對話</strong>
+                    <br><small>10秒鐘感謝練習</small>
+                </div>
+                <div class="nav-item" onclick="showSection(2, this)">
+                    <strong>🌅 尋找美感</strong>
+                    <br><small>體驗美的方法</small>
+                </div>
+                <div class="nav-item" onclick="showSection(3, this)">
+                    <strong>👃 嗅覺覺醒</strong>
+                    <br><small>大自然的連結</small>
+                </div>
+                <div class="nav-item" onclick="showSection(4, this)">
+                    <strong>👅 味覺記憶</strong>
+                    <br><small>五味雜陳人生</small>
+                </div>
+                <div class="nav-item" onclick="showSection(5, this)">
+                    <strong>🤗 觸覺之美</strong>
+                    <br><small>情感的連結</small>
+                </div>
+                <div class="nav-item" onclick="showSection(6, this)">
+                    <strong>🧘 自我照顧</strong>
+                    <br><small>每日10分鐘練習</small>
+                </div>
+                <div class="nav-item" onclick="showSection(7, this)">
+                    <strong>📝 總結反思</strong>
+                    <br><small>學習成果整理</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- 研習概覽 -->
+            <div class="section active" id="section0">
+                <div class="card">
+                    <h3>🎯 歡迎參與感官覺醒研習</h3>
+                    <p>現代人常因忙碌而忽略身體與感官的存在，本研習將帶領您重新連結五感，提升對生活的感受力與幸福感。</p>
+                </div>
+
+                <div class="key-points">
+                    <h4>📚 研習重點</h4>
+                    <ul>
+                        <li>學會與五感對話，感謝身體的辛勞</li>
+                        <li>掌握尋找並感受美的具體方法</li>
+                        <li>了解感官退化的預防與改善</li>
+                        <li>認識性別在感官偏好上的差異</li>
+                        <li>建立每日自我照顧的習慣</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 學習目標</h4>
+                    <p>透過系統性的感官覺醒訓練，您將能夠：</p>
+                    <ul>
+                        <li>提升生活品質與幸福感</li>
+                        <li>增強自我覺察能力</li>
+                        <li>改善人際溝通與理解</li>
+                        <li>建立正向的自我關係</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 開始前的思考</h4>
+                    <p>請花一分鐘思考：您平常多久會停下來感受自己的身體？</p>
+                    <textarea class="reflection-input" placeholder="請記錄您的想法..."></textarea>
+                </div>
+            </div>
+
+            <!-- 感官對話 -->
+            <div class="section" id="section1">
+                <div class="card">
+                    <h3>👁️ 感官對話練習</h3>
+                    <p>現在我們來進行10秒鐘的感官對話練習。請跟著指引，分別與您的眼睛、耳朵、舌頭、身體對話。</p>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>🕐 10秒鐘感謝練習</h4>
+                    <p>點擊下方按鈕開始練習，每個感官10秒鐘</p>
+                    <div class="timer-display" id="timer">準備開始</div>
+                    <button class="exercise-button" onclick="startSensoryExercise()">開始感官對話</button>
+                    <div id="currentSense" style="margin-top: 15px; font-size: 1.2em;"></div>
+                </div>
+
+                <div class="key-points">
+                    <h4>🔑 練習要點</h4>
+                    <ul>
+                        <li>眼睛：感謝它們讓您看見世界的美好</li>
+                        <li>耳朵：感謝它們讓您聽見動人的聲音</li>
+                        <li>舌頭：感謝它品嚐生活的各種滋味</li>
+                        <li>身體：感謝它陪伴您走過人生路程</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 練習感受</h4>
+                    <p>完成練習後，請記錄您的感受與體驗：</p>
+                    <textarea class="reflection-input" placeholder="請分享您在練習中的感受..."></textarea>
+                </div>
+            </div>
+
+            <!-- 尋找美感 -->
+            <div class="section" id="section2">
+                <div class="card">
+                    <h3>🌅 尋找美與感受美的方法</h3>
+                    <p>美的體驗來自於感官的覺察與生活的細節，並非刻意尋找，而是用心感受當下的美好。</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>🌊 美的體驗實例</h4>
+                    <p><strong>沙灘日升：</strong> 透過視覺感官，體驗波光粼粼的自然景色，這種美的感受能提升生命的能量與幸福感。</p>
+                    <p><strong>小河清水：</strong> 用身體與感官去感受，而非刻意尋找。美的感受往往難以用語言表達，但卻能深刻觸動人心。</p>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>🔍 美感探索練習</h4>
+                    <p>請花5分鐘，觀察您周圍環境中的三個美好事物</p>
+                    <button class="exercise-button" onclick="startBeautyObservation()">開始觀察</button>
+                    <div id="beautyTimer" style="margin-top: 10px;"></div>
+                </div>
+
+                <div class="key-points">
+                    <h4>💎 感受美的要點</h4>
+                    <ul>
+                        <li>不要強求美的出現，而是用心體驗生活</li>
+                        <li>美的感受因人而異，需尊重個體差異</li>
+                        <li>美的觸動可以來自一句話、一幅畫、一段音樂</li>
+                        <li>用感官去體驗，而非只用理智分析</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 美感記錄</h4>
+                    <p>請記錄您剛才觀察到的三個美好事物：</p>
+                    <textarea class="reflection-input" placeholder="1. &#10;2. &#10;3. &#10;&#10;請描述它們帶給您的感受..."></textarea>
+                </div>
+            </div>
+
+            <!-- 嗅覺覺醒 -->
+            <div class="section" id="section3">
+                <div class="card">
+                    <h3>👃 嗅覺與大自然的連結</h3>
+                    <p>嗅覺是感官中最敏銳的一種，與大自然的連結最為直接，能帶來深刻的美感體驗。</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>🌸 嗅覺體驗分享</h4>
+                    <p><strong>英國味道：</strong> 講師在國外演講時，兩位外國小女生分享她們聞到的英國味道，讓人深刻體會嗅覺與文化的連結。</p>
+                    <p><strong>海邊小屋：</strong> 出生在大海旁的小屋，經常看海、看日出日落，這些美的景象有助於感官的活化。</p>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>🌿 嗅覺覺醒練習</h4>
+                    <p>請深呼吸，感受當下空間中的氣味</p>
+                    <button class="exercise-button" onclick="startSmellExercise()">開始嗅覺練習</button>
+                    <div id="smellGuide" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="key-points">
+                    <h4>🌱 嗅覺保健重點</h4>
+                    <ul>
+                        <li>嗅覺能感受到遠距離的氣味</li>
+                        <li>大自然的氣味能喚起美的感受</li>
+                        <li>長期處於封閉空間會影響嗅覺敏銳度</li>
+                        <li>需主動安排戶外活動維持嗅覺敏銳度</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 嗅覺體驗記錄</h4>
+                    <p>請記錄您剛才感受到的氣味，以及它們喚起的記憶或情感：</p>
+                    <textarea class="reflection-input" placeholder="描述您感受到的氣味和相關聯想..."></textarea>
+                </div>
+            </div>
+
+            <!-- 味覺記憶 -->
+            <div class="section" id="section4">
+                <div class="card">
+                    <h3>👅 味覺記憶與人生體驗</h3>
+                    <p>人生如同味覺，包含甜、苦、酸、鹹、辣等多種感受，這些味道象徵著人生中的各種經歷與情緒。</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>🍯 五味人生故事</h4>
+                    <p><strong>甜的記憶：</strong> 小時候阿公帶去看歌仔戲，雖然家境貧困，仍會掏出幾塊錢買棉花糖，讓人感受到最甜的幸福。</p>
+                    <p><strong>苦中帶甜：</strong> 阿嬤會用梅子酒調味苦瓜，讓苦瓜帶有甜味，並說：『你如果可以吃苦瓜人生就不苦了』。</p>
+                    <p><strong>咖啡的精準：</strong> 咖啡只要多一克，味道就會完全不同，強調味道的精準與人生的相似。</p>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>🍃 味覺回憶探索</h4>
+                    <p>回想一個特別的味道記憶，它代表什麼意義？</p>
+                    <button class="exercise-button" onclick="startTasteMemory()">探索味覺記憶</button>
+                </div>
+
+                <div class="key-points">
+                    <h4>🌈 五味象徵意義</h4>
+                    <ul>
+                        <li>甜味：象徵幸福與家人的愛</li>
+                        <li>苦味：人生的苦難與挑戰，學會承受</li>
+                        <li>鹹味：勞苦與汗水的象徵</li>
+                        <li>酸味：青澀與成長的經歷</li>
+                        <li>辣味：刺激與熱情的體驗</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 味覺記憶分享</h4>
+                    <p>請分享一個對您有特殊意義的味道記憶：</p>
+                    <textarea class="reflection-input" placeholder="這個味道是什麼？它發生在什麼時候？帶給您什麼感受或啟發？"></textarea>
+                </div>
+            </div>
+
+            <!-- 觸覺之美 -->
+            <div class="section" id="section5">
+                <div class="card">
+                    <h3>🤗 觸覺之美與情感連結</h3>
+                    <p>觸覺不僅是身體的感受，更是一種無形的情感連結，透過擁抱、陪伴等方式，讓人感受到愛與支持。</p>
+                </div>
+
+                <div class="example-box">
+                    <h4>💝 觸覺的深層意義</h4>
+                    <p><strong>蔣勳老師的智慧：</strong> 觸覺之美是用整個身體去感覺愛，除了聽覺外，還要用觸覺去感受對方的存在。</p>
+                    <p><strong>無形的觸覺：</strong> 不僅限於身體的接觸，更是一種情感上的支持與陪伴，如理解、同理心等。</p>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>🤲 自我擁抱練習</h4>
+                    <p>給自己一個溫暖的擁抱，感受自我關愛的力量</p>
+                    <button class="exercise-button" onclick="startTouchExercise()">開始觸覺練習</button>
+                    <div id="touchGuide" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="key-points">
+                    <h4>💕 觸覺關愛要點</h4>
+                    <ul>
+                        <li>觸覺可用來感受對方的存在與愛</li>
+                        <li>無形的觸覺是情感上的支持與陪伴</li>
+                        <li>愛自己是愛他人的前提</li>
+                        <li>適當的身體接觸能傳遞溫暖與支持</li>
+                    </ul>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 觸覺感受記錄</h4>
+                    <p>請記錄剛才自我擁抱的感受，以及您認為最能給您支持的觸覺體驗：</p>
+                    <textarea class="reflection-input" placeholder="描述您的觸覺感受和需要的支持方式..."></textarea>
+                </div>
+            </div>
+
+            <!-- 自我照顧 -->
+            <div class="section" id="section6">
+                <div class="card">
+                    <h3>🧘 每日10分鐘自我照顧</h3>
+                    <p>每天留給自己10分鐘，進行自我照顧、閱讀、反思或簡單的補償，能夠提升生活品質與自我覺察。</p>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>⏰ 10分鐘計時器</h4>
+                    <p>現在就開始您的10分鐘自我照顧時光</p>
+                    <div class="timer-display" id="selfCareTimer">10:00</div>
+                    <button class="exercise-button" onclick="startSelfCareTimer()">開始10分鐘時光</button>
+                    <div id="selfCareActivity" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="key-points">
+                    <h4>🌟 自我照顧建議</h4>
+                    <ul>
+                        <li>閱讀一篇喜歡的文章或書籍</li>
+                        <li>寫下今天的感恩事項</li>
+                        <li>進行簡單的伸展或呼吸練習</li>
+                        <li>聆聽喜愛的音樂</li>
+                        <li>整理或裝飾個人空間</li>
+                        <li>與重要的人簡短通話</li>
+                    </ul>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 自我掌握與內在聲音</h4>
+                    <p>學會掌握自己的自主權，聆聽內在的聲音，而非外界的批判與責備。如同電子書中的句子：「風吹過深深的竹林，像所有大學生，其實都是自序人生。」每個人都是自己人生的作者。</p>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 自我照顧計劃</h4>
+                    <p>請制定您的每日10分鐘自我照顧計劃：</p>
+                    <textarea class="reflection-input" placeholder="您想如何運用這10分鐘？請列出具體的活動和目標..."></textarea>
+                </div>
+            </div>
+
+            <!-- 總結反思 -->
+            <div class="section" id="section7">
+                <div class="card">
+                    <h3>📝 學習總結與行動計劃</h3>
+                    <p>恭喜您完成感官覺醒與美的體驗研習！現在讓我們整理學習成果，制定持續實踐的計劃。</p>
+                </div>
+
+                <div class="key-points">
+                    <h4>🎯 今日學習重點回顧</h4>
+                    <ul>
+                        <li>👁️ 感官對話：10秒鐘感謝練習</li>
+                        <li>🌅 美感體驗：用心感受當下美好</li>
+                        <li>👃 嗅覺覺醒：與大自然連結</li>
+                        <li>👅 味覺記憶：五味雜陳人生體驗</li>
+                        <li>🤗 觸覺之美：情感連結與支持</li>
+                        <li>🧘 自我照顧：每日10分鐘實踐</li>
+                    </ul>
+                </div>
+
+                <div class="interactive-exercise">
+                    <h4>📋 制定行動計劃</h4>
+                    <p>請為接下來一週制定感官覺醒實踐計劃</p>
+                    <button class="exercise-button" onclick="generateActionPlan()">生成個人化計劃</button>
+                    <div id="actionPlan" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="reflection-area">
+                    <h4>✍️ 總結反思</h4>
+                    <p>請總結今天最深刻的學習體驗，以及您希望持續實踐的三個具體行動：</p>
+                    <textarea class="reflection-input" style="min-height: 150px;" placeholder="最深刻的體驗：&#10;&#10;三個持續實踐的行動：&#10;1. &#10;2. &#10;3. &#10;&#10;對未來的期許："></textarea>
+                </div>
+
+                <div class="example-box">
+                    <h4>🌱 持續成長的邀請</h4>
+                    <p>感官覺醒是一個持續的過程，邀請您：</p>
+                    <ul>
+                        <li>建立每日感官對話的習慣</li>
+                        <li>在生活中主動尋找美的體驗</li>
+                        <li>與他人分享您的感受與發現</li>
+                        <li>持續關注身體與心靈的需求</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 筆記功能 -->
+    <button class="notes-toggle" onclick="toggleNotes()">📝</button>
+    <div class="notes-section" id="notesSection">
+        <h4>📝 我的學習筆記</h4>
+        <textarea id="personalNotes" placeholder="記錄您的想法、感受或重要提醒..." style="width: 100%; height: 300px; border: 1px solid #ddd; border-radius: 5px; padding: 10px; resize: none;"></textarea>
+        <button onclick="saveNotes()" style="margin-top: 10px; background: #4a90e2; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">儲存筆記</button>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        let sensoryTimer;
+        let beautyTimer;
+        let selfCareTimer;
+        let smellTimer;
+        let touchTimer;
+
+        function showSection(index, element) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(`section${index}`).classList.add('active');
+            
+            // Update navigation
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            
+            // Update progress
+            currentSection = index;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = ((currentSection + 1) / 8) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function startSensoryExercise() {
+            const senses = [
+                { name: '👁️ 眼睛', message: '感謝您的眼睛，讓我看見世界的美好...' },
+                { name: '👂 耳朵', message: '感謝您的耳朵，讓我聽見動人的聲音...' },
+                { name: '👅 舌頭', message: '感謝您的舌頭，讓我品嚐生活的滋味...' },
+                { name: '🤗 身體', message: '感謝您的身體，陪伴我走過人生路程...' }
+            ];
+            
+            let currentSenseIndex = 0;
+            let countdown = 10;
+            
+            function updateSensoryDisplay() {
+                if (currentSenseIndex < senses.length) {
+                    document.getElementById('currentSense').innerHTML = 
+                        `<strong>${senses[currentSenseIndex].name}</strong><br>${senses[currentSenseIndex].message}`;
+                    document.getElementById('timer').textContent = countdown;
+                    
+                    if (countdown === 0) {
+                        currentSenseIndex++;
+                        countdown = 10;
+                        if (currentSenseIndex >= senses.length) {
+                            document.getElementById('timer').textContent = '完成！';
+                            document.getElementById('currentSense').innerHTML = '<strong>🎉 感官對話練習完成！</strong><br>請記錄您的感受';
+                            clearInterval(sensoryTimer);
+                            return;
+                        }
+                    } else {
+                        countdown--;
+                    }
+                } else {
+                    clearInterval(sensoryTimer);
+                }
+            }
+            
+            sensoryTimer = setInterval(updateSensoryDisplay, 1000);
+            updateSensoryDisplay();
+        }
+
+        function startBeautyObservation() {
+            let minutes = 5;
+            let seconds = 0;
+            
+            document.getElementById('beautyTimer').innerHTML = 
+                `<div style="font-size: 2em; color: #4a90e2; margin: 10px 0;">${minutes}:${seconds.toString().padStart(2, '0')}</div>
+                 <p>請觀察周圍環境，找出三個美好的事物</p>`;
+            
+            beautyTimer = setInterval(() => {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        document.getElementById('beautyTimer').innerHTML = 
+                            '<div style="color: #00b894; font-size: 1.5em;">⏰ 觀察時間結束！請記錄您的發現</div>';
+                        clearInterval(beautyTimer);
+                        return;
+                    }
+                    minutes--;
+                    seconds = 59;
+                } else {
+                    seconds--;
+                }
+                
+                document.getElementById('beautyTimer').innerHTML = 
+                    `<div style="font-size: 2em; color: #4a90e2; margin: 10px 0;">${minutes}:${seconds.toString().padStart(2, '0')}</div>
+                     <p>請觀察周圍環境，找出三個美好的事物</p>`;
+            }, 1000);
+        }
+
+        function startSmellExercise() {
+            const guides = [
+                '深深吸氣，感受當下的空氣...',
+                '試著辨識不同的氣味層次...',
+                '這些氣味喚起了什麼記憶嗎？',
+                '感受氣味帶來的情緒變化...',
+                '練習完成！請記錄您的感受'
+            ];
+            
+            let currentGuide = 0;
+            
+            document.getElementById('smellGuide').innerHTML = guides[currentGuide];
+            
+            smellTimer = setInterval(() => {
+                currentGuide++;
+                if (currentGuide < guides.length) {
+                    document.getElementById('smellGuide').innerHTML = guides[currentGuide];
+                } else {
+                    clearInterval(smellTimer);
+                }
+            }, 3000);
+        }
+
+        function startTouchExercise() {
+            const guides = [
+                '輕輕擁抱自己，感受溫暖...',
+                '感受心跳與呼吸的節奏...',
+                '對自己說：「我值得被愛」...',
+                '感受身體的存在與力量...',
+                '練習完成！您做得很好'
+            ];
+            
+            let currentGuide = 0;
+            
+            document.getElementById('touchGuide').innerHTML = guides[currentGuide];
+            
+            touchTimer = setInterval(() => {
+                currentGuide++;
+                if (currentGuide < guides.length) {
+                    document.getElementById('touchGuide').innerHTML = guides[currentGuide];
+                } else {
+                    clearInterval(touchTimer);
+                }
+            }, 4000);
+        }
+
+        function startTasteMemory() {
+            const prompts = [
+                '閉上眼睛，回想一個特別的味道...',
+                '這個味道發生在什麼時候？',
+                '當時有誰陪伴您？',
+                '這個味道代表什麼意義？',
+                '現在請記錄這個珍貴的記憶'
+            ];
+            
+            let currentPrompt = 0;
+            let promptDisplay = document.createElement('div');
+            promptDisplay.style.marginTop = '15px';
+            promptDisplay.style.fontSize = '1.1em';
+            promptDisplay.style.color = '#4a90e2';
+            promptDisplay.innerHTML = prompts[currentPrompt];
+            
+            event.target.parentNode.appendChild(promptDisplay);
+            
+            let memoryTimer = setInterval(() => {
+                currentPrompt++;
+                if (currentPrompt < prompts.length) {
+                    promptDisplay.innerHTML = prompts[currentPrompt];
+                } else {
+                    clearInterval(memoryTimer);
+                }
+            }, 4000);
+        }
+
+        function startSelfCareTimer() {
+            let minutes = 9;
+            let seconds = 59;
+            
+            const activities = [
+                '深呼吸，放鬆身體',
+                '感受當下的寧靜',
+                '想想今天值得感恩的事',
+                '給自己一些鼓勵',
+                '規劃美好的明天'
+            ];
+            
+            let activityIndex = 0;
+            document.getElementById('selfCareActivity').innerHTML = `💡 ${activities[activityIndex]}`;
+            
+            selfCareTimer = setInterval(() => {
+                if (seconds === 0) {
+                    if (minutes === 0) {
+                        document.getElementById('selfCareTimer').textContent = '完成！';
+                        document.getElementById('selfCareActivity').innerHTML = '🎉 自我照顧時光結束，您辛苦了！';
+                        clearInterval(selfCareTimer);
+                        return;
+                    }
+                    minutes--;
+                    seconds = 59;
+                    
+                    // Change activity suggestion every 2 minutes
+                    if (minutes % 2 === 1 && activityIndex < activities.length - 1) {
+                        activityIndex++;
+                        document.getElementById('selfCareActivity').innerHTML = `💡 ${activities[activityIndex]}`;
+                    }
+                } else {
+                    seconds--;
+                }
+                
+                document.getElementById('selfCareTimer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function generateActionPlan() {
+            const plans = [
+                '📅 週一：進行10秒鐘感官對話練習',
+                '🌅 週二：尋找並記錄三個美好事物',
+                '👃 週三：到戶外進行嗅覺覺醒練習',
+                '👅 週四：品味一道特別的食物，記錄感受',
+                '🤗 週五：給家人或朋友一個溫暖擁抱',
+                '🧘 週六：進行20分鐘的自我照顧時光',
+                '📝 週日：總結一週的感官體驗與成長'
+            ];
+            
+            document.getElementById('actionPlan').innerHTML = `
+                <div style="background: rgba(255,255,255,0.9); padding: 20px; border-radius: 10px; margin-top: 15px;">
+                    <h4 style="color: #4a90e2; margin-bottom: 15px;">🎯 您的一週感官覺醒計劃</h4>
+                    ${plans.map(plan => `<div style="padding: 8px 0; border-bottom: 1px solid #eee;">${plan}</div>`).join('')}
+                    <p style="margin-top: 15px; color: #666;">💡 提醒：每天只需10-15分鐘，持續實踐才是關鍵！</p>
+                </div>
+            `;
+        }
+
+        function toggleNotes() {
+            const notesSection = document.getElementById('notesSection');
+            notesSection.classList.toggle('open');
+        }
+
+        function saveNotes() {
+            const notes = document.getElementById('personalNotes').value;
+            localStorage.setItem('sensoryAwakeningNotes', notes);
+            alert('筆記已儲存！');
+        }
+
+        // Load saved notes on page load
+        window.onload = function() {
+            const savedNotes = localStorage.getItem('sensoryAwakeningNotes');
+            if (savedNotes) {
+                document.getElementById('personalNotes').value = savedNotes;
+            }
+            updateProgress();
+        };
+
+        // Auto-save notes
+        document.getElementById('personalNotes').addEventListener('input', function() {
+            localStorage.setItem('sensoryAwakeningNotes', this.value);
+        });
+    </script>
+</body>
+</html>

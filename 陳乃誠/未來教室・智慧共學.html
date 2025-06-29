@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中小學校園AI教學整合方案 - 竹光國中實踐經驗</title>
+    <style>
+        :root {
+            --primary: #FF7A00;
+            --secondary: #FF9A40;
+            --accent: #FF5500;
+            --light: #FFF0E6;
+            --dark: #331100;
+            --neutral: #F8F8F8;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        
+        body {
+            background-color: var(--neutral);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(255, 122, 0, 0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .hero {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .hero h2 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.1rem;
+            color: #555;
+        }
+        
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 122, 0, 0.15);
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.2rem;
+        }
+        
+        .card-icon i {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .card-content ul {
+            padding-left: 1.2rem;
+        }
+        
+        .card-content li {
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            color: var(--primary);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 3rem;
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: var(--light);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid var(--primary);
+        }
+        
+        .profile-image i {
+            font-size: 5rem;
+            color: var(--primary);
+        }
+        
+        .profile-info {
+            text-align: center;
+            max-width: 800px;
+        }
+        
+        .profile-info h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-info p {
+            margin-bottom: 1rem;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto 3rem auto;
+            padding: 20px;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+        
+        .timeline-left {
+            left: 0;
+        }
+        
+        .timeline-right {
+            left: 50%;
+        }
+        
+        .timeline-left::after {
+            right: -10px;
+        }
+        
+        .timeline-right::after {
+            left: -10px;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-content h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .timeline-content p {
+            margin-bottom: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--light);
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            margin: 0 0.5rem;
+            border-radius: 5px;
+        }
+        
+        .tab.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding: 1.5rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-left::after, .timeline-right::after {
+                left: 15px;
+            }
+            
+            .timeline-right {
+                left: 0;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>未來教室・智慧共學</h1>
+        <p>中小學校園資訊素養與AI科技教學整合方案 - 竹光國中實踐經驗</p>
+    </header>
+    
+    <div class="container">
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'tab1')">整合策略</button>
+            <button class="tab" onclick="openTab(event, 'tab2')">竹光經驗分享</button>
+            <button class="tab" onclick="openTab(event, 'tab3')">AI教學應用</button>
+            <button class="tab" onclick="openTab(event, 'tab4')">智慧閱讀空間</button>
+
+
+                                <button class="tab" onclick="openTab(event, 'tab3')">AI教學應用</button>
+
+        </div>
+        
+        <div id="tab1" class="tab-content active">
+            <div class="hero">
+                <h2>AI與教育的完美結合</h2>
+                <p>面對瞬息萬變的數位時代，中小學校園如何因應時代潮流，將資訊素養與AI科技結合教學，成為每位教育工作者必須面對的挑戰。本方案整合最新教育科技趨勢，提供全方位的校園AI轉型指南，協助教師打造智慧化、個人化的學習環境。</p>
+            </div>
+            
+            <div class="section-title">
+                <h2>整合策略</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>數位基礎設施與平台建設</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>建立完善的<span class="highlight">智慧型裝置管理系統</span>，確保數位轉型成果</li>
+                            <li>採用現有平台作為基礎，發展在地特色內容</li>
+                            <li>為學生配備個人平板電腦，便於使用AI工具學習</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>教學方法創新</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>結合<span class="highlight">自主學習理論</span>：</li>
+                            <li>培養學生自主設定目標、管理時間、運用策略的能力</li>
+                            <li>鼓勵主動探索與提問，發展批判思考能力</li>
+                            <li>提供彈性學習路徑，適應不同學習風格</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <h3>教師專業發展</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><span class="highlight">AI素養培訓</span>：</li>
+                            <li>了解AI基本概念、運作原理與應用範圍</li>
+                            <li>培養AI思維與倫理意識</li>
+                            <li>鼓勵在各科應用AI創新教學</li>
+                            <li><span class="highlight">數位教學能力提升</span>：</li>
+                            <li>熟悉AI教科書系統功能</li>
+                            <li>掌握數位教材編輯與互動式教學技巧</li>
+                            <li>培養數據素養，應用學習歷程分析</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>學習評估與回饋系統</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>運用AI技術<span class="highlight">分析學生學習歷程</span>，了解學習特點與困難</li>
+                            <li>根據分析結果提供個人化學習建議與回饋</li>
+                            <li>將學習歷程與分析結果提供給教師和家長，協助了解學習狀況</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h3>教材設計與資源整合</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>強調學生<span class="highlight">主動參與、互動性與自主性</span></li>
+                            <li>提供豐富的多媒體資源，如影音、動畫等</li>
+                            <li>設計個人化學習路徑，根據學生能力與興趣調整</li>
+                            <li>提供即時回饋與提示，引導學生思考</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>教師角色轉變</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>從知識傳授者轉變為<span class="highlight">學習引導者</span></li>
+                            <li>運用AI教科書的數據分析，了解每位學生需求</li>
+                            <li>提供差異化教學與輔導</li>
+                            <li>營造以學生為中心的互動式學習環境</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>配套措施</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>建立技術與內容的<span class="highlight">審查標準</span></li>
+                            <li>先進行小規模試點，逐步擴大推廣</li>
+                            <li>重視資安意識，謹慎處理個人資料</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero" style="margin-top: 3rem;">
+                <h2>結語</h2>
+                <p>重要的是要認識到，AI的目的不是取代教師，而是作為教學輔助工具，協助創造更個性化、高效和有意義的教育體驗。透過整合資訊素養與AI科技於教學中，我們能夠為學生打造更符合未來需求的學習環境，培養他們成為具備數位公民素養的新世代人才。</p>
+            </div>
+        </div>
+        
+        <div id="tab2" class="tab-content">
+            <div class="profile">
+                <div class="profile-image">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="profile-info">
+                    <h2>教學背景與專業發展</h2>
+                    <p>目前擔任竹光國中資訊組長暨國文教師，具有彰化師大國文系及清華大學教育與學習科技系學歷。專注於AI教育應用、數位學習整合與自主學習推廣，在全台已累積超過多場次分享經驗。</p>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <h2>數位教育發展歷程</h2>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h3>2014年</h3>
+                        <p>加入教育部行動學習計畫，開始數位教學之旅。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h3>2016年</h3>
+                        <p>致力於數位教育轉型，探索新型態教學模式。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h3>2017-2020年</h3>
+                        <p>帶領學校成為教育部5G示範學校，並擔任新竹市國文科數位輔導團成員。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-right">
+                    <div class="timeline-content">
+                        <h3>2021年</h3>
+                        <p>帶領教師群發展「四學模式」，創新教學方法論。</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item timeline-left">
+                    <div class="timeline-content">
+                        <h3>2022年至今</h3>
+                        <p>積極響應教育部數位教學指引，帶領團隊探索AI融入教學的可能性。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title">
+                <h2>教學實踐與創新方法</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3>多元數位工具應用</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>使用<span class="highlight">學習吧平台</span>進行作業管理和學習追蹤</li>
+                            <li>運用計時器有效管理課堂時間</li>
+                            <li>創新採用錄音方式讓學生表達學習內容</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>教學觀察與策略</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>精確掌握<span class="highlight">班級互動差異</span>：如710班較為互動，707班互動性較低</li>
+                            <li>精準時間管理：為每個教學環節規劃明確時間</li>
+                            <li>即時回饋機制：一一聆聽學生上傳的錄音並給予回饋</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>創新教學方法</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>開創「<span class="highlight">自我領導力</span>」課程，融入七個習慣</li>
+                            <li>建立完整教學紀錄系統，有助未來推廣與經驗傳承</li>
+                            <li>運用開場音樂建立課程儀式感，提升學習氛圍</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>教學挑戰與解決方案</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>面對<span class="highlight">學生被動問題</span>：針對不同學習特質設計差異化策略</li>
+                            <li>實施差異化教學：為成績較好的學生提供加深加廣內容</li>
+                            <li>解決硬體障礙：學生設備問題時，提供學校平板供借用</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero" style="margin-top: 3rem;">
+                <h2>未來發展方向</h2>
+                <p>持續推動數位教育創新，為學生打造更優質的學習環境。強調教師需要與時俱進，不斷探索新的教學方法與技術，持續擴展學生的學習視野。結合AI技術與人文關懷，培養學生成為具備未來競爭力的數位公民。</p>
+            </div>
+        </div>
+        
+        <div id="tab3" class="tab-content">
+            <div class="hero">
+                <h2>AI工具教學應用</h2>
+                <p>人工智慧正在改變教育的本質。透過適當運用AI工具，教師可以提升教學效率，學生能更有效率地獲取知識。以下分享AI教學應用的具體方式以及實際教學案例。</p>
+            </div>
+            
+            <div class="section-title">
+                <h2>教師運用AI的具體方式</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>教學準備與資源創新</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>利用AI<span class="highlight">生成教材</span>：根據學生程度製作適合的教學內容</li>
+                            <li>自動生成簡報：減少格式製作時間，提升效率</li>
+                            <li>設計創新教學活動：提供多樣化的教學活動設計方案</li>
+                            <li>多媒體資源製作：
+                                <ul>
+                                    <li>運用TTS技術製作語音教材</li>
+                                    <li>生成角色扮演對話情境</li>
+                                    <li>設計遊戲化教學活動</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>教學效率提升</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><span class="highlight">批改作業</span>：顯著減少批改時間，特別是在處理大量作文時</li>
+                            <li>行政工作簡化：利用AI處理評語撰寫、家長回覆等工作</li>
+                            <li>資源整合：有效整合分散的教學資源，形成系統性教學方案</li>
+                            <li>提供一致性的評分標準，減少主觀因素影響</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>教學模式轉變</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>從知識傳授轉向<span class="highlight">引導</span>：更注重引導學生學習，而非單純傳授知識</li>
+                            <li>推動探究式學習：讓學生在真實情境中運用跨領域知識解決問題</li>
+                            <li>個性化教學：根據學生程度提供適合的學習內容和回饋</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>實際教學案例與挑戰</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-icon">
+                        <i class="fas fa-feather-alt"></i>
+                    </div>
+                    <h3>「詩意創作」課堂的驚喜</h3>
+                    <div class="card-content">
+                        <p>去年我在教導國二學生創作新詩時，面臨了一個普遍的挑戰：學生對詩歌創作感到畏懼，認為這是「天賦」而非可學習的技能。</p>
+                        <p>我嘗試引入AI輔助寫作工具，但不是讓AI直接創作，而是採用「協作式創作」方法：</p>
+                        <ol>
+                            <li>請學生先構思主題和關鍵意象</li>
+                            <li>利用AI生成多種可能的表達方式和修辭手法</li>
+                            <li>學生從中選擇最能表達自己感受的內容，並加以修改</li>
+                            <li>最後整合成自己的作品</li>
+                        </ol>
+                        <p>這種方法的效果令人驚喜。班上一位平時害羞的女學生，利用這種方式創作了一首關於「成長」的詩，不僅表達了深刻的情感，還運用了豐富的意象。她後來告訴我：「老師，AI像是一位可以不斷與我討論的夥伴，讓我看到同一個想法可以有這麼多表達方式。」</p>
+                        <p>這個經驗讓我認識到：AI不是取代創意，而是擴展學生的創意可能性，降低創作的心理門檻。</p>
+                    </div>
+                </div>
+                
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <h3>AI使用的兩難挑戰</h3>
+                    <div class="card-content">
+                        <p>在一次專題研究課中，我發現幾位學生的報告內容過於專業完整，懷疑是直接使用AI生成的內容。課後我私下與學生交談，發現確實如此。</p>
+                        <p>這帶來了一個教育兩難：如果完全禁止使用AI，學生會失去學習使用這些工具的機會；如果不加限制，學生可能會過度依賴而不發展自己的思考能力。</p>
+                        <p>最終，我採取了「過程導向」的解決方案：</p>
+                        <ol>
+                            <li>重新設計作業要求，明確規定必須記錄研究過程</li>
+                            <li>要求學生提交「AI對話紀錄」，展示他們如何與AI互動</li>
+                            <li>增加口頭報告環節，學生需要針對內容回答深度問題</li>
+                            <li>建立評分標準，重視思考過程而非最終成品的完美度</li>
+                        </ol>
+                        <p>這個調整使學生從單純「使用AI生成答案」轉變為「學習如何有效提問並與AI協作」，真正發揮了科技輔助學習的價值。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>學生透過AI學習的方式</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>知識獲取與理解</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><span class="highlight">降低學習門檻</span>：幫助理解原本較難接觸的專業內容</li>
+                            <li>多元化呈現：提供多樣化的知識呈現方式</li>
+                            <li>即時回饋：快速了解自己的優勢和不足</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-smile"></i>
+                    </div>
+                    <h3>學習體驗改善</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>提高<span class="highlight">參與度</span>：通過多樣化的互動方式增加學習興趣</li>
+                            <li>個性化學習：獲得符合個人程度的學習內容</li>
+                            <li>自主學習能力培養：學習如何提出有效問題</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>重要注意事項</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card" style="grid-column: span 3;">
+                    <div class="card-icon">
+                        <i class="fas fa-exclamation-circle"></i>
+                    </div>
+                    <h3>使用AI的平衡之道</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><span class="highlight">避免過度依賴</span>：學生不應完全依賴AI完成作業，需保持自主思考能力</li>
+                            <li><span class="highlight">重視學習過程</span>：教師應教導學生謹慎使用AI技術，將其視為輔助工具而非替代品</li>
+                            <li><span class="highlight">注重實踐</span>：使用AI工具時應先求有再求美，重點在於學習技能</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero" style="margin-top: 3rem;">
+                <h2>結語</h2>
+                <p>AI工具正在深刻改變教育現場的樣貌。對教師而言，這不僅是工具的更新，更是教學思維的轉變。善用這些工具，可以讓教師從繁瑣的準備工作中解放出來，將更多時間投入到真正重要的教學互動中。在這個過程中，我們需要思考的不是「要不要用AI」，而是「如何有效運用AI增強教與學的品質」。</p>
+            </div>
+        </div>
+        
+        <div id="tab4" class="tab-content">
+            <div class="hero">
+                <h2>AI x 圖書館：打造智慧多元閱讀場域</h2>
+                <p>結合AI工具與校內外圖書館資源，可以創造更豐富、更個人化的閱讀體驗，有效培養學生的閱讀習慣與資訊素養能力。本方案提供AI與圖書館資源整合的具體策略，幫助打造未來智慧閱讀空間。</p>
+            </div>
+            
+            <div class="section-title">
+                <h2>竹光國中閱讀推廣現況</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-tablet-alt"></i>
+                    </div>
+                    <h3>數位閱讀推動</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>九年級國文課使用<span class="highlight">平板進行課後延伸閱讀</span>與個別化測驗</li>
+                            <li>響應環保並提升閱讀量與興趣</li>
+                            <li>結合行動載具即時呈現學習現況，促進討論與分享</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3>特色圖書館建設</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>學校圖書館改造為<span class="highlight">哈利波特風「家的圖書館」</span></li>
+                            <li>獲教育部「全國最美社區共讀站」頭獎</li>
+                            <li>定期舉辦主題書展與藝文展覽，激發閱讀熱情</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>分級閱讀系統</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>依學生閱讀能力進行<span class="highlight">書箱分層</span></li>
+                            <li>兼顧個別差異，提供適合每位學生的閱讀材料</li>
+                            <li>「心築織光　閱享人生」活動中，將班級書箱依難易分級</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <h3>走讀與實境學習</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>結合<span class="highlight">走讀活動與閱讀擂台賽</span></li>
+                            <li>以在地文化與實境探索深化閱讀體驗</li>
+                            <li>「竹光之美」課程引導學生關懷校園與社區環境</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>理想的學習與閱讀體驗</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>提升閱讀興趣與自主性</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>運用<span class="highlight">數位閱讀與多元主題活動</span>，讓學生愛上且享受閱讀過程</li>
+                            <li>行動學習與資訊融入讓學生養成自學習慣，邁向未來自主學習的能力</li>
+                            <li>讓閱讀成為常態性活動，透過文字開啟心靈對話，重塑生命視野</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card" style="grid-column: span 2;">
+                    <div class="card-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3>知識應用與多元視角</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>透過<span class="highlight">PBL問題導向學習法</span>強化學生溝通能力與實作經驗</li>
+                            <li>引導學生關懷校園與社區環境，培養在地情感與社會責任感</li>
+                            <li>培養學生從多元視角探索知識，形成個人獨特的思考方式</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>智慧化資源整合與檢索系統</h2>
+            </div>
+
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>智慧檢索整合</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>運用<span class="highlight">Felo Search</span>等AI工具快速檢索和整合資料庫資源</li>
+                            <li>結合Fellow平台進行學術資訊搜索與報告生成</li>
+                            <li>為學生提供更直觀、更符合需求的檢索結果</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>資源整合系統</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>利用AI技術將<span class="highlight">分散的教學資源有效整合</span>，形成系統性的學習方案</li>
+                            <li>跨平台資源索引，包括實體與數位館藏</li>
+                            <li>整合校內圖書館與公共圖書館資源，擴展可用範圍</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-tablet-alt"></i>
+                    </div>
+                    <h3>智慧推薦系統</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>基於學生<span class="highlight">過往閱讀歷史與興趣</span>，推薦相關書籍與資源</li>
+                            <li>結合學科學習進度，提供補充閱讀材料</li>
+                            <li>根據閱讀難度逐步引導，避免挫折感</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>個性化學習支持機制</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>即時回饋系統</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>提供<span class="highlight">即時、具體的回饋</span>，幫助學生了解自己的優勢和不足</li>
+                            <li>針對閱讀理解提供引導性問題</li>
+                            <li>根據回答給予適當的解釋與延伸</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h3>適應性學習路徑</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>根據學生<span class="highlight">之前的學習歷史調整</span>閱讀內容與難度</li>
+                            <li>識別並補強學生的知識盲點</li>
+                            <li>提供個人化的閱讀計劃與目標設定</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>閱讀進度追蹤</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><span class="highlight">視覺化呈現</span>閱讀量、閱讀廣度與深度</li>
+                            <li>設置閱讀目標與獎勵機制</li>
+                            <li>生成閱讀報告，幫助反思與規劃</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>AI智慧協作學習環境設計</h2>
+            </div>
+
+            
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>即時回饋系統</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>提供<span class="highlight">即時、具體的回饋</span>，幫助學生了解自己的優勢和不足</li>
+                            <li>針對閱讀理解提供引導性問題</li>
+                            <li>根據回答給予適當的解釋與延伸</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-user-cog"></i>
+                    </div>
+                    <h3>適應性學習路徑</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li>根據學生<span class="highlight">之前的學習歷史調整</span>閱讀內容與難度</li>
+                            <li>識別並補強學生的知識盲點</li>
+                            <li>提供個人化的閱讀計劃與目標設定</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>閱讀進度追蹤</h3>
+                    <div class="card-content">
+                        <ul>
+                            <li><span class="highlight">視覺化呈現</span>閱讀量、閱讀廣度與深度</li>
+                            <li>設置閱讀目標與獎勵機制</li>
+                            <li>生成閱讀報告，幫助反思與規劃</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-title" style="margin-top: 3rem;">
+                <h2>未來發展願景：智慧閱讀生態系統</h2>
+            </div>
+            
+            <div class="card-container">
+                <div class="card" style="grid-column: span 3;">
+                    <div class="card-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>圖書館智慧轉型</h3>
+                    <div class="card-content">
+                        <p>基於竹光國中已有的「家的圖書館」基礎，將AI技術與現有閱讀推廣活動相結合，形成完整的智慧閱讀生態系統：</p>
+                        <ol>
+                            <li><strong>實體空間優化</strong>：維持哈利波特風格特色，增加互動式數位裝置與智慧閱讀角</li>
+                            <li><strong>數位平台整合</strong>：建立學校專屬的數位圖書館平台，整合實體與數位資源</li>
+                            <li><strong>閱讀社群建立</strong>：透過AI輔助的讀書會與線上討論，形成跨班級、跨年級的閱讀社群</li>
+                            <li><strong>校外資源連結</strong>：與公共圖書館、大學圖書館建立合作關係，擴充可獲取的資源範圍</li>
+                            <li><strong>家庭閱讀延伸</strong>：將閱讀活動延伸至家庭，形成學校-家庭閱讀支持網絡</li>
+                        </ol>
+                        <p>透過這樣的智慧閱讀生態系統，我們期望能培養學生成為終身學習者，具備面對未來社會所需的閱讀素養與資訊能力。</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hero" style="margin-top: 3rem;">
+                <h2>結語</h2>
+                <p>透過AI工具與圖書館資源的有機結合，並延續竹光國中現有的閱讀推廣優勢，我們能為學生創造更智慧、更個性化的閱讀體驗。這不僅能培養學生的閱讀習慣，也能提升他們的資訊素養與自主學習能力。在這個過程中，教師的角色將不斷創新，從知識傳授者轉變為學習引導者，為學生打造更富有創意和啟發性的學習旅程。</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 智慧教育創新中心 | 資訊素養與AI科技教學整合方案</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>
+
+
+
+        <p>© 2025 智慧教育創新中心 | 資訊素養與AI科技教學整合方案</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+</body>
+</html>
+                

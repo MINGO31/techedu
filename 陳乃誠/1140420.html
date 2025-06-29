@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陪伴與遇見：我在蘆竹湳的意外旅行</title>
+    <style>
+        :root {
+            --primary-color: #FF8C38; /* 主要橘色 */
+            --secondary-color: #FFAE70; /* 次要橘色 */
+            --tertiary-color: #FFF1E6; /* 淡橘色背景 */
+            --dark-orange: #E06000; /* 深橘色 */
+            --text-color: #4A4A4A; /* 主要文字顏色 */
+            --light-text: #7A7A7A; /* 淺色文字 */
+            --white: #FFFFFF; /* 白色 */
+            --shadow: rgba(0, 0, 0, 0.1); /* 陰影 */
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', '微軟正黑體', 'Noto Sans TC', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--tertiary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://source.unsplash.com/random/1000x400/?brick,architecture,taiwan') center/cover;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quote {
+            font-style: italic;
+            max-width: 90%;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-left: 4px solid var(--white);
+            border-radius: 5px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        .section {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px var(--shadow);
+        }
+        
+        .section-title {
+            color: var(--dark-orange);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+        
+        .diary-content p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+        
+        .highlight {
+            background-color: var(--tertiary-color);
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .summary-list {
+            list-style: none;
+        }
+        
+        .summary-list li {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .summary-list li::before {
+            content: "•";
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            position: absolute;
+            left: 5px;
+            top: -3px;
+        }
+        
+        .summary-title {
+            font-weight: bold;
+            color: var(--dark-orange);
+            margin-right: 8px;
+        }
+        
+        .insight-card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary-color);
+            box-shadow: 0 3px 8px var(--shadow);
+        }
+        
+        .insight-card h3 {
+            color: var(--dark-orange);
+            margin-bottom: 10px;
+        }
+        
+        .insight-advice {
+            background-color: var(--tertiary-color);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            position: relative;
+            font-style: italic;
+            padding-left: 30px;
+        }
+        
+        .insight-advice::before {
+            content: """;
+            font-size: 3rem;
+            color: var(--primary-color);
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            opacity: 0.5;
+        }
+        
+        .todo-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        
+        .todo-item {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 3px 8px var(--shadow);
+            border-top: 4px solid var(--secondary-color);
+            transition: transform 0.3s ease;
+        }
+        
+        .todo-item:hover {
+            transform: translateY(-3px);
+        }
+        
+        .todo-title {
+            font-weight: bold;
+            color: var(--dark-orange);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .todo-title i {
+            margin-right: 8px;
+            color: var(--primary-color);
+        }
+        
+        .todo-desc {
+            font-size: 0.9rem;
+            color: var(--light-text);
+        }
+        
+        .checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background-color: var(--white);
+            border: 2px solid var(--primary-color);
+            border-radius: 4px;
+            margin-right: 10px;
+            cursor: pointer;
+            position: relative;
+            vertical-align: middle;
+        }
+        
+        .checkbox:checked {
+            background-color: var(--primary-color);
+        }
+        
+        .checkbox:checked::after {
+            content: "✓";
+            color: white;
+            position: absolute;
+            top: -3px;
+            left: 4px;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 40px;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+        
+        .date-display {
+            background-color: var(--dark-orange);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .nav-btn {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--dark-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px var(--shadow);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            box-shadow: 0 3px 10px var(--shadow);
+            z-index: 100;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background-color: var(--dark-orange);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .quote {
+                padding: 10px;
+                max-width: 100%;
+            }
+            
+            .section {
+                padding: 20px 15px;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .todo-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <span class="date-display">2025年4月20日（日）</span>
+                <h1>陪伴與遇見：我在蘆竹湳的意外旅行</h1>
+                <div class="quote">
+                    原本只是陪朋友走一趟行程，沒想到卻不小心走進了一段被紅磚與語言溫柔包裹的時光裡。在蘆竹湳，我遇見了一群對土地深情的人，也遇見了自己，靜靜感動的那一刻。
+                </div>
+            </div>
+        </header>
+        
+        <div class="navigation">
+            <button class="nav-btn" id="btn-diary"><i class="fas fa-book-open"></i> 完整日記</button>
+            <button class="nav-btn" id="btn-summary"><i class="fas fa-list-ul"></i> 重點摘要</button>
+            <button class="nav-btn" id="btn-insights"><i class="fas fa-lightbulb"></i> 心理洞察</button>
+            <button class="nav-btn" id="btn-todo"><i class="fas fa-tasks"></i> 待辦清單</button>
+        </div>
+        
+        <div class="main-content">
+            <section class="section" id="diary-section">
+                <h2 class="section-title"><i class="fas fa-book-open"></i> 今日完整日記</h2>
+                <div class="diary-content">
+                    <p>今天陪著美國友人來到苗栗頭份的蘆竹湳古厝。這個社區已有286年的歷史，是閩南人從福建漳州渡海而來，在此開墾留下的聚落。這次的造訪原本是個陪伴性的行程，但在導覽與閒聊的過程中，我卻意外地感受到這群人對土地的熱愛與對文化的深厚情感。</p>
+                    
+                    <p>蘆竹湳的名字來自當地的地形與植物，「蘆竹」是一種高達三四公尺、耐寒的植物，而「湳」則是閩南語中「爛泥地」的意思，形容這裡早期水量豐富、地勢低窪、泥濘不堪的樣貌。早期的祖先來到這裡時，選擇在中港溪流域旁耕種，土壤濕潤，有利農耕。但隨著時代變遷，這塊地在1968年被劃為工業區，無法興建住宅，也不利耕作，村落逐漸凋零，留下的多是老人與歷史的痕跡。</p>
+                    
+                    <div class="highlight">
+                        導覽老師娓娓道來這裡曾經歷的1935年關刀山大地震，許多原始的建築倒塌，如今留下的紅磚屋，也已是五六十年前的產物。許多房子因為地價不高、開發困難而得以保留，這或許是時代送給文化的一份遺產。
+                    </div>
+                    
+                    <p>行程途中我一邊聽著帆書App中的《流動的盛宴》有聲書，講述海明威在巴黎生活與寫作的記憶。他在書裡說：「如果你年輕時曾在巴黎生活過，那麼此後不論你走到哪裡，巴黎都會與你同在。」這句話聽來餘韻悠長，也讓我聯想到蘆竹湳：雖非我成長的地方，但今日短暫的停留、接觸、觀察，竟也悄悄留下了某種難以言喻的共鳴。</p>
+                    
+                    <p>孩子們在村子裡玩彈珠，大人們喝著奶茶聊著家常，貓咪圈圈慵懶地走過紅磚前廊，每一道牆上寫的閩南語詞彙，都是時間的雕刻。那股從土地升起來的溫度，來自人們對這塊地方的記憶與守護——不華麗，卻動人。</p>
+                    
+                    <p>雖然這次是陪朋友出遊，但能因此重新認識一塊土地的故事，也是一種難得的收穫。</p>
+                </div>
+            </section>
+            
+            <section class="section" id="summary-section">
+                <h2 class="section-title"><i class="fas fa-list-ul"></i> 重點摘要</h2>
+                <ul class="summary-list">
+                    <li><span class="summary-title">📍 地點：</span>苗栗頭份「蘆竹湳古厝」，閩南人聚落，有286年歷史。</li>
+                    
+                    <li>
+                        <span class="summary-title">🧱 文化背景：</span>
+                        <ul class="summary-list">
+                            <li>地名由來：「蘆竹」為當地植物，「湳」為泥濘地，融合閩南語地景與生活語言。</li>
+                            <li>主要兩大歷史事件：1935年關刀山大地震、1968年被劃為工業區。</li>
+                        </ul>
+                    </li>
+                    
+                    <li><span class="summary-title">🏘️ 建築樣貌：</span>早期樸裝建築 → 後期紅磚屋（五六十年以上歷史）。</li>
+                    
+                    <li>
+                        <span class="summary-title">🔁 時代變遷：</span>
+                        <ul class="summary-list">
+                            <li>工業化導致村落人口外移、農田荒廢，僅長輩與老人留守。</li>
+                            <li>因開發價值低，反而保存了完整的文化與建築樣貌。</li>
+                        </ul>
+                    </li>
+                    
+                    <li><span class="summary-title">🎧 聆聽內容：</span>《流動的盛宴》（海明威）——透過帆書App聆聽，與當地文化連結產生共鳴。</li>
+                    
+                    <li><span class="summary-title">❤️ 個人感受：</span>雖是陪伴美國友人前來，但因此獲得深入了解這個社區與其歷史的機會，並深刻感受到居民對土地的熱愛與堅持。</li>
+                </ul>
+            </section>
+            
+            <section class="section" id="insights-section">
+                <h2 class="section-title"><i class="fas fa-lightbulb"></i> 心理洞察與人生建議</h2>
+                
+                <div class="insight-card">
+                    <h3>1. 陪伴中的轉化：感受的細膩與自主探索</h3>
+                    <p>你原本只是陪朋友出行，但因為你開放的心態與觀察力，讓這段旅程有了意義轉換。這顯示你不僅是個體貼的人，也擁有從日常經驗中發掘意義的能力。</p>
+                    
+                    <div class="insight-advice">
+                        🔍 建議：未來無論是陪伴誰、走入何地，都別忽略內心正在進行的那些微小觸動，因為那些可能正是你生命裡真正重要的片段。
+                    </div>
+                </div>
+                
+                <div class="insight-card">
+                    <h3>2. 文化共鳴的深度思考：你對土地有連結的天賦</h3>
+                    <p>從蘆竹湳的泥巴地與磚牆，到牆上的閩南語，你的筆觸顯示出你對在地文化與語言細節有深刻感受力。而與《流動的盛宴》產生連結，也說明你有將個人生命與文化經驗連結的天賦。</p>
+                    
+                    <div class="insight-advice">
+                        🧠 建議：你可以持續書寫這些地方、情感與語言的故事，無論是日記、散文、或創作，這些都是非常有價值的「記憶保存」。
+                    </div>
+                </div>
+                
+                <div class="insight-card">
+                    <h3>3. 時間的流動與生命的價值</h3>
+                    <p>蘆竹湳因無法開發反而保留下來，如同生活中某些「被遺忘的角落」，可能正默默承載著重要的東西。你對此的體會顯示你理解「慢」、「保留」、「原樣存在」的價值。</p>
+                    
+                    <div class="insight-advice">
+                        🌱 建議：試著給自己也多一點「緩慢」與「保留」的空間。你的人生，不需要一直往前衝，也可以是保留記憶、守護文化的「溫柔力量」。
+                    </div>
+                </div>
+            </section>
+            
+            <section class="section" id="todo-section">
+                <h2 class="section-title"><i class="fas fa-tasks"></i> 待辦事項清單</h2>
+                
+                <div class="todo-list">
+                    <div class="todo-item">
+                        <label class="todo-title">
+                            <input type="checkbox" class="checkbox">
+                            整理今天拍攝的照片
+                        </label>
+                        <p class="todo-desc">選出幾張在蘆竹湳古厝的代表性照片，並簡單標註時間與地點，未來可製作小相冊或社群分享。</p>
+                    </div>
+                    
+                    <div class="todo-item">
+                        <label class="todo-title">
+                            <input type="checkbox" class="checkbox">
+                            記錄導覽內容重點
+                        </label>
+                        <p class="todo-desc">將導覽中關於蘆竹湳歷史、建築與文化的知識條列記錄，方便日後回顧與分享。</p>
+                    </div>
+                    
+                    <div class="todo-item">
+                        <label class="todo-title">
+                            <input type="checkbox" class="checkbox">
+                            補完《流動的盛宴》聆聽
+                        </label>
+                        <p class="todo-desc">找時間完成帆書App上《流動的盛宴》的內容，也可搭配閱讀文字版。</p>
+                    </div>
+                    
+                    <div class="todo-item">
+                        <label class="todo-title">
+                            <input type="checkbox" class="checkbox">
+                            寫一篇個人文化札記
+                        </label>
+                        <p class="todo-desc">以今天的經驗為主題，寫一篇短文反思地方文化保存與自己心靈的共鳴。</p>
+                    </div>
+                    
+                    <div class="todo-item">
+                        <label class="todo-title">
+                            <input type="checkbox" class="checkbox">
+                            關注當地文化活動
+                        </label>
+                        <p class="todo-desc">搜尋是否有更多在地導覽、文化體驗工作坊可參加，培養更多這類深入互動的機會。</p>
+                    </div>
+                    
+                    <div class="todo-item">
+                        <label class="todo-title">
+                            <input type="checkbox" class="checkbox">
+                            製作小型語音記錄
+                        </label>
+                        <p class="todo-desc">試著用手機錄音或說故事的方式，口述今天的心情與見聞，訓練表達與記錄的能力。</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>© 2025 我的旅行日記 | 蘆竹湳古厝參訪記錄</p>
+            <p>使用 HTML、CSS 和 JavaScript 製作的橘色系網頁設計</p>
+        </footer>
+    </div>
+    
+    <a href="#" class="back-to-top" id="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+    
+    <script>
+        // 按鈕導航功能
+        document.getElementById('btn-diary').addEventListener('click', function() {
+            document.getElementById('diary-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('btn-summary').addEventListener('click', function() {
+            document.getElementById('summary-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('btn-insights').addEventListener('click', function() {
+            document.getElementById('insights-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        document.getElementById('btn-todo').addEventListener('click', function() {
+            document.getElementById('todo-section').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // 回到頂部按鈕
+        const backToTopBtn = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        backToTopBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // 待辦事項功能
+        const checkboxes = document.querySelectorAll('.checkbox');
+        
+        // 從 localStorage 加載已保存的狀態
+        document.addEventListener('DOMContentLoaded', function() {
+            checkboxes.forEach(function(checkbox, index) {
+                const saved = localStorage.getItem('todo-' + index);
+                if (saved === 'true') {
+                    checkbox.checked = true;
+                    checkbox.closest('.todo-item').style.opacity = '0.6';
+                }
+            });
+        });
+        
+        // 添加事件監聽器保存狀態
+        checkboxes.forEach(function(checkbox, index) {
+            checkbox.addEventListener('change', function() {
+                localStorage.setItem('todo-' + index, checkbox.checked);
+                
+                if (checkbox.checked) {
+                    checkbox.closest('.todo-item').style.opacity = '0.6';
+                } else {
+                    checkbox.closest('.todo-item').style.opacity = '1';
+                }
+            });
+        });
+        
+        // 簡單的頁面加載動畫
+        window.addEventListener('load', function() {
+            document.body.classList.add('loaded');
+            
+            // 為各個部分添加滑入動畫
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(function(section, index) {
+                setTimeout(function() {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 300 * index);
+            });
+        });
+    </script>
+</body>
+</html>

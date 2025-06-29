@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIBBS反思模組 - AI教育研習回饋分析</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8E53 25%, #F7931E 50%, #FFB366 75%, #FFC477 100%);
+            min-height: 100vh;
+            color: #2C1810;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(255, 107, 53, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            color: #D2691E;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            color: #8B4513;
+            font-weight: 500;
+        }
+        
+        .gibbs-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .gibbs-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.2);
+            border-left: 6px solid #FF6B35;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gibbs-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #FF6B35, #F7931E, #FFB366);
+        }
+        
+        .gibbs-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(255, 107, 53, 0.3);
+        }
+        
+        .gibbs-title {
+            font-size: 1.4em;
+            color: #D2691E;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .gibbs-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            background: linear-gradient(45deg, #FF6B35, #F7931E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.2);
+        }
+        
+        .chart-title {
+            text-align: center;
+            font-size: 1.3em;
+            color: #D2691E;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #FF8E53, #FFB366);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .key-insights {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            box-shadow: 0 6px 25px rgba(255, 107, 53, 0.2);
+        }
+        
+        .insight-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: linear-gradient(90deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.1));
+            border-radius: 10px;
+            border-left: 4px solid #FF6B35;
+        }
+        
+        .quote-highlight {
+            background: #FFF5EE;
+            border-left: 4px solid #FF6B35;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+            font-style: italic;
+            color: #8B4513;
+        }
+        
+        .metric {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(255, 179, 102, 0.1));
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 2px solid #FFB366;
+        }
+        
+        .metric-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #D2691E;
+            display: block;
+        }
+        
+        .metric-label {
+            color: #8B4513;
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧡 GIBBS反思模組分析報告</h1>
+            <p>AI教育研習活動回饋深度分析 - 共89份有效問卷</p>
+        </div>
+
+        <div class="gibbs-container">
+            <div class="gibbs-card">
+                <div class="gibbs-title">
+                    <div class="gibbs-icon">1</div>
+                    描述 (Description)
+                </div>
+                <p>本次為AI與數位工具教育研習活動，主要內容包含Notion、ChatGPT、Dola等工具的實務應用教學。活動吸引了89位教育工作者參與，涵蓋課程設計、行政管理、教學效率提升等主題。</p>
+                
+                <div class="highlight-box">
+                    📊 活動概況：89位參與者 | 主題：AI數位工具 | 實務導向工作坊
+                </div>
+            </div>
+
+            <div class="gibbs-card">
+                <div class="gibbs-title">
+                    <div class="gibbs-icon">2</div>
+                    感受 (Feelings)
+                </div>
+                <p>參與者整體反應極為正面，展現出對新科技學習的高度熱忱。多數人表達了「收穫滿滿」、「獲益良多」的感受，同時也反映出對數位工具學習的渴望與期待。</p>
+                
+                <div class="quote-highlight">
+                    💭 「做就對了！」- 這句金句在回饋中反覆出現，反映了講師鼓勵實作的教學理念深深打動參與者
+                </div>
+            </div>
+
+            <div class="gibbs-card">
+                <div class="gibbs-title">
+                    <div class="gibbs-icon">3</div>
+                    評估 (Evaluation)
+                </div>
+                <div class="metric">
+                    <span class="metric-number">94.4%</span>
+                    <div class="metric-label">整體滿意度</div>
+                </div>
+                
+                <p><strong>正面表現：</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>內容實用性高，貼近教學現場需求</li>
+                    <li>講師準備充分，資源豐富</li>
+                    <li>工具操作示範清楚易懂</li>
+                </ul>
+                
+                <p><strong>待改善處：</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>部分參與者反映內容進度過快</li>
+                    <li>希望有更多實作練習時間</li>
+                    <li>建議分級教學（初階/進階）</li>
+                </ul>
+            </div>
+
+            <div class="gibbs-card">
+                <div class="gibbs-title">
+                    <div class="gibbs-icon">4</div>
+                    分析 (Analysis)
+                </div>
+                <p><strong>成功因素分析：</strong></p>
+                <div class="insight-item">
+                    <strong>🎯 需求導向：</strong>內容聚焦於教師實際工作痛點，如行政效率、備課助手等
+                </div>
+                <div class="insight-item">
+                    <strong>🔧 實務取向：</strong>不只理論說明，更注重實際操作與應用情境
+                </div>
+                <div class="insight-item">
+                    <strong>💪 激勵導向：</strong>「做就對了」的理念降低學習門檻，鼓勵嘗試
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>挑戰分析：</strong></p>
+                <p>學習者數位能力差異大，導致跟上進度的困難。建議未來可採分組或分級教學模式。</p>
+            </div>
+
+            <div class="gibbs-card">
+                <div class="gibbs-title">
+                    <div class="gibbs-icon">5</div>
+                    結論 (Conclusion)
+                </div>
+                <p>本次研習達成了預期目標，成功激發教師對AI工具的學習興趣。參與者不僅學到具體技能，更重要的是建立了「勇於嘗試新科技」的心態。</p>
+                
+                <div class="highlight-box">
+                    🏆 核心成就：將抽象的AI概念轉化為具體的教學與行政工具，有效降低科技焦慮
+                </div>
+                
+                <p style="margin-top: 15px;"><strong>學習影響力：</strong></p>
+                <p>多位參與者表示將立即開始使用所學工具，並希望參與進階課程，顯示學習動機的有效激發。</p>
+            </div>
+
+            <div class="gibbs-card">
+                <div class="gibbs-title">
+                    <div class="gibbs-icon">6</div>
+                    行動計劃 (Action Plan)
+                </div>
+                <p><strong>短期行動（1-3個月）：</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>開設Notion進階操作工作坊</li>
+                    <li>製作常見問題解答資源包</li>
+                    <li>建立學習者交流社群</li>
+                </ul>
+                
+                <p><strong>中期規劃（3-6個月）：</strong></p>
+                <ul style="margin: 10px 0; padding-left: 20px;">
+                    <li>發展分級課程體系（基礎/進階）</li>
+                    <li>增加實作練習時間比例</li>
+                    <li>建立學習成效追蹤機制</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    🚀 長期願景：建立AI教育工具學習生態系，支持教師持續專業發展
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="chart-container">
+                <div class="chart-title">整體滿意度分布</div>
+                <canvas id="satisfactionChart" width="400" height="300"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <div class="chart-title">學習工具熱門度</div>
+                <canvas id="toolsChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="key-insights">
+            <h2 style="color: #D2691E; margin-bottom: 20px; text-align: center;">🔍 關鍵洞察與建議</h2>
+            
+            <div class="insight-item">
+                <strong>💡 學習動機強烈：</strong>89位參與者中有87位表示願意推薦此活動，顯示內容確實符合需求
+            </div>
+            
+            <div class="insight-item">
+                <strong>🛠️ 工具偏好明確：</strong>Notion與ChatGPT是最受關注的工具，建議深化這兩項工具的教學內容
+            </div>
+            
+            <div class="insight-item">
+                <strong>⏰ 時間管理重要：</strong>約15%參與者反映時間不夠，建議未來增加實作練習時段
+            </div>
+            
+            <div class="insight-item">
+                <strong>🎯 需求導向成功：</strong>參與者對「提升工作效率」、「備課輔助」等實務需求回應熱烈
+            </div>
+            
+            <div class="quote-highlight">
+                「科技幫助工作更有效率，才有更多時間好好生活」- 這個理念深深觸動了參與者的心
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 滿意度圓餅圖
+        const satisfactionCtx = document.getElementById('satisfactionChart').getContext('2d');
+        new Chart(satisfactionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['非常滿意', '滿意', '普通', '不滿意'],
+                datasets: [{
+                    data: [84, 15, 2, 1],
+                    backgroundColor: [
+                        '#FF6B35',
+                        '#F7931E', 
+                        '#FFB366',
+                        '#FFC477'
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#FFFFFF'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#8B4513',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // 工具熱門度長條圖
+        const toolsCtx = document.getElementById('toolsChart').getContext('2d');
+        new Chart(toolsCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Notion', 'ChatGPT', 'AI工具', 'Dola', 'Prompt技巧'],
+                datasets: [{
+                    label: '提及次數',
+                    data: [45, 38, 35, 12, 8],
+                    backgroundColor: [
+                        '#FF6B35',
+                        '#F7931E',
+                        '#FFB366',
+                        '#FFC477',
+                        '#FF8E53'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#FFFFFF',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#8B4513',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#8B4513',
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

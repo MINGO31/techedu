@@ -1,0 +1,366 @@
+<html><head><base href="https://websim.ai/reading-test/"><title>English Reading Test - Costa Serena Cruise Update</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f8ff;
+}
+h1, h2 {
+    color: #0077be;
+}
+.question {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.options {
+    display: flex;
+    flex-direction: column;
+}
+.option {
+    margin: 5px 0;
+}
+button {
+    background-color: #0077be;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+}
+button:hover {
+    background-color: #005fa3;
+}
+.feedback {
+    margin-top: 10px;
+    font-weight: bold;
+}
+.correct {
+    color: #4CAF50;
+}
+.incorrect {
+    color: #f44336;
+}
+</style>
+</head>
+<body>
+<h1>English Reading Test: Costa Serena Cruise Update</h1>
+<p>Read the following passage and answer the questions below:</p>
+
+<div id="passage" style="background-color: #e6f3ff; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+    <p>July 24, 2024 Dear Guest, While we are looking forward to welcoming you on board Costa Serena, we must take this time to provide you with an update about an important issue regarding your originally planned sailing schedule. As part of a continuous monitoring activity of the weather conditions and their possible developments along the route and at different destinations, we acknowledged about the development trajectory of typhoon GAEMI, which, according to the meteo-marine forecasts, is expected to head towards Keelung, Taiwan on 25th July, with sustained winds and gusts. Such a situation will not allow us to safely carry out the operations as we originally planned. For this reason, by focusing first on the safety of navigation and port operations, while preserving your serene and safe cruise holiday experience, we are forced to cancel the operation on the date of July 25. On another hand, as we understand the value of your long-awaited holiday while placing our utmost attention on the safety of operations, we are actively exploring the possible alternative itinerary for the sailing from 25-28, July, while continuously monitoring the development of the Typhoon. But as we well understand the value of your awaited cruise holiday, to mitigate the consequences of this unforeseeable change in schedule due to force majeure, you can decide to wait for our further update and make your final decision. If this option is not suitable for you, you can decide to cancel your cruise now and be fully refunded. For the refund process please remember that your personal travel agent is available to provide you with all the necessary information to activate the request for a refund due to the cancellation of your cruise voyage. Please know that you will be constantly updated with any decision taken by first evaluating the safety.</p>
+</div>
+
+<div id="quiz-container"></div>
+
+<button id="submit-btn" style="display: none;">Submit Answers</button>
+<button id="next-btn" style="display: none;">Next Questions</button>
+
+<script>
+const questions = [
+    {
+        question: "What is the main reason for the change in the cruise schedule?",
+        options: [
+            "Mechanical issues with the ship",
+            "Overbooking of passengers",
+            "The approaching typhoon GAEMI",
+            "A strike by the ship's crew"
+        ],
+        correct: 2,
+        explanation: "The passage mentions that typhoon GAEMI is expected to head towards Keelung, Taiwan, which affects the safety of the planned operations."
+    },
+    {
+        question: "What date is mentioned as being canceled for the cruise operation?",
+        options: [
+            "July 24, 2024",
+            "July 25, 2024",
+            "July 28, 2024",
+            "August 1, 2024"
+        ],
+        correct: 1,
+        explanation: "The passage states that they are 'forced to cancel the operation on the date of July 25.'"
+    },
+    {
+        question: "What options are given to the passengers in light of this situation?",
+        options: [
+            "Only to cancel the cruise and get a refund",
+            "To wait for updates or cancel for a full refund",
+            "To choose an alternative cruise date",
+            "To continue with the cruise as planned"
+        ],
+        correct: 1,
+        explanation: "The passage offers two options: to wait for further updates or to cancel the cruise now and be fully refunded."
+    },
+    {
+        question: "What is the cruise line actively doing while monitoring the typhoon?",
+        options: [
+            "Canceling all future cruises",
+            "Hiring more staff",
+            "Exploring possible alternative itineraries",
+            "Upgrading the ship's facilities"
+        ],
+        correct: 2,
+        explanation: "The passage mentions that they are 'actively exploring the possible alternative itinerary for the sailing from 25-28, July.'"
+    },
+    {
+        question: "Who should passengers contact for information about the refund process?",
+        options: [
+            "The ship's captain",
+            "Costa Serena's head office",
+            "Their personal travel agent",
+            "The local port authority"
+        ],
+        correct: 2,
+        explanation: "The passage states that 'your personal travel agent is available to provide you with all the necessary information to activate the request for a refund.'"
+    },
+    {
+        question: "What is the primary concern of the cruise line in making these decisions?",
+        options: [
+            "Maximizing profits",
+            "Maintaining their schedule",
+            "Customer satisfaction",
+            "Safety of navigation and port operations"
+        ],
+        correct: 3,
+        explanation: "The passage emphasizes 'focusing first on the safety of navigation and port operations' as the primary concern."
+    },
+    {
+        question: "How is the weather information being obtained by the cruise line?",
+        options: [
+            "Through social media reports",
+            "By continuous monitoring of weather conditions",
+            "From passenger feedback",
+            "Through annual weather predictions"
+        ],
+        correct: 1,
+        explanation: "The passage mentions 'a continuous monitoring activity of the weather conditions and their possible developments.'"
+    },
+    {
+        question: "What legal term is used to describe the unexpected change in schedule?",
+        options: [
+            "Breach of contract",
+            "Force majeure",
+            "Act of God",
+            "Negligence"
+        ],
+        correct: 1,
+        explanation: "The passage uses the term 'force majeure' to describe the unforeseeable change in schedule."
+    },
+    {
+        question: "What does the cruise line promise regarding future updates?",
+        options: [
+            "Weekly email updates",
+            "A final decision within 24 hours",
+            "Constant updates on any decisions taken",
+            "No further updates until the cruise date"
+        ],
+        correct: 2,
+        explanation: "The passage assures that 'you will be constantly updated with any decision taken.'"
+    },
+    {
+        question: "What is the name of the cruise ship mentioned in the passage?",
+        options: [
+            "Costa Fortuna",
+            "Costa Serena",
+            "Costa Luminosa",
+            "Costa Deliziosa"
+        ],
+        correct: 1,
+        explanation: "The passage welcomes guests 'on board Costa Serena.'"
+    },
+    {
+        question: "Based on the passage, what can be inferred about the cruise line's approach to customer service?",
+        options: [
+            "They prioritize profits over customer satisfaction",
+            "They are indifferent to passengers' holiday plans",
+            "They balance safety concerns with understanding of customers' expectations",
+            "They avoid making difficult decisions"
+        ],
+        correct: 2,
+        explanation: "The passage shows that while prioritizing safety, the cruise line acknowledges 'the value of your long-awaited holiday,' indicating a balance between safety and customer satisfaction."
+    },
+    {
+        question: "What meteorological tool is mentioned in the passage for predicting the typhoon's path?",
+        options: [
+            "Satellite imagery",
+            "Weather balloons",
+            "Meteo-marine forecasts",
+            "Doppler radar"
+        ],
+        correct: 2,
+        explanation: "The passage mentions 'meteo-marine forecasts' as the tool used to predict the typhoon's trajectory."
+    },
+    {
+        question: "What is the implied duration of the original cruise based on the information given?",
+        options: [
+            "One day",
+            "Three days",
+            "Four days",
+            "A week"
+        ],
+        correct: 2,
+        explanation: "The passage mentions exploring alternative itineraries 'for the sailing from 25-28, July,' implying a four-day cruise."
+    },
+    {
+        question: "What action does the cruise line suggest for passengers who choose not to wait for updates?",
+        options: [
+            "File a complaint",
+            "Rebook for a later date",
+            "Cancel the cruise and receive a full refund",
+            "Accept a partial refund"
+        ],
+        correct: 2,
+        explanation: "The passage states, 'If this option is not suitable for you, you can decide to cancel your cruise now and be fully refunded.'"
+    },
+    {
+        question: "What factor is NOT mentioned as part of the cruise line's decision-making process?",
+        options: [
+            "Safety of navigation",
+            "Port operations",
+            "Passenger preferences",
+            "Weather conditions"
+        ],
+        correct: 2,
+        explanation: "While safety, port operations, and weather are mentioned, passenger preferences are not explicitly stated as part of the decision-making process."
+    },
+    {
+        question: "How does the cruise line characterize the change in schedule?",
+        options: [
+            "A minor inconvenience",
+            "An exciting opportunity",
+            "An unforeseeable change due to force majeure",
+            "A regular occurrence"
+        ],
+        correct: 2,
+        explanation: "The passage describes the situation as 'this unforeseeable change in schedule due to force majeure.'"
+    },
+    {
+        question: "What aspect of the typhoon is specifically mentioned as a concern?",
+        options: [
+            "Heavy rainfall",
+            "Storm surge",
+            "Sustained winds and gusts",
+            "Visibility issues"
+        ],
+        correct: 2,
+        explanation: "The passage mentions the typhoon is expected to bring 'sustained winds and gusts.'"
+    },
+    {
+        question: "What is the tone of the message conveyed in this passage?",
+        options: [
+            "Apologetic and concerned",
+            "Indifferent and bureaucratic",
+            "Excited and enthusiastic",
+            "Angry and frustrated"
+        ],
+        correct: 0,
+        explanation: "The tone of the message is apologetic for the inconvenience while showing concern for passenger safety and satisfaction."
+    },
+    {
+        question: "Based on the passage, what can be inferred about the cruise line's policy on refunds in this situation?",
+        options: [
+            "Refunds are automatically processed",
+            "Refunds are only partial",
+            "Refunds must be requested through a travel agent",
+            "Refunds are not available"
+        ],
+        correct: 2,
+        explanation: "The passage implies that refunds must be requested, stating 'your personal travel agent is available to provide you with all the necessary information to activate the request for a refund.'"
+    },
+    {
+        question: "What does the cruise line's approach suggest about their risk management strategy?",
+        options: [
+            "They have no risk management strategy",
+            "They only consider financial risks",
+            "They prioritize passenger safety in their decision-making",
+            "They ignore weather-related risks"
+        ],
+        correct: 2,
+        explanation: "The passage demonstrates that the cruise line prioritizes passenger safety in their decision-making process, indicating a strong risk management strategy."
+    }
+];
+
+let currentQuestions = [];
+let userAnswers = [];
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function displayQuestions() {
+    shuffleArray(questions);
+    currentQuestions = questions.slice(0, 5);
+    const quizContainer = document.getElementById('quiz-container');
+    quizContainer.innerHTML = '';
+    userAnswers = [];
+
+    currentQuestions.forEach((q, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.innerHTML = `
+            <h3>Question ${index + 1}</h3>
+            <p>${q.question}</p>
+            <div class="options">
+                ${q.options.map((option, i) => `
+                    <label class="option">
+                        <input type="radio" name="q${index}" value="${i}">
+                        ${option}
+                    </label>
+                `).join('')}
+            </div>
+            <div class="feedback"></div>
+        `;
+        quizContainer.appendChild(questionDiv);
+    });
+
+    document.getElementById('submit-btn').style.display = 'inline-block';
+    document.getElementById('next-btn').style.display = 'none';
+}
+
+function checkAnswers() {
+    const questions = document.querySelectorAll('.question');
+    let score = 0;
+
+    questions.forEach((q, index) => {
+        const selectedOption = q.querySelector('input[type="radio"]:checked');
+        const feedbackDiv = q.querySelector('.feedback');
+
+        if (selectedOption) {
+            const userAnswer = parseInt(selectedOption.value);
+            userAnswers.push(userAnswer);
+
+            if (userAnswer === currentQuestions[index].correct) {
+                score++;
+                feedbackDiv.textContent = "Correct! " + currentQuestions[index].explanation;
+                feedbackDiv.className = 'feedback correct';
+            } else {
+                feedbackDiv.textContent = "Incorrect. " + currentQuestions[index].explanation;
+                feedbackDiv.className = 'feedback incorrect';
+            }
+        } else {
+            feedbackDiv.textContent = "Please select an answer.";
+            feedbackDiv.className = 'feedback';
+        }
+    });
+
+    document.getElementById('submit-btn').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'inline-block';
+}
+
+document.getElementById('submit-btn').addEventListener('click', checkAnswers);
+document.getElementById('next-btn').addEventListener('click', displayQuestions);
+
+displayQuestions();
+</script>
+</body></html>

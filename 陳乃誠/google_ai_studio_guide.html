@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google AI Studio 教學應用完整指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: float 20s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .nav-bar {
+            background: #2c3e50;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .nav-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .nav-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .nav-btn.active {
+            background: #e74c3c;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .section.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section h2 {
+            color: #2c3e50;
+            border-left: 5px solid #3498db;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .section h3 {
+            color: #34495e;
+            margin: 1.5rem 0 1rem 0;
+            font-size: 1.5rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        }
+        
+        .feature-card h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .feature-card p {
+            color: #5a6c7d;
+            line-height: 1.6;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            background: #f8f9fa;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            position: relative;
+            padding-left: 4rem;
+            transition: all 0.3s ease;
+        }
+        
+        .step-list li:hover {
+            background: #e9ecef;
+            transform: translateX(10px);
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .comparison-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+        }
+        
+        .tip-box::before {
+            content: '💡';
+            margin-right: 0.5rem;
+        }
+        
+        .demo-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border: 2px dashed #3498db;
+        }
+        
+        .demo-section h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+        }
+        
+        .warning-box::before {
+            content: '⚠️';
+            margin-right: 0.5rem;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-content {
+                padding: 0 1rem;
+            }
+            
+            .content {
+                padding: 1rem;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Google AI Studio 教學應用完整指南</h1>
+            <p>講師：台中家商 李偉綾 Shirley Li | 一站式AI解決方案</p>
+        </div>
+        
+        <nav class="nav-bar">
+            <div class="nav-content">
+                <button class="nav-btn active" onclick="showSection('overview')">功能概覽</button>
+                <button class="nav-btn" onclick="showSection('image-gen')">圖片生成</button>
+                <button class="nav-btn" onclick="showSection('video-analysis')">影片分析</button>
+                <button class="nav-btn" onclick="showSection('admin-apps')">行政應用</button>
+                <button class="nav-btn" onclick="showSection('stream')">Stream互動</button>
+                <button class="nav-btn" onclick="showSection('comparison')">工具比較</button>
+                <button class="nav-btn" onclick="showSection('tips')">實用技巧</button>
+            </div>
+        </nav>
+        
+        <div class="content">
+            <!-- 功能概覽 -->
+            <section id="overview" class="section active">
+                <h2>🚀 Google AI Studio 功能概覽</h2>
+                
+                <div class="highlight-box">
+                    <h3>為什麼選擇 Google AI Studio？</h3>
+                    <p>解決傳統教學行政中的三大痛點：影片無法快速擷取文字、複雜海報難以讀取、多個工具整合困難。Google AI Studio 提供一站式解決方案！</p>
+                </div>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🎯 Chat 聊天功能</h4>
+                        <p>適用於行政、教學、生活娛樂。可產生學習單、閱讀理解題，支援影片文字擷取及時間戳記。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📺 Stream 直播互動</h4>
+                        <p>個人家教模式，可直接對話解題。支援國文、數學會考題目討論，具備螢幕分享功能。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎨 Image Generation</h4>
+                        <p>圖片生成與編輯，支援人物一致性維持，適合製作電子繪本和行銷素材。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎬 Video Generation</h4>
+                        <p>影片生成功能，可將靜態圖片轉為動態影片，支援角色動畫製作。</p>
+                    </div>
+                </div>
+                
+                <h3>🔧 系統設定說明</h3>
+                <div class="demo-section">
+                    <h4>重要設定項目</h4>
+                    <ul class="step-list">
+                        <li><strong>模型選擇：</strong>Gemini 2.5（最新）、2.0、1.5 可選，圖片生成請選擇 2.0 Image Generation</li>
+                        <li><strong>Temperature：</strong>創意發散度設定，0為嚴謹，1為最創意（適合社群文宣）</li>
+                        <li><strong>系統指令：</strong>可設定AI人設，例如「你是課程設計大師」</li>
+                        <li><strong>檔案上傳：</strong>支援影片、圖片、PDF等多種格式</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- 圖片生成 -->
+            <section id="image-gen" class="section">
+                <h2>🎨 圖片生成與編輯應用</h2>
+                
+                <h3>📸 基礎圖片編輯功能</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>相片修改</h4>
+                        <p>上傳任何照片，可要求改成正面照、全身照、更換服裝顏色等。類似 Canva Magic Expand 功能但速度更快。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>圖案合成</h4>
+                        <p>可上傳多張照片進行合成，例如將小貓圖案放在衣服上，製作客製化商品預覽。</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>行銷應用</h4>
+                        <p>製作托特包、馬克杯等週邊商品設計，適合學校行銷推廣使用。</p>
+                    </div>
+                </div>
+                
+                <h3>📚 電子繪本製作</h3>
+                <div class="demo-section">
+                    <h4>繪本創作流程</h4>
+                    <ol class="step-list">
+                        <li>設定人設：「你是台灣繪本大師」</li>
+                        <li>提供故事概念：「以兩隻倉鼠做追逐自由的故事」</li>
+                        <li>要求生成連續圖片：「請一次生出十頁的圖片」</li>
+                        <li>AI 會保持角色一致性，快速產出完整繪本</li>
+                    </ol>
+                    
+                    <div class="tip-box">
+                        <strong>繪本製作技巧：</strong>可指定畫風（3D、皮克斯風格、寫實等），AI會維持人物造型一致性，適合製作教學用電子繪本。
+                    </div>
+                </div>
+                
+                <h3>🎯 YouTube 封面設計</h3>
+                <div class="code-block">
+範例指令：
+「請設計一個YouTube封面圖，主題為AI幫我規劃完美旅程，
+畫面包含亞洲女性、旅行元素、現代科技感」
+                </div>
+                
+                <div class="warning-box">
+                    <strong>注意事項：</strong>AI生成的中文字體可能會有錯誤，建議後製時使用 Canva Magic Eraser 或美圖秀秀重新添加文字。
+                </div>
+            </section>
+            
+            <!-- 影片分析 -->
+            <section id="video-analysis" class="section">
+                <h2>📹 影片分析與文字擷取</h2>
+                
+                <h3>🎯 影片文字擷取功能</h3>
+                <div class="highlight-box">
+                    <h3>革命性突破！</h3>
+                    <p>Google AI Studio 可以直接讀取 YouTube 影片（無字幕也可以），自動生成逐字稿含時間戳記，解決傳統需要下載轉檔的麻煩！</p>
+                </div>
+                
+                <div class="demo-section">
+                    <h4>操作步驟</h4>
+                    <ol class="step-list">
+                        <li>直接在對話框貼上 YouTube 網址</li>
+                        <li>選擇 Gemini 2.5 模型（最新版本）</li>
+                        <li>輸入指令：「請截取文字檔含時間戳記」</li>
+                        <li>AI 自動分析影片內容，產生完整逐字稿</li>
+                    </ol>
+                    
+                    <div class="tip-box">
+                        <strong>時間限制：</strong>免費版最多支援 10-30 分鐘影片，超過 30 分鐘可能無法處理。
+                    </div>
+                </div>
+                
+                <h3>📝 教學應用範例</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>學習單生成</h4>
+                        <p>「請根據這個影片設計一個學習單，包含閱讀理解問題，要有詳解和時間戳記」</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>雙語教材</h4>
+                        <p>「設計一個雙語學習單給國中學生，包含思考題目」</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>翻轉教學</h4>
+                        <p>利用時間戳記製作互動式影片練習，學生可在特定時間點回答問題</p>
+                    </div>
+                </div>
+                
+                <h3>🎬 多人對話影片分析</h3>
+                <div class="code-block">
+範例輸出：
+時間戳記: 00:30-00:45
+董事長: 我們計畫在明年推出新產品線
+記者: 請問具體的時程安排如何？
+執行長: 預計第二季開始量產
+                </div>
+                
+                <div class="comparison-table">
+                    <tr>
+                        <th>傳統方法</th>
+                        <th>Google AI Studio</th>
+                    </tr>
+                    <tr>
+                        <td>需要下載影片 → 轉音檔 → 上傳 NotebookLM → 等待轉錄</td>
+                        <td>直接貼網址，一鍵完成</td>
+                    </tr>
+                    <tr>
+                        <td>無時間戳記，需手動對照</td>
+                        <td>自動生成精確時間戳記</td>
+                    </tr>
+                    <tr>
+                        <td>無法辨識多人對話</td>
+                        <td>自動區分不同講者</td>
+                    </tr>
+                </table>
+            </section>
+            
+            <!-- 行政應用 -->
+            <section id="admin-apps" class="section">
+                <h2>📊 行政應用實戰</h2>
+                
+                <h3>📅 研習行事曆製作</h3>
+                <div class="highlight-box">
+                    <h3>解決行政大痛點！</h3>
+                    <p>面對滿滿的研習海報，想要快速整理成 Google 日曆卻苦於無法讀取複雜圖片？Google AI Studio 完美解決！</p>
+                </div>
+                
+                <div class="demo-section">
+                    <h4>海報轉日曆流程</h4>
+                    <ol class="step-list">
+                        <li>上傳研習海報檔案（即使是複雜的 Canva 設計也可讀取）</li>
+                        <li>輸入指令：「請幫我做表格，要能上傳到Google日曆的csv檔」</li>
+                        <li>AI 自動擷取：講師、時間、地點、主題等資訊</li>
+                        <li>整理成表格格式，可直接下載為 CSV 檔</li>
+                        <li>匯入 Google 日曆，完成行事曆建置</li>
+                    </ol>
+                </div>
+                
+                <div class="tip-box">
+                    <strong>範例指令：</strong>「請讀取圖片檔案中的文字，把研習資料直接做成試算表表格，以便下載成csv檔匯入Google日曆」
+                </div>
+                
+                <h3>📰 文宣製作應用</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>新聞稿撰寫</h4>
+                        <p>「請根據這個影片幫我寫一個聳動的標題，做一個臉書的貼文」</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>簡報大綱</h4>
+                        <p>上傳任何文宣或繪本，自動產生簡報大綱，可直接用於 Gamma 或其他簡報工具</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>活動規劃</h4>
+                        <p>分析多個活動資料，整合成完整的學期活動規劃表</p>
+                    </div>
+                </div>
+                
+                <h3>🔄 與其他工具的整合</h3>
+                <div class="comparison-table">
+                    <tr>
+                        <th>工具</th>
+                        <th>主要功能</th>
+                        <th>與 AI Studio 整合</th>
+                    </tr>
+                    <tr>
+                        <td>NotebookLM</td>
+                        <td>多檔案分析（最多50個）</td>
+                        <td>無法讀取複雜圖片時的替代方案</td>
+                    </tr>
+                    <tr>
+                        <td>BreakTeacher</td>
+                        <td>Google 生態系學習單製作</td>
+                        <td>接收 AI Studio 產出的文字檔</td>
+                    </tr>
+                    <tr>
+                        <td>Gamma</td>
+                        <td>AI 簡報製作</td>
+                        <td>使用 AI Studio 產出的大綱</td>
+                    </tr>
+                </table>
+            </section>
+            
+            <!-- Stream互動 -->
+            <section id="stream" class="section">
+                <h2>🗣️ Stream 即時互動功能</h2>
+                
+                <h3>👨‍🏫 個人數位家教</h3>
+                <div class="highlight-box">
+                    <h3>革命性學習體驗！</h3>
+                    <p>Stream 功能讓 AI 成為您的專屬家教，可以即時對話、螢幕分享、視訊互動，解決學習上的各種疑難雜症！</p>
+                </div>
+                
+                <div class="demo-section">
+                    <h4>基本設定</h4>
+                    <ol class="step-list">
+                        <li>選擇語言：Mandarin Chinese（中文對話）或 English（英文練習）</li>
+                        <li>選擇聲音：男聲或女聲</li>
+                        <li>啟用 WebCam：視訊互動模式</li>
+                        <li>啟用 Share Screen：螢幕分享解題</li>
+                    </ol>
+                </div>
+                
+                <h3>📚 學科應用範例</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>數學解題</h4>
+                        <p>分享螢幕上的數學題目，AI 即時講解解題步驟，比請家教更經濟實惠！</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>國文會考</h4>
+                        <p>討論閱讀理解題目，AI 會分析題目考點並提供解題思路</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>英文對話</h4>
+                        <p>練習英文口說，AI 可以糾正發音、提供對話練習</p>
+                    </div>
+                </div>
+                
+                <h3>🍽️ 生活應用</h3>
+                <div class="demo-section">
+                    <h4>健康飲食顧問</h4>
+                    <p>透過鏡頭展示餐點，AI 可以：</p>
+                    <ul>
+                        <li>估算卡路里含量</li>
+                        <li>分析營養成分</li>
+                        <li>提供飲食建議</li>
+                        <li>判斷是否符合營養金字塔</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <strong>實測範例：</strong>拍攝麥當勞套餐，AI 估算 1300-1500 卡路里，並建議增加蔬菜水果攝取。
+                    </div>
+                </div>
+                
+                <h3>👗 造型顧問功能</h3>
+                <div class="code-block">
+實際對話範例：
+用戶: "請問我現在的穿搭適合研習講座嗎？"
+AI: "您穿著白色上衣，建議可以搭配西裝外套或輕薄夾克，
+    增加專業感的同時保持舒適度..."
+                </div>
+                
+                <div class="warning-box">
+                    <strong>使用建議：</strong>如果 AI 回答出現錯誤或混亂，建議開啟新的對話重新開始，避免錯誤記憶影響後續互動。
+                </div>
+            </section>
+            
+            <!-- 工具比較 -->
+            <section id="comparison" class="section">
+                <h2>⚖️ AI 工具全方位比較</h2>
+                
+                <h3>🎨 圖片生成工具比較</h3>
+                <div class="comparison-table">
+                    <tr>
+                        <th>工具</th>
+                        <th>優勢</th>
+                        <th>劣勢</th>
+                        <th>適用場景</th>
+                    </tr>
+                    <tr>
+                        <td>Google AI Studio</td>
+                        <td>速度快、與Google生態整合</td>
+                        <td>中文字體錯誤、單次只能生成一張</td>
+                        <td>快速原型、教育應用</td>
+                    </tr>
+                    <tr>
+                        <td>ChatGPT DALL-E</td>
+                        <td>一次生成四張、品質穩定</td>
+                        <td>速度較慢、需付費</td>
+                        <td>專業設計、商業用途</td>
+                    </tr>
+                    <tr>
+                        <td>Bing Image Creator</td>
+                        <td>免費額度高（每日15點）</td>
+                        <td>風格較固定</td>
+                        <td>日常使用、學習練習</td>
+                    </tr>
+                    <tr>
+                        <td>Microsoft Designer</td>
+                        <td>整合Office套件</td>
+                        <td>需微軟帳號</td>
+                        <td>辦公環境應用</td>
+                    </tr>
+                </table>
+                
+                <h3>📄 文件處理工具比較</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>NotebookLM</h4>
+                        <p><strong>優勢：</strong>可上傳50個檔案、心智圖生成、播客製作</p>
+                        <p><strong>劣勢：</strong>無法讀取複雜圖片、彩色海報</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>Google AI Studio</h4>
+                        <p><strong>優勢：</strong>讀取複雜圖片、影片分析、即時互動</p>
+                        <p><strong>劣勢：</strong>單一檔案處理、無心智圖功能</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>ChatGPT</h4>
+                        <p><strong>優勢：</strong>對話品質高、推理能力強</p>
+                        <p><strong>劣勢：</strong>影片處理能力有限</p>
+                    </div>
+                </div>
+                
+                <h3>🎯 最佳使用策略</h3>
+                <div class="demo-section">
+                    <h4>Combo 組合技巧</h4>
+                    <ul class="step-list">
+                        <li><strong>單一複雜檔案：</strong>使用 Google AI Studio</li>
+                        <li><strong>多檔案整合：</strong>使用 NotebookLM</li>
+                        <li><strong>深度對話：</strong>使用 ChatGPT 或 Claude</li>
+                        <li><strong>教學整合：</strong>結合 BreakTeacher 擴充功能</li>
+                        <li><strong>簡報製作：</strong>搭配 Gamma 或 Fellow</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- 實用技巧 -->
+            <section id="tips" class="section">
+                <h2>💡 實用技巧與注意事項</h2>
+                
+                <h3>🎯 提示詞優化技巧</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>人設設定</h4>
+                        <p>「你是台灣繪本大師」、「你是課程設計專家」等人設可提升回答品質</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>具體化需求</h4>
+                        <p>明確指定學生年級、題目類型、輸出格式等詳細要求</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>批次處理</h4>
+                        <p>「請一次生出十頁圖片」、「每題間隔30秒」等批次指令</p>
+                    </div>
+                </div>
+                
+                <h3>⚠️ 常見問題與解決方案</h3>
+                <div class="demo-section">
+                    <h4>問題排解指南</h4>
+                    <ul class="step-list">
+                        <li><strong>記憶混亂：</strong>AI記住上次對話內容導致錯誤，解決方法：開啟新對話</li>
+                        <li><strong>中文字體錯誤：</strong>圖片生成的中文常有錯字，需後製修正</li>
+                        <li><strong>影片長度限制：</strong>免費版限制30分鐘，超過需分段處理</li>
+                        <li><strong>複雜圖片讀取失敗：</strong>換用NotebookLM或重新整理圖片</li>
+                        <li><strong>算力不足：</strong>免費版有使用限制，可升級付費版</li>
+                    </ul>
+                </div>
+                
+                <h3>🔧 進階設定技巧</h3>
+                <div class="tip-box">
+                    <strong>SRT字幕製作：</strong>「請根據時間節點每行字幕不要超過16-20字」，可直接產生YouTube字幕檔案。
+                </div>
+                
+                <div class="tip-box">
+                    <strong>學習單優化：</strong>「第一分鐘不要出題，每題間隔30秒」，避免題目過於密集。
+                </div>
+                
+                <div class="tip-box">
+                    <strong>繁體中文設定：</strong>對話中明確要求「請用繁體中文」，避免簡體字輸出。
+                </div>
+                
+                <h3>📱 行動裝置應用</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>手機版優勢</h4>
+                        <p>隨時隨地使用、鏡頭即拍即用、語音輸入方便</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>平板教學</h4>
+                        <p>課堂即時解題、學生互動討論、大螢幕展示</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>跨裝置同步</h4>
+                        <p>Google帳號自動同步、雲端儲存、無需手動備份</p>
+                    </div>
+                </div>
+                
+                <h3>🚀 未來發展趨勢</h3>
+                <div class="highlight-box">
+                    <h3>AI 教育的未來</h3>
+                    <p>AI 工具將成為教育工作者的得力助手，但永遠無法取代人與人之間的真實互動。善用科技提升效率，把時間留給最珍貴的人際關係！</p>
+                </div>
+            </section>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Google AI Studio 教學應用指南 | 講師：李偉綾 Shirley Li</p>
+            <p>讓 AI 成為教育的助力，把時間留給最重要的人 ❤️</p>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // 隱藏所有區塊
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 移除所有按鈕的 active 狀態
+            const buttons = document.querySelectorAll('.nav-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // 顯示選中的區塊
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 添加對應按鈕的 active 狀態
+            event.target.classList.add('active');
+            
+            // 滾動到頂部
+            window.scrollTo(0, 0);
+        }
+        
+        // 為 feature-card 添加點擊效果
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

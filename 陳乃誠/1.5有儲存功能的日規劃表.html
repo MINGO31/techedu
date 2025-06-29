@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帶本地存儲功能的三列布局動態日期24小時制多任務響應式橘色系日行程管理</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #FFF5E6;
+            color: #333;
+            box-sizing: border-box;
+        }
+        .container {
+            position: relative;
+            padding-top: 40px;
+        }
+        h1 {
+            text-align: center;
+            color: #FF8C00;
+            margin-top: 0;
+        }
+        #taskInput, #reflectionInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #FFA500;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        #schedule {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .schedule-column {
+            flex: 1;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .schedule-column h2 {
+            background-color: #FFA500;
+            color: white;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+        }
+        .schedule-column table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .schedule-column th, .schedule-column td {
+            border: 1px solid #FFD700;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .task-cell {
+            cursor: text;
+            min-height: 40px;
+        }
+        .task {
+            background-color: #FFE4B5;
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .default-task {
+            color: #888;
+            font-style: italic;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+        #coins {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #FFD700;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+        button {
+            background-color: #FF8C00;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #FFA500;
+        }
+        #resetButton {
+            background-color: #FF4500;
+        }
+        #resetButton:hover {
+            background-color: #FF6347;
+        }
+        .edit-mode {
+            background-color: #FFFACD;
+        }
+        .edit-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #FFA500;
+            border-radius: 3px;
+            resize: vertical;
+        }
+        @media (max-width: 768px) {
+            #schedule {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="coins">金幣: 0</div>
+        <h1 id="pageTitle">帶本地存儲功能的三列布局動態日期24小時制多任務響應式橘色系日行程管理</h1>
+        <input type="text" id="taskInput" placeholder="輸入任務 (例如: 0830讀書)">
+        <div id="schedule"></div>
+        <textarea id="reflectionInput" placeholder="今日心得... (100字以上可獲得100金幣)" rows="4"></textarea>
+        <button onclick="submitReflection()">提交心得</button>
+        <button onclick="exportToGoogle()">匯出到Google行事曆</button>
+        <button id="resetButton" onclick="resetAll()">重置</button>
+    </div>
+
+    <script>
+        const schedule = document.getElementById('schedule');
+        const taskInput = document.getElementById('taskInput');
+        const reflectionInput = document.getElementById('reflectionInput');
+        const coinsDisplay = document.getElementById('coins');
+        const pageTitle = document.getElementById('pageTitle');
+        let coins = 0;
+        let tasks = {};
+        let reflectionSubmitted = false;
+
+        function getCurrentDate() {
+            return new Date();
+        }
+
+        function updatePageTitle() {
+            const currentDate = getCurrentDate();
+            const month = currentDate.getMonth() + 1;
+            const day = currentDate.getDate();
+            pageTitle.textContent = `${month}月${day}日行程紀錄和提醒清單`;
+        }
+
+        function createSchedule() {
+            const columns = [
+                { title: "早上 (06:00 - 12:00)", start: 6, end: 12 },
+                { title: "下午 (12:00 - 18:00)", start: 12, end: 18 },
+                { title: "晚上 (18:00 - 23:00)", start: 18, end: 23 }
+            ];
+
+            columns.forEach(column => {
+                const columnDiv = document.createElement('div');
+                columnDiv.className = 'schedule-column';
+                columnDiv.innerHTML = `<h2>${column.title}</h2>`;
+                const table = document.createElement('table');
+
+                for (let hour = column.start; hour < column.end; hour++) {
+                    for (let minute of ['00', '30']) {
+                        const row = table.insertRow();
+                        const time = `${hour.toString().padStart(2, '0')}${minute}`;
+                        row.innerHTML = `<td>${time}</td><td id="${time}" class="task-cell" onclick="editTimeSlot(event, '${time}')"></td>`;
+                        if (!tasks[time]) {
+                            tasks[time] = [];
+                        }
+                    }
+                }
+
+                columnDiv.appendChild(table);
+                schedule.appendChild(columnDiv);
+            });
+
+            renderAllTasks();
+        }
+
+        function addTask() {
+            const input = taskInput.value;
+            const match = input.match(/^(\d{4})(.+)/);
+            if (match) {
+                let time = match[1];
+                const task = match[2].trim();
+                
+                // 確保時間在有效範圍內
+                const hour = parseInt(time.substring(0, 2));
+                const minute = parseInt(time.substring(2));
+                if (hour < 6 || hour >= 23 || (hour === 23 && minute > 0)) {
+                    alert('請輸入0600到2300之間的時間。');
+                    return;
+                }
+
+                // 調整時間到正確的半小時間隔
+                const formattedTime = minute >= 30 ? 
+                    `${hour.toString().padStart(2, '0')}30` : 
+                    `${hour.toString().padStart(2, '0')}00`;
+                
+                if (tasks[formattedTime]) {
+                    tasks[formattedTime].push({text: task, completed: false});
+                    renderAllTasks();
+                    taskInput.value = '';
+                    saveData();
+                } else {
+                    alert('無效的時間格式。');
+                }
+            } else {
+                alert('請按照格式輸入任務 (例如: 0830讀書)');
+            }
+        }
+
+        function renderAllTasks() {
+            for (let time in tasks) {
+                renderTasks(time);
+            }
+        }
+
+        function renderTasks(time) {
+            const cell = document.getElementById(time);
+            if (!cell) return;  // 如果找不到對應的單元格，就跳過
+            if (tasks[time].length === 0) {
+                cell.innerHTML = '<div class="default-task">發呆摸魚時間</div>';
+            } else {
+                cell.innerHTML = tasks[time].map((task, index) => 
+                    `<div class="task ${task.completed ? 'completed' : ''}">
+                        <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${time}', ${index})" onclick="event.stopPropagation()">
+                        ${task.text}
+                    </div>`
+                ).join('');
+            }
+        }
+
+        function toggleTask(time, index) {
+            const task = tasks[time][index];
+            task.completed = !task.completed;
+            if (task.completed) {
+                coins += 30;
+            } else {
+                coins -= 30;
+            }
+            updateCoins();
+            renderTasks(time);
+            saveData();
+        }
+
+        function editTimeSlot(event, time) {
+            const cell = event.currentTarget;
+            if (cell.querySelector('textarea')) return;  // 如果已經在編輯中，就不再創建新的textarea
+
+            const currentTasks = tasks[time].map(task => task.text).join('\n');
+            const textarea = document.createElement('textarea');
+            textarea.className = 'edit-input';
+            textarea.value = currentTasks;
+            textarea.rows = 4;
+            
+            textarea.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    saveTimeSlot(time, this.value);
+                }
+            });
+
+            cell.innerHTML = '';
+            cell.appendChild(textarea);
+            cell.classList.add('edit-mode');
+            textarea.focus();
+        }
+
+        function saveTimeSlot(time, value) {
+            const newTasks = value.split('\n').filter(task => task.trim() !== '');
+            tasks[time] = newTasks.map(task => ({text: task, completed: false}));
+            const cell = document.getElementById(time);
+            cell.classList.remove('edit-mode');
+            renderTasks(time);
+            saveData();
+        }
+
+        function submitReflection() {
+            if (!reflectionSubmitted && reflectionInput.value.length >= 100) {
+                coins += 100;
+                updateCoins();
+                reflectionSubmitted = true;
+                alert('心得已提交！獲得100金幣獎勵。');
+                saveData();
+            } else if (reflectionSubmitted) {
+                alert('您今天已經提交過心得了。');
+            } else {
+                alert('心得需要至少100字才能獲得獎勵。');
+            }
+        }
+
+        function updateCoins() {
+            coinsDisplay.textContent = `金幣: ${coins}`;
+            saveData();
+        }
+
+        function exportToGoogle() {
+            let csvContent = "Subject,Start Date,Start Time,End Date,End Time\n";
+            const currentDate = getCurrentDate();
+            const formattedDate = currentDate.toISOString().split('T')[0];
+
+            for (let time in tasks) {
+                tasks[time].forEach(task => {
+                    if (task.text) {
+                        const hour = time.substring(0, 2);
+                        const minute = time.substring(2);
+                        const startTime = `${hour}:${minute}:00`;
+                        const endHour = minute === '30' ? 
+                            (hour === '23' ? '23' : String(Number(hour) + 1).padStart(2, '0')) : 
+                            hour;
+                        const endMinute = minute === '30' ? '00' : '30';
+                        const endTime = `${endHour}:${endMinute}:00`;
+                        csvContent += `${task.text},${formattedDate},${startTime},${formattedDate},${endTime}\n`;
+                    }
+                });
+            }
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", `schedule_${formattedDate}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+
+        function resetAll() {
+            if (confirm('確定要重置所有數據嗎？這將清除所有任務、心得和金幣。')) {
+                tasks = {};
+                for (let hour = 6; hour < 23; hour++) {
+                    for (let minute of ['00', '30']) {
+                        const time = `${hour.toString().padStart(2, '0')}${minute}`;
+                        tasks[time] = [];
+                    }
+                }
+                renderAllTasks();
+                coins = 0;
+                updateCoins();
+                reflectionSubmitted = false;
+                reflectionInput.value = '';
+                taskInput.value = '';
+                updatePageTitle();
+                saveData();
+            }
+        }
+
+        function saveData() {
+            const data = {
+                tasks: tasks,
+                coins: coins,
+                reflectionSubmitted: reflectionSubmitted,
+                reflection: reflectionInput.value
+            };
+            localStorage.setItem('scheduleData', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const savedData = localStorage.getItem('scheduleData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                tasks = data.tasks;
+                coins = data.coins;
+                reflectionSubmitted = data.reflectionSubmitted;
+                reflectionInput.value = data.reflection;
+                updateCoins();
+                renderAllTasks();
+            }
+        }
+
+        createSchedule();
+        loadData();
+        updatePageTitle();
+        taskInput.addEventListener('keyup', function(event) {
+            if (event.key === 'Enter') {
+                addTask();
+            }
+        });
+
+        // 定期自動保存數據
+        setInterval(saveData, 60000); // 每分鐘保存一次
+    </script>
+</body>

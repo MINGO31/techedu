@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felo AI 教學指南 - 專業互動式平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe0b3 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        .header {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6347 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(255, 140, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        .nav {
+            background: rgba(255, 140, 0, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .nav-item {
+            background: linear-gradient(45deg, #ff8c00, #ff6347);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+        }
+
+        .nav-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4);
+            background: linear-gradient(45deg, #ff6347, #ff8c00);
+        }
+
+        /* Section Styles */
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #ff8c00, #ff6347);
+            color: white;
+            padding: 25px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .section-header:hover::before {
+            left: 100%;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-header .icon {
+            font-size: 1.8rem;
+        }
+
+        .section-content {
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Styles */
+        .card {
+            background: #fff;
+            border: 2px solid #ff8c00;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            border-color: #ff6347;
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.15);
+            transform: translateX(5px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, #ff8c00, #ff6347);
+            border-radius: 4px 0 0 4px;
+        }
+
+        .card h3 {
+            color: #ff6347;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-left: 15px;
+        }
+
+        .card p, .card li {
+            color: #555;
+            margin-bottom: 10px;
+            padding-left: 15px;
+        }
+
+        .card ul {
+            padding-left: 35px;
+        }
+
+        /* Highlight Box */
+        .highlight {
+            background: linear-gradient(45deg, #fff5e6, #ffe0b3);
+            border-left: 5px solid #ff8c00;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+            position: relative;
+        }
+
+        .highlight::before {
+            content: '💡';
+            position: absolute;
+            left: -12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #ff8c00;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        /* Button Styles */
+        .btn {
+            background: linear-gradient(45deg, #ff8c00, #ff6347);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        /* Examples Box */
+        .example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .example::before {
+            content: '範例';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #ff8c00;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .example ol {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        .example li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-list {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .section-header h2 {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(to right, #ff8c00, #ff6347);
+            transition: width 0.3s ease;
+            z-index: 1000;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff8c00, #ff6347);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .scroll-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.4);
+        }
+
+        .scroll-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="container">
+        <header class="header">
+            <h1>🚀 Felo AI 教學指南</h1>
+            <p>專業AI工具應用與教學資源整合平台</p>
+        </header>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                <li><a href="#section1" class="nav-item">🔍 Felo 搜尋平台</a></li>
+                <li><a href="#section2" class="nav-item">📊 圖表與簡報</a></li>
+                <li><a href="#section3" class="nav-item">🎬 影片製作</a></li>
+                <li><a href="#section4" class="nav-item">🎙️ 語音製作</a></li>
+                <li><a href="#section5" class="nav-item">⚙️ 工具管理</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- Section 1: Felo搜尋平台 -->
+            <section class="section" id="section1">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">🔍</span>Felo 專業搜尋平台</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <h3>平台概述</h3>
+                        <p>Felo是一個專業搜尋平台，提供免費與付費功能，適合教師備課、資料搜尋、生成簡報、改寫小論文、演講稿、網站等多種功能。</p>
+                        
+                        <div class="highlight">
+                            <strong>重要提醒：</strong>免費用戶每日有5次pro專業搜尋額度，24小時後恢復。建議使用個人Google帳號登入，避免學校帳號權限問題。
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>核心功能</h3>
+                        <ul>
+                            <li><strong>專業搜尋：</strong>每日5次pro搜尋額度</li>
+                            <li><strong>簡報生成：</strong>每日3次額度，24小時後恢復</li>
+                            <li><strong>文件改寫：</strong>可改寫成小論文、演講稿等</li>
+                            <li><strong>互動網頁：</strong>將搜尋結果生成互動網頁</li>
+                            <li><strong>心智圖：</strong>多種模板（單邊、雙邊、組織圖、時間軸、魚骨圖等）</li>
+                            <li><strong>AI圖表：</strong>生成專業圖表，約30秒完成</li>
+                        </ul>
+                    </div>
+
+                    <div class="example">
+                        <h4>實際操作範例：以「清代紅樓夢」為例</h4>
+                        <ol>
+                            <li>登入Felo平台，選擇pro專業搜尋模式</li>
+                            <li>輸入關鍵字「清代紅樓夢」並送出</li>
+                            <li>等待平台搜尋與整理資料（約1分鐘）</li>
+                            <li>複製搜尋結果貼到作業區（作業五）</li>
+                            <li>生成心智圖，選擇模板下載PNG或SVG格式</li>
+                            <li>複製心智圖到作業區（作業六）</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: 圖表與簡報 -->
+            <section class="section" id="section2">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">📊</span>圖表生成與簡報製作</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <h3>心智圖製作</h3>
+                        <p>Felo提供多種心智圖模板，包括單邊、雙邊、組織圖、時間軸、魚骨圖等，可下載PNG或SVG格式。</p>
+                        
+                        <div class="highlight">
+                            <strong>下載建議：</strong>根據用途選擇格式 - PNG適合一般使用，SVG適合專業編輯。
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>AI圖表功能</h3>
+                        <ul>
+                            <li>生成時間約30秒</li>
+                            <li>可能會出現跑板情況，可重新生成</li>
+                            <li>失敗不會扣點數</li>
+                            <li>適合專業簡報使用</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Gamma簡報工具</h3>
+                        <p>採用點數制度，免費帳號600點，使用邀請連結可獲得額外200點。</p>
+                        <ul>
+                            <li>每生成一張簡報扣5點</li>
+                            <li>一次最多生成10張</li>
+                            <li>免費版僅能生成一次</li>
+                            <li>可與Canva串接</li>
+                        </ul>
+                        
+                        <div class="highlight">
+                            <strong>節省點數技巧：</strong>建議將內容分批處理，避免一次投入過多內容導致品質下降。
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: 影片製作 -->
+            <section class="section" id="section3">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">🎬</span>AI影片製作流程</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <h3>劇本準備</h3>
+                        <ul>
+                            <li>撰寫1500字劇本，使用繁體中文臺灣用語</li>
+                            <li>可利用Felo、Gemini、Claude等AI工具協助生成</li>
+                            <li>劇本超過字數需請AI協助刪減</li>
+                            <li>最多16個場景</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>Storyteller平台操作</h3>
+                        <ul>
+                            <li>將劇本貼到Storyteller平台</li>
+                            <li>選擇「使用我的文稿內容」模式</li>
+                            <li>設定字幕格式：每行12-16字，無標點符號</li>
+                            <li>選擇配音與背景音樂</li>
+                            <li>設定語言為繁體中文</li>
+                        </ul>
+                    </div>
+
+                    <div class="example">
+                        <h4>完整製作流程</h4>
+                        <ol>
+                            <li>搜尋相關資料，整理成文字檔</li>
+                            <li>利用AI生成1500字劇本</li>
+                            <li>將劇本貼到Storyteller平台</li>
+                            <li>選擇「使用我的文稿內容」</li>
+                            <li>調整字幕格式與配音設定</li>
+                            <li>生成影片並下載（含浮水印）</li>
+                            <li>上傳至Padlet作為作業</li>
+                        </ol>
+                    </div>
+
+                    <div class="highlight">
+                        <strong>重要注意：</strong>下載影片時不要勾選去除浮水印，否則需要付費。有浮水印不影響作業提交。
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: 語音製作 -->
+            <section class="section" id="section4">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">🎙️</span>Podcast語音製作</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <h3>Gemini語音摘要</h3>
+                        <p>利用Gemini平台將文字內容自動生成語音摘要，快速製作Podcast。</p>
+                        <ul>
+                            <li>將搜尋內容下載為PDF</li>
+                            <li>上傳至Gemini平台</li>
+                            <li>點選生成語音摘要</li>
+                            <li>等待3-5分鐘自動生成</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>AI聲音模組限制</h3>
+                        <p>目前AI聲音模組開發困難，現有平台僅提供一男一女聲音選擇。</p>
+                        
+                        <div class="highlight">
+                            <strong>發展現況：</strong>聲音模組開發已超過一年，選擇有限，需依現有資源製作。
+                        </div>
+                    </div>
+
+                    <div class="example">
+                        <h4>Podcast製作範例</h4>
+                        <ol>
+                            <li>將研習紀錄整理成文字</li>
+                            <li>轉為PDF檔案</li>
+                            <li>上傳Gemini平台</li>
+                            <li>點選生成語音摘要</li>
+                            <li>等待3-5分鐘自動產出Podcast</li>
+                            <li>下載並上傳至指定平台</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: 工具管理 -->
+            <section class="section" id="section5">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span class="icon">⚙️</span>工具管理與最佳化</h2>
+                </div>
+                <div class="section-content">
+                    <div class="card">
+                        <h3>點數管理策略</h3>
+                        <ul>
+                            <li><strong>Felo：</strong>每日5次pro搜尋額度</li>
+                            <li><strong>Gamma：</strong>600點免費額度，邀請連結+200點</li>
+                            <li><strong>節省技巧：</strong>使用主題集功能分類搜尋記錄</li>
+                            <li><strong>失敗處理：</strong>重試不會扣點數</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>AI工具選擇建議</h3>
+                        <ul>
+                            <li><strong>Felo：</strong>適合資料搜尋與整理</li>
+                            <li><strong>Claude：</strong>適合文字創作與劇本生成</li>
+                            <li><strong>Gemini：</strong>適合語音摘要製作</li>
+                            <li><strong>Gamma：</strong>適合簡報一鍵生成</li>
+                            <li><strong>Storyteller：</strong>專門用於AI影片製作</li>
+                        </ul>
+                    </div>
+
+                    <div class="card">
+                        <h3>帳號管理建議</h3>
+                        <div class="highlight">
+                            <strong>重要提醒：</strong>
+                            <ul>
+                                <li>建議使用個人Google帳號登入</li>
+                                <li>學校帳號需分流管理</li>
+                                <li>避免學生帳號因年齡限制無法使用AI功能</li>
+                                <li>與資訊組保持良好合作關係</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3>語言設定最佳化</h3>
+                        <p>各平台預設語言設定建議：</p>
+                        <ul>
+                            <li>Felo：設定偏好回應語言為繁體中文</li>
+                            <li>Gamma：生成前確認語言設定為繁體中文</li>
+                            <li>Storyteller：配音語言選擇繁體中文</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</button>
+
+    <script>
+        // Toggle section content
+        function toggleSection(header) {
+            const content = header.nextElementSibling;
+            const isActive = content.classList.contains('active');
+            
+            // Close all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Open clicked section if it wasn't active
+            if (!isActive) {
+                content.classList.add('active');
+            }
+        }
+
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            
+            // Show/hide scroll to top button
+            const scrollTop = document.getElementById('scrollTop');
+            if (winScroll > 300) {
+                scrollTop.classList.add('show');
+            } else {
+                scrollTop.classList.remove('show');
+            }
+        });
+
+        // Scroll to top function
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('.nav-item').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Auto-open the section
+                    const header = targetSection.querySelector('.section-header');
+                    const content = targetSection.querySelector('.section-content');
+                    content.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize - open first section by default
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstSection = document.querySelector('.section-content');
+            if (firstSection) {
+                firstSection.classList.add('active');
+            }
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(10px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+    </script>
+</body>
+</html>

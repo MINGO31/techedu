@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音表達基礎班測驗</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #FFF3E0;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #FF9800;
+        }
+        .question {
+            margin-bottom: 20px;
+            background-color: #FFE0B2;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            margin: 5px 0;
+            padding: 10px;
+            background-color: #FFF3E0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background-color: #FFE0B2;
+        }
+        .selected {
+            background-color: #FFB74D;
+        }
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            background-color: #F57C00;
+        }
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #FFCC80;
+            display: none;
+        }
+        .score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #E65100;
+            margin-bottom: 10px;
+        }
+        .explanation {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #FFF3E0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>聲音表達基礎班測驗</h1>
+        <form id="quiz-form">
+            <!-- 問題將由JavaScript動態生成 -->
+        </form>
+        <button class="submit-btn" onclick="submitQuiz()">提交答案</button>
+        <div id="feedback" class="feedback">
+            <div class="score" id="score"></div>
+            <div id="feedback-text"></div>
+            <div id="explanations"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "聲音表達基礎班的課程目標是什麼？",
+                options: ["提升寫作能力", "增強聲音表達能力", "改善人際關係", "學習音樂創作"],
+                correct: 1,
+                explanation: "聲音表達基礎班的主要目標是增強學員的聲音表達能力。"
+            },
+            {
+                question: "淬鍊知識的五個步驟中，哪一步不包括在內？",
+                options: ["好懂", "會", "想", "說"],
+                correct: 2,
+                explanation: "淬鍊知識的五個步驟是：好懂、會、記、說、做。'想'不包括在內。"
+            },
+            {
+                question: "什麼是 Aha Moment？",
+                options: ["一種呼吸技巧", "課程的結束時刻", "靈光一閃的時刻", "表演的高潮部分"],
+                correct: 2,
+                explanation: "Aha Moment 指的是靈光一閃的時刻，包括說法、想法和做法。"
+            },
+            {
+                question: "在英雄旅程中，'平凡的世界'之後是什麼階段？",
+                options: ["獎賞", "召喚冒險", "回歸", "盟友、試煉和敵人"],
+                correct: 1,
+                explanation: "在英雄旅程中，'平凡的世界'之後是'召喚冒險'階段。"
+            },
+            {
+                question: "課程建議如何對抗遺忘曲線？",
+                options: ["增加睡眠時間", "重複觀看課程視頻", "記錄筆記，下載課程內容", "與他人討論課程內容"],
+                correct: 2,
+                explanation: "課程建議通過記錄筆記和下載課程內容來對抗遺忘曲線。"
+            },
+            {
+                question: "說話的四個步驟中，哪一個不屬於？",
+                options: ["呼吸", "發聲", "共鳴", "思考"],
+                correct: 3,
+                explanation: "說話的四個步驟是：呼吸、發聲、共鳴、咬字。'思考'不屬於這四個步驟。"
+            },
+            {
+                question: "以下哪一種不是課程中提到的呼吸狀態？",
+                options: ["口鼻淺呼吸", "淺胸式呼吸", "全胸式呼吸", "深層呼吸"],
+                correct: 3,
+                explanation: "課程中提到的四種呼吸狀態是：口鼻淺呼吸、淺胸式呼吸、全胸式呼吸和腹式呼吸。'深層呼吸'不在其中。"
+            },
+            {
+                question: "說話時的氣息應該比平常呼吸多使用多少？",
+                options: ["10%", "20%", "30%", "50%"],
+                correct: 1,
+                explanation: "課程建議說話時的氣息應該比平常呼吸多使用20%。"
+            },
+            {
+                question: "'提打挺鬆'中的'提'指的是什麼？",
+                options: ["提起肩膀", "提起笑肌", "提高音量", "提升情緒"],
+                correct: 1,
+                explanation: "'提打挺鬆'中的'提'指的是提起笑肌。"
+            },
+            {
+                question: "以下哪一項不是課程中提到的表達模式？",
+                options: ["默念", "訴說", "朗讀", "吟唱"],
+                correct: 3,
+                explanation: "課程中提到的三種表達模式是：默念、訴說和朗讀。'吟唱'不在其中。"
+            },
+            {
+                question: "課程強調的是擴大還是突破舒適圈？",
+                options: ["擴大舒適圈", "突破舒適圈", "保持在舒適圈內", "忽視舒適圈"],
+                correct: 0,
+                explanation: "課程強調的是擴大舒適圈，而不是突破舒適圈。"
+            },
+            {
+                question: "課程建議練習時應該採取什麼態度？",
+                options: ["追求完美", "與他人競爭", "練習本身就是目的", "盡快完成任務"],
+                correct: 2,
+                explanation: "課程建議練習時應該採取'練習本身就是目的'的態度，不要練習害怕或抗拒。"
+            },
+            {
+                question: "課程中提到的三種角色扮演不包括哪一個？",
+                options: ["練習生", "教練", "啦啦隊", "觀眾"],
+                correct: 3,
+                explanation: "課程中提到的三種角色扮演是：練習生、教練和啦啦隊。'觀眾'不在其中。"
+            },
+            {
+                question: "關於氣息的三個重點，以下哪一項是錯誤的？",
+                options: ["聚氣要足", "調氣要穩", "用氣要猛", "用氣順氣"],
+                correct: 2,
+                explanation: "氣息的三個重點是：聚氣要足、調氣要穩、用氣順氣（不用勁，留有餘裕）。'用氣要猛'是錯誤的。"
+            },
+            {
+                question: "課程中提到的'氣場'指的是什麼？",
+                options: ["物理學中的磁場", "散發出的能量或影響", "運動場的氛圍", "空氣中的氣味"],
+                correct: 1,
+                explanation: "課程中提到的'氣場'指的是散發出的能量或影響他人的磁場。"
+            },
+            {
+                question: "為什麼課程不建議使用腹式呼吸來說話？",
+                options: ["腹式呼吸太淺", "腹式呼吸聲音太小", "腹式呼吸節奏不適合", "腹式呼吸容易疲勞"],
+                correct: 2,
+                explanation: "課程不建議使用腹式呼吸來說話，因為腹式呼吸的節奏（吸氣5秒，呼氣10秒）不適合日常對話。"
+            },
+            {
+                question: "課程建議如何練習表情管理？",
+                options: ["保持面無表情", "誇張地展示情緒", "根據內容調整表情", "模仿他人的表情"],
+                correct: 2,
+                explanation: "課程建議根據內容調整表情強度，保持適度的笑容。"
+            },
+            {
+                question: "在講話時，課程建議關注什麼？",
+                options: ["只關注自己的表現", "只關注聽眾的反應", "關注自己、聽眾和內容", "不需要特別關注什麼"],
+                correct: 2,
+                explanation: "課程建議在講話時關注三個方面：自己的表現、聽眾的反應，以及講話的內容。"
+            },
+            {
+                question: "課程中提到的'氣度'指的是什麼？",
+                options: ["呼吸的深度", "說話的音量", "寬容和大度的特質", "個人的外表氣質"],
+                correct: 2,
+                explanation: "課程中提到的'氣度'指的是一個人的寬容、慷慨和寬宏大量的特質。"
+            },
+            {
+                question: "課程結束後，學員應該如何繼續學習？",
+                options: ["立即報名下一個課程", "停止所有練習", "在日常生活中應用所學", "等待老師的進一步指示"],
+                correct: 2,
+                explanation: "課程鼓勵學員在日常生活中繼續應用所學，用聲音填滿時間的縫隙，持續練習和改進。"
+            }
+        ];
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function generateQuiz() {
+            const form = document.getElementById('quiz-form');
+            shuffleArray(questions);
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `<p>${index + 1}. ${q.question}</p>`;
+
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+
+                shuffleArray(q.options);
+                q.options.forEach((option, optionIndex) => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option';
+                    optionDiv.innerHTML = `
+                        <input type="radio" id="q${index}o${optionIndex}" name="q${index}" value="${optionIndex}">
+                        <label for="q${index}o${optionIndex}">${option}</label>
+                    `;
+                    optionsDiv.appendChild(optionDiv);
+                });
+
+                questionDiv.appendChild(optionsDiv);
+                form.appendChild(questionDiv);
+            });
+        }
+
+        function submitQuiz() {
+            let score = 0;
+            const explanationsDiv = document.getElementById('explanations');
+            explanationsDiv.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected) {
+                    if (parseInt(selected.value) === q.correct) {
+                        score++;
+                    } else {
+                        const explanationDiv = document.createElement('div');
+                        explanationDiv.className = 'explanation';
+                        explanationDiv.innerHTML = `<p><strong>問題 ${index + 1}:</strong> ${q.question}</p>
+                                                    <p><strong>正確答案:</strong> ${q.options[q.correct]}</p>
+                                                    <p><strong>解釋:</strong> ${q.explanation}</p>`;
+                        explanationsDiv.appendChild(explanationDiv);
+                    }
+                }
+            });
+
+            const totalScore = score * 5; // 每題5分，總分100分
+            const feedbackDiv = document.getElementById('feedback');
+            const scoreDiv = document.getElementById('score');
+            const feedbackTextDiv = document.getElementById('feedback-text');
+
+            scoreDiv.textContent = `你的得分是 ${totalScore} / 100`;
+            feedbackDiv.style.display = 'block';
+
+            let feedbackText = '';
+            if (totalScore >= 90) {
+                feedbackText = "太棒了！你對聲音表達基礎班的內容掌握得非常好！繼續保持這種學習熱情！";
+            } else if (totalScore >= 70) {
+                feedbackText = "做得很好！你已經掌握了大部分的內容。繼續努力，你會做得更好的！";
+            } else if (totalScore >= 50) {
+                feedbackText = "不錯的表現！你已經理解了一些重要概念。再多練習一下，相信你會有更大的進步！";
+            } else {
+                feedbackText = "這只是開始！每個人都有不同的學習速度。繼續努力，你一定會有所突破的！";
+            }
+
+            feedbackTextDiv.textContent = feedbackText;
+        }
+
+        window.onload = generateQuiz;
+    </script>
+</body>
+</html>

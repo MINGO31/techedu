@@ -1,0 +1,191 @@
+<html><head><base href="https://websimcreationengine.com/"><style>
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+}
+
+.quiz-container {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.question {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.options {
+  margin-bottom: 20px;
+}
+
+.option {
+  margin-bottom: 5px;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+#result {
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+#explanation {
+  margin-top: 10px;
+}
+
+#encouragement {
+  font-style: italic;
+  color: #27ae60;
+  margin-top: 20px;
+}
+</style></head><body>
+
+<h1>聲音與溝通技巧測驗</h1>
+
+<div class="quiz-container">
+  <form id="quiz-form" method="GET" action="https://websimcreationengine.com/quiz-result">
+    <div id="questions"></div>
+    <button type="submit">提交答案</button>
+  </form>
+</div>
+
+<div id="result"></div>
+<div id="explanation"></div>
+<div id="encouragement"></div>
+
+<script>
+const questions = [
+  {
+    question: "在聆聽他人說話時,應該優先注意的是什麼?",
+    options: [
+      "對方的衣著打扮",
+      "對方的聲音快慢冷熱",
+      "對方的身體語言",
+      "對方的社會地位"
+    ],
+    answer: 1
+  },
+  {
+    question: "以下哪一項不是評估一個人說話底氣的要素?",
+    options: [
+      "呼吸方式",
+      "發聲位置", 
+      "咬字清晰度",
+      "說話時的表情"
+    ],
+    answer: 3
+  },
+  {
+    question: "在與他人溝通時,如何拒絕對方的邀約更為得體?",
+    options: [
+      "直接了當地說不",
+      "找藉口推託",
+      "禮貌地表達感謝,說明原因並提出替代方案",
+      "完全不回應"
+    ],
+    answer: 2
+  },
+  {
+    question: "下列哪一種說話方式最容易讓人產生防衛心理?",
+    options: [
+      "語速緩慢、音量適中",
+      "語速快、音量大、語氣強硬",
+      "語速適中、音量小、語氣柔和",
+      "語速慢、音量適中、語氣堅定"
+    ],
+    answer: 1
+  },
+  {
+    question: "在進行邀約時,以下哪種心態最有助於成功?",
+    options: [
+      "對方一定要答應我的邀約",
+      "不管對方如何回應我都能接受",
+      "如果對方拒絕就再也不理他",
+      "邀約時要表現出很強勢的態度"
+    ],
+    answer: 1
+  }
+];
+
+let currentQuestions = [];
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function initializeQuiz() {
+  shuffleArray(questions);
+  currentQuestions = questions.slice(0, 5);
+  const questionsContainer = document.getElementById('questions');
+  
+  currentQuestions.forEach((q, index) => {
+    const questionDiv = document.createElement('div');
+    questionDiv.innerHTML = `
+      <p class="question">${index + 1}. ${q.question}</p>
+      <div class="options">
+        ${q.options.map((option, i) => `
+          <div class="option">
+            <input type="radio" id="q${index}_${i}" name="q${index}" value="${i}" required>
+            <label for="q${index}_${i}">${option}</label>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    questionsContainer.appendChild(questionDiv);
+  });
+}
+
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  let score = 0;
+  currentQuestions.forEach((q, index) => {
+    const selected = document.querySelector(`input[name="q${index}"]:checked`);
+    if (selected && parseInt(selected.value) === q.answer) {
+      score++;
+    }
+  });
+  
+  const resultDiv = document.getElementById('result');
+  const explanationDiv = document.getElementById('explanation');
+  const encouragementDiv = document.getElementById('encouragement');
+  
+  resultDiv.textContent = `你的得分是: ${score} / 5`;
+  
+  explanationDiv.innerHTML = currentQuestions.map((q, index) => `
+    <p><strong>${index + 1}. ${q.question}</strong><br>
+    正確答案: ${q.options[q.answer]}</p>
+  `).join('');
+  
+  encouragementDiv.textContent = `太棒了!你已經展現出對聲音與溝通技巧的深刻理解。記住,實踐出真知,持續在日常生活中應用這些技巧,你的溝通能力一定會更上一層樓。加油!`;
+});
+
+initializeQuiz();
+</script>
+
+</body></html>

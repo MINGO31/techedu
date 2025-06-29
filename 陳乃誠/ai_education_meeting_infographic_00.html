@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>康軒AI系統互動式討論紀錄</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe6d9 100%);
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: slide 20s linear infinite;
+        }
+        
+        @keyframes slide {
+            0% { transform: translate(-50%, -50%); }
+            100% { transform: translate(-30%, -30%); }
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .date {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+        
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            position: relative;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #ffcc99;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            background: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.2);
+        }
+        
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.1);
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            margin: 5px;
+            background: transparent;
+            border: 2px solid #ffcc99;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .tab.active {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border-color: #ff6b35;
+            transform: scale(1.05);
+        }
+        
+        .tab:hover:not(.active) {
+            background: #fff5f0;
+            transform: translateY(-2px);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .interactive-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 107, 53, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .interactive-card:hover::before {
+            left: 100%;
+        }
+        
+        .interactive-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(255, 107, 53, 0.2);
+            border-color: #ff6b35;
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.8rem;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+        
+        .card-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+        
+        .expandable-content.expanded {
+            max-height: 500px;
+        }
+        
+        .expand-btn {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .expand-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .animated-stat {
+            text-align: center;
+            padding: 20px 15px;
+            background: linear-gradient(135deg, #fff5f0, #ffe6d9);
+            border-radius: 15px;
+            border: 2px solid #ffcc99;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .animated-stat:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.2);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ff6b35;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .progress-chart {
+            margin: 20px 0;
+        }
+        
+        .progress-item {
+            margin: 15px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            background: #ffe6d9;
+            border-radius: 15px;
+            height: 25px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 15px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .filter-container {
+            margin: 20px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid #ffcc99;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border-color: #ff6b35;
+        }
+        
+        .filter-btn:hover:not(.active) {
+            background: #fff5f0;
+            transform: translateY(-2px);
+        }
+        
+        .issue-grid {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .issue-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.1);
+            border-left: 5px solid #ff6b35;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .issue-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.2);
+        }
+        
+        .issue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .issue-title {
+            font-weight: bold;
+            color: #ff6b35;
+            font-size: 1.1rem;
+        }
+        
+        .priority-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .priority-high { background: #e74c3c; }
+        .priority-medium { background: #f39c12; }
+        .priority-low { background: #27ae60; }
+        
+        .floating-action {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+        
+        .floating-action:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.4);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.4s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from { 
+                opacity: 0; 
+                transform: translate(-50%, -60%) scale(0.8); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translate(-50%, -50%) scale(1); 
+            }
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #ff6b35;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                margin: 2px 0;
+            }
+            
+            .floating-action {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                right: 20px;
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>📚 康軒AI系統討論紀錄</h1>
+                <div class="date">2025-05-25 系統調整、AI生成題目、作文批改</div>
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="搜尋會議內容、功能或議題..." id="searchInput">
+            <button class="search-btn" onclick="performSearch()">🔍</button>
+        </div>
+        
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('overview')">📊 系統概覽</div>
+            <div class="tab" onclick="showTab('features')">🤖 功能應用</div>
+            <div class="tab" onclick="showTab('issues')">⚠️ 關鍵議題</div>
+            <div class="tab" onclick="showTab('international')">🌍 國際回饋</div>
+            <div class="tab" onclick="showTab('actions')">🎯 行動計畫</div>
+        </div>
+        
+        <!-- 系統概覽頁面 -->
+        <div id="overview" class="tab-content active">
+            <div class="dashboard-grid">
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">📈</div>
+                        <div class="card-title">系統效能指標</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="stats-container">
+                            <div class="animated-stat" onclick="event.stopPropagation(); showDetailModal('作文批改', '康軒AI系統每日處理超過2000篇作文，包含假日在內，顯示出極高的使用率和市場接受度')">
+                                <span class="stat-number" data-target="2000">0</span>
+                                <div class="stat-label">每日批改篇數</div>
+                            </div>
+                            <div class="animated-stat" onclick="event.stopPropagation(); showDetailModal('OCR辨識', 'OCR文字辨識成功率為70-80%，主要受到學生手寫字跡清晰度影響')">
+                                <span class="stat-number" data-target="75">0</span>
+                                <div class="stat-label">OCR辨識率(%)</div>
+                            </div>
+                            <div class="animated-stat" onclick="event.stopPropagation(); showDetailModal('系統穩定性', '作文批改系統使用率極高，獲得教師廣泛認可')">
+                                <span class="stat-number" data-target="95">0</span>
+                                <div class="stat-label">系統使用率(%)</div>
+                            </div>
+                        </div>
+                        <button class="expand-btn">查看詳細分析</button>
+                        <div class="expandable-content">
+                            <div class="progress-chart">
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span>作文批改準確度</span>
+                                        <span>85%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" data-width="85"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span>教師滿意度</span>
+                                        <span>92%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" data-width="92"></div>
+                                    </div>
+                                </div>
+                                <div class="progress-item">
+                                    <div class="progress-label">
+                                        <span>系統回應速度</span>
+                                        <span>78%</span>
+                                    </div>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" data-width="78"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">📁</div>
+                        <div class="card-title">檔案處理效能</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="progress-chart">
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>TXT格式處理</span>
+                                    <span>85%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="85"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>PDF直接輸入</span>
+                                    <span>45%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="45"></div>
+                                </div>
+                            </div>
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>PDF轉圖檔OCR</span>
+                                    <span>30%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" data-width="30"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="expand-btn">查看處理建議</button>
+                        <div class="expandable-content">
+                            <h4 style="color: #ff6b35; margin: 15px 0;">最佳實踐建議</h4>
+                            <ul style="margin-left: 20px;">
+                                <li>優先使用TXT格式以獲得最佳辨識效果</li>
+                                <li>PDF檔案需要預處理，移除特殊字元</li>
+                                <li>避免PDF轉圖檔的處理方式</li>
+                                <li>建議教師指導學生使用文字貼上功能</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 功能應用頁面 -->
+        <div id="features" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-title">AI題目生成</div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>✅ 成功功能：</strong></p>
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>自動生成素養題並標示單元頁數</li>
+                            <li>精準抓取課文內容並提供來源定位</li>
+                            <li>支援多版本模型測試（2.5Ti、2.5Vash、2.0Ti）</li>
+                        </ul>
+                        <button class="expand-btn">查看詳細測試結果</button>
+                        <div class="expandable-content">
+                            <h4 style="color: #ff6b35; margin: 15px 0;">測試案例分析</h4>
+                            <div style="background: #fff5f0; padding: 15px; border-radius: 10px; margin: 10px 0;">
+                                <strong>範例：</strong>「全臺總雨量15.5毫米」<br>
+                                <strong>AI回應：</strong>自動標示來源頁數，準確追蹤課文序列
+                            </div>
+                            <p style="margin-top: 15px;"><strong>優勢：</strong>相較於一般ChatGPT，康軒AI系統能提供具體的課程內容位置信息。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">📝</div>
+                        <div class="card-title">作文批改系統</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="stats-container">
+                            <div class="animated-stat">
+                                <span class="stat-number" data-target="7">0</span>
+                                <div class="stat-label">天運作</div>
+                            </div>
+                            <div class="animated-stat">
+                                <span class="stat-number" data-target="2000">0</span>
+                                <div class="stat-label">日均批改</div>
+                            </div>
+                        </div>
+                        <button class="expand-btn">查看批改流程</button>
+                        <div class="expandable-content">
+                            <h4 style="color: #ff6b35; margin: 15px 0;">批改機制</h4>
+                            <ul style="margin-left: 20px;">
+                                <li><strong>快速班級建立：</strong>生成G1 code和QR碼分享</li>
+                                <li><strong>多重評分：</strong>分數差距超過三個積分時由另一位老師補充評分</li>
+                                <li><strong>成績管理：</strong>Excel表格下載，四大餘裕25%計算法則</li>
+                                <li><strong>文體參考：</strong>採用楊玉浩教授作文範例標準</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">💻</div>
+                        <div class="card-title">系統整合功能</div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>HTML表格整合：</strong></p>
+                        <ul style="margin: 10px 0 10px 20px;">
+                            <li>按頁面輸出簡報檔案</li>
+                            <li>每個table對應一個分頁</li>
+                            <li>版式簡潔，方便教師調整</li>
+                        </ul>
+                        <button class="expand-btn">查看技術細節</button>
+                        <div class="expandable-content">
+                            <h4 style="color: #ff6b35; margin: 15px 0;">技術架構</h4>
+                            <div style="background: #ffe6d9; padding: 15px; border-radius: 10px;">
+                                <p><strong>核心技術：</strong>HTML table + XML整合</p>
+                                <p><strong>輸出格式：</strong>可下載的簡報檔案</p>
+                                <p><strong>設計理念：</strong>以教師需求為中心，提供彈性調整空間</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 關鍵議題頁面 -->
+        <div id="issues" class="tab-content">
+            <div class="filter-container">
+                <div class="filter-btn active" onclick="filterIssues('all')">全部議題</div>
+                <div class="filter-btn" onclick="filterIssues('high')">高優先級</div>
+                <div class="filter-btn" onclick="filterIssues('medium')">中優先級</div>
+                <div class="filter-btn" onclick="filterIssues('low')">低優先級</div>
+            </div>
+            
+            <div class="issue-grid" id="issueGrid">
+                <div class="issue-card" data-priority="high">
+                    <div class="issue-header">
+                        <div class="issue-title">PDF與OCR識別率問題</div>
+                        <div class="priority-badge priority-high">高</div>
+                    </div>
+                    <p>系統處理PDF檔案直接輸入常導致錯誤辨識，特別是含有非系統字型（如畫桿等）的文件。TXT檔案雖然較穩定，但無法有效過濾特殊字元。</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #fff5f0; border-radius: 8px;">
+                        <strong>影響：</strong>影響批改準確性，需要標準化檔案轉換流程
+                    </div>
+                </div>
+                
+                <div class="issue-card" data-priority="high">
+                    <div class="issue-header">
+                        <div class="issue-title">AI數學解答準確性</div>
+                        <div class="priority-badge priority-high">高</div>
+                    </div>
+                    <p>現行系統在數學問題解答中出現計算錯誤，特別是「2.5」相關問題的解題邏輯存在偏差，影響教師和學生的使用體驗。</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #fff5f0; border-radius: 8px;">
+                        <strong>改進措施：</strong>已限制Token數提升回應速度，但仍需優化計算準確性
+                    </div>
+                </div>
+                
+                <div class="issue-card" data-priority="medium">
+                    <div class="issue-header">
+                        <div class="issue-title">學生登入驗證機制</div>
+                        <div class="priority-badge priority-medium">中</div>
+                    </div>
+                    <p>學生無須登入帳號密碼，導致系統無法確認不同時間場次的同一學生資料，影響歷程記錄的完整性和資料整合。</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #fff5f0; border-radius: 8px;">
+                        <strong>解決方向：</strong>依賴教師身份進行學生資料統一管理
+                    </div>
+                </div>
+                
+                <div class="issue-card" data-priority="medium">
+                    <div class="issue-header">
+                        <div class="issue-title">教學模型整合流程</div>
+                        <div class="priority-badge priority-medium">中</div>
+                    </div>
+                    <p>現有教學資源轉換為完整教學模型的機制不明確，缺乏即時調整和連結知識點的標準流程，需要進一步討論最佳實踐。</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #fff5f0; border-radius: 8px;">
+                        <strong>進展：</strong>已針對英文考試檢定設計初步流程，包含知識點連結和錯誤回饋機制
+                    </div>
+                </div>
+                
+                <div class="issue-card" data-priority="low">
+                    <div class="issue-header">
+                        <div class="issue-title">成本控制與系統配置</div>
+                        <div class="priority-badge priority-low">低</div>
+                    </div>
+                    <p>雲端機器成本隨使用率增長呈等比放大，可能達到二十倍增長。需要持續監控成本效益和優化資源配置。</p>
+                    <div style="margin-top: 15px; padding: 10px; background: #fff5f0; border-radius: 8px;">
+                        <strong>現況：</strong>原型模型付費成本可控，但大規模應用時需要成本管控策略
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 國際回饋頁面 -->
+        <div id="international" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">🇨🇦</div>
+                        <div class="card-title">加拿大參訪成果</div>
+                    </div>
+                    <div class="card-content">
+                        <div style="background: linear-gradient(135deg, #fff5f0, #ffe6d9); padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px;">
+                            <h3 style="color: #ff6b35; margin-bottom: 20px;">🌟 國際認可度</h3>
+                            <div class="stats-container">
+                                <div class="animated-stat">
+                                    <span class="stat-number" data-target="4">0</span>
+                                    <div class="stat-label">教育層級</div>
+                                </div>
+                                <div class="animated-stat">
+                                    <span class="stat-number" data-target="100">0</span>
+                                    <div class="stat-label">教師興趣度(%)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="expand-btn">查看詳細回饋</button>
+                        <div class="expandable-content">
+                            <h4 style="color: #ff6b35; margin: 15px 0;">參訪詳情</h4>
+                            <ul style="margin-left: 20px;">
+                                <li><strong>參與對象：</strong>教授、國中、高中、小學教師</li>
+                                <li><strong>重點功能：</strong>批次批改功能獲得高度關注</li>
+                                <li><strong>整體評價：</strong>務實有用的教育創舉</li>
+                                <li><strong>市場反應：</strong>教師表達期待但因免費功能較為含蓄</li>
+                            </ul>
+                            <div style="background: #ffe6d9; padding: 15px; border-radius: 10px; margin-top: 15px;">
+                                <strong>國際影響：</strong>提升教師及家長對學生學習狀況的認識，為創新教育模式樹立標竿
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-card" onclick="toggleExpand(this)">
+                    <div class="card-header">
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">寫作戰力分析報告</div>
+                    </div>
+                    <div class="card-content">
+                        <p><strong>建議方案：</strong>在學生成績單後附加寫作戰力分析報告</p>
+                        <button class="expand-btn">查看報告價值</button>
+                        <div class="expandable-content">
+                            <h4 style="color: #ff6b35; margin: 15px 0;">多方影響分析</h4>
+                            <div style="display: grid; gap: 15px;">
+                                <div style="background: #fff5f0; padding: 15px; border-radius: 10px;">
+                                    <strong>👨‍🏫 對教師：</strong>確認批改內容正確性，提供具體教學回饋依據
+                                </div>
+                                <div style="background: #ffe6d9; padding: 15px; border-radius: 10px;">
+                                    <strong>👨‍👩‍👧‍👦 對家長：</strong>彌補僅依據積分無法全面掌握學生進步的盲點
+                                </div>
+                                <div style="background: #fff5f0; padding: 15px; border-radius: 10px;">
+                                    <strong>👨‍🎓 對學生：</strong>透過詳細分析提供精準的個別改進建議
+                                </div>
+                            </div>
+                            <p style="margin-top: 15px; font-weight: bold; color: #ff6b35;">預期效果：提升教學透明度與學生考核公信力</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 行動計畫頁面 -->
+        <div id="actions" class="tab-content">
+            <div class="dashboard-grid">
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <div class="card-title">立即行動項目</div>
+                    </div>
+                    <div class="card-content">
+                        <div style="display: grid; gap: 15px;">
+                            <div style="background: #fff5f0; padding: 15px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                                <strong>🔴 緊急優先</strong>
+                                <p>建立PDF轉換與上傳的標準作業流程</p>
+                            </div>
+                            <div style="background: #ffe6d9; padding: 15px; border-radius: 10px; border-left: 4px solid #f39c12;">
+                                <strong>🟡 重要項目</strong>
+                                <p>優化AI數學解題的準確性與回應機制</p>
+                            </div>
+                            <div style="background: #fff5f0; padding: 15px; border-radius: 10px; border-left: 4px solid #27ae60;">
+                                <strong>🟢 持續改進</strong>
+                                <p>收集教師回饋並優化使用者體驗</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="interactive-card">
+                    <div class="card-header">
+                        <div class="card-icon">🎯</div>
+                        <div class="card-title">中長期規劃</div>
+                    </div>
+                    <div class="card-content">
+                        <ul style="margin-left: 20px; line-height: 2;">
+                            <li>建立AI生成內容的品質控管機制</li>
+                            <li>完善學生身份驗證與歷程記錄系統</li>
+                            <li>開發自學模式與口寫辨識功能</li>
+                            <li>擴展國際合作與應用推廣</li>
+                            <li>建立成本控制與效益評估機制</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <button class="floating-action" onclick="generateReport()" title="生成完整報告">📄</button>
+    
+    <!-- 詳細資訊彈窗 -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle" style="color: #ff6b35; margin-bottom: 20px;"></h2>
+            <p id="modalContent"></p>
+        </div>
+    </div>
+    
+    <script>
+        // 標籤頁切換功能
+        function showTab(tabName) {
+            // 隱藏所有標籤內容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // 移除所有標籤的active狀態
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 顯示選中的標籤內容
+            document.getElementById(tabName).classList.add('active');
+            
+            // 設置對應標籤為active
+            event.target.classList.add('active');
+            
+            // 重新啟動動畫
+            setTimeout(animateNumbers, 300);
+            setTimeout(animateProgressBars, 500);
+        }
+        
+        // 展開/收起功能
+        function toggleExpand(card) {
+            const expandableContent = card.querySelector('.expandable-content');
+            const button = card.querySelector('.expand-btn');
+            
+            if (expandableContent.classList.contains('expanded')) {
+                expandableContent.classList.remove('expanded');
+                button.textContent = '查看詳細分析';
+            } else {
+                expandableContent.classList.add('expanded');
+                button.textContent = '收起詳細內容';
+                
+                // 啟動進度條動畫
+                setTimeout(() => {
+                    const progressBars = expandableContent.querySelectorAll('.progress-fill');
+                    progressBars.forEach(bar => {
+                        const width = bar.getAttribute('data-width') + '%';
+                        bar.style.width = width;
+                    });
+                }, 100);
+            }
+        }
+        
+        // 數字動畫
+        function animateNumbers() {
+            document.querySelectorAll('.stat-number').forEach(element => {
+                const target = parseInt(element.getAttribute('data-target'));
+                const increment = target / 50;
+                let current = 0;
+                
+                element.textContent = '0';
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        element.textContent = target;
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(current);
+                    }
+                }, 40);
+            });
+        }
+        
+        // 進度條動畫
+        function animateProgressBars() {
+            document.querySelectorAll('.progress-fill').forEach(bar => {
+                if (bar.closest('.expandable-content') && 
+                    !bar.closest('.expandable-content').classList.contains('expanded')) {
+                    return;
+                }
+                
+                const width = bar.getAttribute('data-width');
+                if (width) {
+                    setTimeout(() => {
+                        bar.style.width = width + '%';
+                    }, 200);
+                }
+            });
+        }
+        
+        // 搜尋功能
+        function performSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.interactive-card, .issue-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm) || searchTerm === '') {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // 議題篩選
+        function filterIssues(priority) {
+            const cards = document.querySelectorAll('.issue-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // 更新按鈕狀態
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                const cardPriority = card.getAttribute('data-priority');
+                if (priority === 'all' || cardPriority === priority) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.5s ease';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // 詳細資訊彈窗
+        function showDetailModal(title, content) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalContent').textContent = content;
+            document.getElementById('detailModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+        
+        // 生成報告功能
+        function generateReport() {
+            const reportContent = `
+康軒AI系統討論紀錄報告
+生成時間：${new Date().toLocaleString('zh-TW')}
+
+=== 系統概覽 ===
+- 每日批改作文：2000+ 篇
+- OCR辨識率：70-80%
+- 系統使用率：95%
+
+=== 主要成就 ===
+✅ 作文批改系統獲得極高使用率
+✅ AI題目生成功能精準標示來源
+✅ 國際參訪獲得正面回饋
+✅ HTML表格整合功能完善
+
+=== 關鍵挑戰 ===
+⚠️ PDF檔案處理效率需要改善
+⚠️ AI數學解答準確性待提升
+⚠️ 學生身份驗證機制需要完善
+
+=== 行動計畫 ===
+🎯 建立標準化檔案處理流程
+🎯 優化AI解答準確性
+🎯 完善使用者體驗設計
+            `;
+            
+            const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '康軒AI系統討論紀錄_' + new Date().toISOString().slice(0, 10) + '.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            // 顯示提示
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '✅';
+            setTimeout(() => {
+                event.target.innerHTML = originalText;
+            }, 2000);
+        }
+        
+        // 鍵盤快捷鍵
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+        });
+        
+        // 頁面載入完成後啟動動畫
+        window.addEventListener('load', function() {
+            setTimeout(animateNumbers, 500);
+            setTimeout(animateProgressBars, 800);
+            
+            // 搜尋框即時搜尋
+            document.getElementById('searchInput').addEventListener('input', function() {
+                if (this.value.length >= 2 || this.value.length === 0) {
+                    performSearch();
+                }
+            });
+        });
+        
+        // 點擊模態框外部關閉
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

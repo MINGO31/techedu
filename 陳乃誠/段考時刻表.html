@@ -1,0 +1,885 @@
+<html lang="zh-TW"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>段考時刻表</title>
+    <style>
+        /* 全局樣式 */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #fff3e0; /* 淺橘色背景 */
+            font-size: 18px; /* 字體調大 */
+        }
+
+        /* 主容器 */
+        .container {
+            width: 90%; /* 佔據90%版面 */
+            max-width: 1200px; /* 最大寬度 */
+            background-color: #ffffff; /* 白色背景 */
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); /* 陰影效果 */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 標題 */
+        h1 {
+            color: #e65100; /* 深橘色標題 */
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 32px; /* 標題字體更大 */
+        }
+
+        /* 時刻表容器 */
+        .schedule-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 20px; /* 兩天時刻表之間的間距 */
+        }
+
+        /* 單天時刻表 */
+        .day-schedule {
+            width: 48%; /* 每邊佔48%寬度 */
+        }
+
+        /* 表格樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 20px; /* 表格字體調大 */
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 15px; /* 增加內距 */
+            text-align: center;
+        }
+
+        th {
+            background-color: #ff9800; /* 橘色表頭 */
+            color: white;
+            font-size: 22px; /* 表頭字體更大 */
+        }
+
+        /* 下拉式選單 */
+        select {
+            width: 100%;
+            padding: 10px; /* 增加內距 */
+            border: 1px solid #ff9800;
+            border-radius: 4px;
+            background-color: #fff3e0;
+            color: #e65100;
+            font-size: 18px; /* 下拉選單字體調大 */
+        }
+
+        /* 出席狀況區塊 */
+        .attendance-section {
+            width: 100%;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            font-size: 20px; /* 字體調大 */
+        }
+
+        .attendance-section h2 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 24px; /* 標題字體更大 */
+        }
+
+        .attendance-section label {
+            display: block;
+            margin-bottom: 5px;
+            color: #e65100;
+        }
+
+        .attendance-section input {
+            width: 100%;
+            padding: 10px; /* 增加內距 */
+            border: 1px solid #ff9800;
+            border-radius: 4px;
+            background-color: #fff3e0;
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 18px; /* 輸入框字體調大 */
+        }
+
+        /* 下載按鈕 */
+        .download-btn {
+            margin-top: 20px;
+            padding: 15px 30px; /* 增加內距 */
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 20px; /* 按鈕字體調大 */
+        }
+
+        .download-btn:hover {
+            background-color: #e65100;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%; /* 小螢幕時佔據更多版面 */
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 28px; /* 小螢幕時標題字體稍小 */
+            }
+
+            .schedule-container {
+                flex-direction: column; /* 小螢幕時改為垂直排列 */
+            }
+
+            .day-schedule {
+                width: 100%; /* 小螢幕時佔滿寬度 */
+            }
+
+            th, td {
+                padding: 12px; /* 小螢幕時內距稍小 */
+            }
+
+            .attendance-section {
+                padding: 10px;
+            }
+        }
+    </style>
+<style>body { margin: 0; }</style><script src="chrome-extension://bpoadfkcbjbfhfodiogcnhhhpibjhbnh/image/inject.js" id="imt-image-inject"></script><style data-id="immersive-translate-input-injected-css">.immersive-translate-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2147483647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.immersive-translate-attach-loading::after {
+  content: " ";
+
+  --loading-color: #f78fb6;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+  margin: 12px auto;
+  position: relative;
+  color: white;
+  left: -100px;
+  box-sizing: border-box;
+  animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-2000%, -50%);
+  z-index: 100;
+}
+
+.immersive-translate-loading-spinner {
+  vertical-align: middle !important;
+  width: 10px !important;
+  height: 10px !important;
+  display: inline-block !important;
+  margin: 0 4px !important;
+  border: 2px rgba(221, 244, 255, 0.6) solid !important;
+  border-top: 2px rgba(0, 0, 0, 0.375) solid !important;
+  border-left: 2px rgba(0, 0, 0, 0.375) solid !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  -webkit-animation: immersive-translate-loading-animation 0.6s infinite linear !important;
+  animation: immersive-translate-loading-animation 0.6s infinite linear !important;
+}
+
+@-webkit-keyframes immersive-translate-loading-animation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(359deg);
+  }
+}
+
+@keyframes immersive-translate-loading-animation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.immersive-translate-input-loading {
+  --loading-color: #f78fb6;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+  margin: 12px auto;
+  position: relative;
+  color: white;
+  left: -100px;
+  box-sizing: border-box;
+  animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+}
+
+@keyframes immersiveTranslateShadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  12% {
+    box-shadow: 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  25% {
+    box-shadow: 110px 0 var(--loading-color), 100px 0 var(--loading-color),
+      0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  36% {
+    box-shadow: 120px 0 var(--loading-color), 110px 0 var(--loading-color),
+      100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    box-shadow: 130px 0 var(--loading-color), 120px 0 var(--loading-color),
+      110px 0 var(--loading-color), 100px 0 var(--loading-color);
+  }
+
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color),
+      120px 0 var(--loading-color), 110px 0 var(--loading-color);
+  }
+
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      130px 0 var(--loading-color), 120px 0 var(--loading-color);
+  }
+
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color);
+  }
+
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0),
+      200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
+.immersive-translate-toast {
+  display: flex;
+  position: fixed;
+  z-index: 2147483647;
+  left: 0;
+  right: 0;
+  top: 1%;
+  width: fit-content;
+  padding: 12px 20px;
+  margin: auto;
+  overflow: auto;
+  background: #fef6f9;
+  box-shadow: 0px 4px 10px 0px rgba(0, 10, 30, 0.06);
+  font-size: 15px;
+  border-radius: 8px;
+  color: #333;
+}
+
+.immersive-translate-toast-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.immersive-translate-toast-hidden {
+  margin: 0 20px 0 72px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.immersive-translate-toast-close {
+  color: #666666;
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .immersive-translate-toast {
+    top: 0;
+    padding: 12px 0px 0 10px;
+  }
+  .immersive-translate-toast-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .immersive-translate-toast-hidden {
+    margin: 10px auto;
+  }
+}
+
+.immersive-translate-modal {
+  display: none;
+  position: fixed;
+  z-index: 2147483647;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  font-size: 15px;
+}
+
+.immersive-translate-modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 40px 24px 24px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 270px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+    "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  position: relative;
+}
+
+@media screen and (max-width: 768px) {
+  .immersive-translate-modal-content {
+    margin: 50% auto !important;
+  }
+}
+
+.immersive-translate-modal .immersive-translate-modal-content-in-input {
+  max-width: 500px;
+}
+.immersive-translate-modal-content-in-input .immersive-translate-modal-body {
+  text-align: left;
+  max-height: unset;
+}
+
+.immersive-translate-modal-title {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.immersive-translate-modal-body {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333333;
+  word-break: break-all;
+  margin-top: 24px;
+}
+
+@media screen and (max-width: 768px) {
+  .immersive-translate-modal-body {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+}
+
+.immersive-translate-close {
+  color: #666666;
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.immersive-translate-close:hover,
+.immersive-translate-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.immersive-translate-modal-footer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.immersive-translate-btn {
+  width: fit-content;
+  color: #fff;
+  background-color: #ea4c89;
+  border: none;
+  font-size: 16px;
+  margin: 0 8px;
+  padding: 9px 30px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.immersive-translate-btn:hover {
+  background-color: #f082ac;
+}
+.immersive-translate-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.immersive-translate-btn:disabled:hover {
+  background-color: #ea4c89;
+}
+
+.immersive-translate-cancel-btn {
+  /* gray color */
+  background-color: rgb(89, 107, 120);
+}
+
+.immersive-translate-cancel-btn:hover {
+  background-color: hsl(205, 20%, 32%);
+}
+
+.immersive-translate-action-btn {
+  background-color: transparent;
+  color: #ea4c89;
+  border: 1px solid #ea4c89;
+}
+
+.immersive-translate-btn svg {
+  margin-right: 5px;
+}
+
+.immersive-translate-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #007bff;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+.immersive-translate-primary-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #ea4c89;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+.immersive-translate-modal input[type="radio"] {
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+.immersive-translate-modal label {
+  cursor: pointer;
+}
+
+.immersive-translate-close-action {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  cursor: pointer;
+}
+
+.imt-image-status {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 16px !important;
+}
+.imt-image-status img,
+.imt-image-status svg,
+.imt-img-loading {
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 0 8px 0 !important;
+  min-height: 28px !important;
+  min-width: 28px !important;
+  position: relative !important;
+}
+.imt-img-loading {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADgAAAA4CAMAAACfWMssAAAAtFBMVEUAAAD////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////oK74hAAAAPHRSTlMABBMIDyQXHwyBfFdDMSw+OjXCb+5RG51IvV/k0rOqlGRM6KKMhdvNyZBz9MaupmxpWyj437iYd/yJVNZeuUC7AAACt0lEQVRIx53T2XKiUBCA4QYOiyCbiAsuuGBcYtxiYtT3f6/pbqoYHVFO5r+iivpo6DpAWYpqeoFfr9f90DsYAuRSWkFnPO50OgR9PwiCUFcl2GEcx+N/YBh6pvKaefHlUgZd1zVe0NbYcQjGBfzrPE8Xz8aF+71D8gG6DHFPpc4a7xFiCDuhaWgKgGIJQ3d5IMGDrpS4S5KgpIm+en9f6PlAhKby4JwEIxlYJV9h5k5nee9GoxHJ2IDSNB0dwdad1NAxDJ/uXDHYmebdk4PdbkS58CIVHdYSUHTYYRWOJblWSyu2lmy3KNFVJNBhxcuGW4YBVCbYGRZwIooipHsNqjM4FbgOQqQqSKQQU9V8xmi1QlgHqQQ6DDBvRUVCDirs+EzGDGOQTCATgtYTnbCVLgsVgRE0T1QE0qHCFAht2z6dLvJQs3Lo2FQoDxWNUiBhaP4eRgwNkI+dAjVOA/kUrIDwf3CG8NfNOE0eiFotSuo+rBiq8tD9oY4Qzc6YJw99hl1wzpQvD7ef2M8QgnOGJfJw+EltQc+oX2yn907QB22WZcvlUpd143dqQu+8pCJZuGE4xCuPXJqqcs5sNpsI93Rmzym1k4Npk+oD1SH3/a3LOK/JpUBpWfqNySxWzCfNCUITuDG5dtuphrUJ1myeIE9bIsPiKrfqTai5WZxbhtNphYx6GEIHihyGFTI69lje/rxajdh0s0msZ0zYxyPLhYCb1CyHm9Qsd2H37Y3lugVwL9kNh8Ot8cha6fUNQ8nuXi5z9/ExsAO4zQrb/ev1yrCB7lGyQzgYDGuxq1toDN/JGvN+HyWNHKB7zEoK+PX11e12G431erGYzwmytAWU56fkMHY5JJnDRR2eZji3AwtIcrEV8Cojat/BdQ7XOwGV1e1hDjGGjXbdArm8uJZtCH5MbcctVX8A1WpqumJHwckAAAAASUVORK5CYII=");
+  background-size: 28px 28px;
+  animation: image-loading-rotate 1s linear infinite !important;
+}
+
+.imt-image-status span {
+  color: var(--bg-2, #fff) !important;
+  font-size: 14px !important;
+  line-height: 14px !important;
+  font-weight: 500 !important;
+  font-family: "PingFang SC", Arial, sans-serif !important;
+}
+
+@keyframes image-loading-rotate {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+</style></head>
+<body>
+
+    <div class="container">
+        <h1>段考時刻表</h1>
+
+        <!-- 時刻表容器 -->
+        <div class="schedule-container">
+            <!-- 第一天時刻表 -->
+            <div class="day-schedule">
+                <h2>第一天</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>節次</th>
+                            <th>時間</th>
+                            <th>科目</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>第一節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="1">
+                                    <option value="08:30 - 09:15">08:30 - 09:15</option>
+                                    <option value="08:30 - 09:00">08:30 - 09:00</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="1">
+                                    <option value="自習">自習</option>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第二節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="2">
+                                    <option value="09:25 - 10:10">09:25 - 10:10</option>
+                                    <option value="09:10 - 10:10">09:10 - 10:10</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="2">
+                                    <option value="數學">數學</option>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第三節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="3" disabled="">
+                                    <option value="10:20 - 11:05">10:20 - 11:05</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="3">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第四節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="4" disabled="">
+                                    <option value="11:15 - 12:00">11:15 - 12:00</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="4">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第五節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="5" disabled="">
+                                    <option value="13:15 - 14:00">13:15 - 14:00</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="5">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第六節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="6" disabled="">
+                                    <option value="14:10 - 14:55">14:10 - 14:55</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="6">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第七節</td>
+                            <td>
+                                <select class="time-select" data-day="1" data-period="7" disabled="">
+                                    <option value="15:05 - 15:50">15:05 - 15:50</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="1" data-period="7">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 第二天時刻表 -->
+            <div class="day-schedule">
+                <h2>第二天</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>節次</th>
+                            <th>時間</th>
+                            <th>科目</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>第一節</td>
+                            <td>
+                                <select class="time-select" data-day="2" data-period="1">
+                                    <option value="08:30 - 09:15">08:30 - 09:15</option>
+                                    <option value="08:30 - 09:00">08:30 - 09:00</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="2" data-period="1">
+                                    <option value="自習">自習</option>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第二節</td>
+                            <td>
+                                <select class="time-select" data-day="2" data-period="2">
+                                    <option value="09:25 - 10:10">09:25 - 10:10</option>
+                                    <option value="09:10 - 10:10">09:10 - 10:10</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="2" data-period="2">
+                                    <option value="數學">數學</option>
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第三節</td>
+                            <td>
+                                <select class="time-select" data-day="2" data-period="3" disabled="">
+                                    <option value="10:20 - 11:05">10:20 - 11:05</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="2" data-period="3">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>第四節</td>
+                            <td>
+                                <select class="time-select" data-day="2" data-period="4" disabled="">
+                                    <option value="11:15 - 12:00">11:15 - 12:00</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select class="subject-select" data-day="2" data-period="4">
+                                    <option value="國文">國文</option>
+                                    <option value="英文">英文</option>
+                                    <option value="數學">數學</option>
+                                    <option value="社會">社會</option>
+                                    <option value="理化">理化</option>
+                                    <option value="作文">作文</option>
+                                    <option value="英文聽力">英文聽力</option>
+                                    <option value="生物">生物</option>
+                                    <option value="自習">自習</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 出席狀況 -->
+        <div class="attendance-section">
+            <h2>出席狀況</h2>
+            <label for="total">應到人數：</label>
+            <input type="number" id="total" placeholder="輸入應到人數">
+            <label for="present">實到人數：</label>
+            <input type="number" id="present" placeholder="輸入實到人數">
+            <label for="absent">缺席人數：</label>
+            <input type="number" id="absent" placeholder="輸入缺席人數">
+            <label for="absentList">缺席座號：</label>
+            <input type="text" id="absentList" placeholder="輸入缺席座號（以逗號分隔）">
+        </div>
+
+        <!-- 下載按鈕 -->
+        <button class="download-btn" onclick="downloadHTML()">下載時刻表</button>
+    </div>
+
+    <script>
+        // 時間調整邏輯
+        const timeSelects = document.querySelectorAll('.time-select');
+        const subjectSelects = document.querySelectorAll('.subject-select');
+
+        subjectSelects.forEach(select => {
+            select.addEventListener('change', (e) => {
+                const day = e.target.getAttribute('data-day');
+                const period = e.target.getAttribute('data-period');
+                const subject = e.target.value;
+
+                if (period === '2' && subject === '數學') {
+                    // 第二節是數學考試，調整時間
+                    const firstPeriodTime = document.querySelector(`.time-select[data-day="${day}"][data-period="1"]`);
+                    const secondPeriodTime = document.querySelector(`.time-select[data-day="${day}"][data-period="2"]`);
+
+                    firstPeriodTime.value = '08:30 - 09:00';
+                    secondPeriodTime.value = '09:10 - 10:10';
+                } else if (period === '2' && subject !== '數學') {
+                    // 第二節不是數學考試，恢復預設時間
+                    const firstPeriodTime = document.querySelector(`.time-select[data-day="${day}"][data-period="1"]`);
+                    const secondPeriodTime = document.querySelector(`.time-select[data-day="${day}"][data-period="2"]`);
+
+                    firstPeriodTime.value = '08:30 - 09:15';
+                    secondPeriodTime.value = '09:25 - 10:10';
+                }
+            });
+        });
+
+        // 下載HTML文件的函數
+        function downloadHTML() {
+            const content = document.documentElement.outerHTML;
+            const blob = new Blob([content], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'exam_schedule.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+
+</body></html>

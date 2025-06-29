@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI在研究學習與教育場域的創新應用</title>
+    <style>
+        /* 全局樣式 */
+        body {
+            font-family: 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            color: #1a5276;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 15px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            color: #2980b9;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            margin-top: 1.8rem;
+            color: #2c3e50;
+        }
+        
+        h4 {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            color: #34495e;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        blockquote {
+            background-color: #f0f7fb;
+            border-left: 4px solid #3498db;
+            margin: 1.5rem 0;
+            padding: 1rem 1.5rem;
+            font-style: italic;
+        }
+        
+        code {
+            background-color: #f7f9fa;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background-color: #f7f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* 表格樣式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background-color: white;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* 區塊樣式 */
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .speaker-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .speaker-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-right: 2rem;
+            object-fit: cover;
+            background-color: #e9f2fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #3498db;
+        }
+        
+        .speaker-details {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .quote {
+            background-color: #f0f7fb;
+            border-left: 4px solid #3498db;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+        }
+        
+        .highlight-box {
+            background-color: #e9f7ef;
+            border-radius: 5px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .warning-box {
+            background-color: #fff5e6;
+            border-radius: 5px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid #f39c12;
+        }
+        
+        .application-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #3498db;
+        }
+        
+        .card-title {
+            color: #2980b9;
+            font-size: 1.3rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        
+        .two-cols {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .col {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background-color: #e9f2fa;
+            color: #3498db;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .tag-container {
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 3rem;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            .speaker-photo {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI在研究學習與教育場域的創新應用</h1>
+        
+        <div class="speaker-info">
+            <div class="speaker-photo">陳</div>
+            <div class="speaker-details">
+                <h3>講者資訊</h3>
+                <p><strong>主講者：</strong>國立興大附中前校長陳勇延</p>
+                <p><strong>身分：</strong>延選好學 YT/Podcast/電子報 校長兼撞鐘</p>
+                <p><strong>座右銘：</strong>自己幸福，助人幸福</p>
+                <p><strong>聯絡方式：</strong></p>
+                <ul>
+                    <li>Facebook：搜尋 陳勇延</li>
+                    <li>YouTube：@yenshare</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="quote">
+            「你不是缺知識，你只是沒人陪你練——聽得懂、做得到的學習系統」
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>一、NotebookLM 工具介紹</h2>
+        
+        <h3>NotebookLM核心定位</h3>
+        <p>NotebookLM定位為<strong>研究學習必備工具</strong>，最大特色是「有所本」—以文件為本，回答始終依據您上傳的資料，確保引用有據可循。</p>
+        
+        <h3>NotebookLM與ChatGPT比較</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>NotebookLM</th>
+                    <th>ChatGPT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>專注於用戶的文件資料</td>
+                    <td>基於通用網絡知識</td>
+                </tr>
+                <tr>
+                    <td>可追蹤引用來源</td>
+                    <td>無法提供精確引用</td>
+                </tr>
+                <tr>
+                    <td>適合深度研究分析</td>
+                    <td>適合廣泛話題討論</td>
+                </tr>
+                <tr>
+                    <td>引用有明確頁碼段落</td>
+                    <td>資訊可能未經驗證</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <h3>AI幻覺問題與應對</h3>
+        <div class="warning-box">
+            <p>陳校長開發了輔助教師設計AI防弊教學活動的助手，此工具能協助：</p>
+            <ul>
+                <li>教師設計「陷阱教材」</li>
+                <li>提供學生練習幻覺辨識的對話情境</li>
+                <li>點評學生交來的AI生成文字，分析其幻覺風險點</li>
+            </ul>
+        </div>
+        
+        <h3>NotebookLM功能比喻</h3>
+        <p>NotebookLM就像是「超級圖書館員 + 聰明作家」的組合：</p>
+        <ul>
+            <li><strong>圖書館員（檢索）</strong>：當你提問，它會在你的記事和上傳的來源中快速翻找，找到最相關的信息</li>
+            <li><strong>聰明作家（生成）</strong>：不是單純複製內容，而是理解資訊後，用流暢自然的語言，幫你總結重點或解釋概念</li>
+        </ul>
+        
+        <blockquote>
+            走進圖書館，告訴館員：「我想了解 XX」<br>
+            他不僅迅速找到對應的書籍，還能幫你濃縮內容<br>
+            還能用更容易理解的方式重新表達，讓你輕鬆獲取有用資訊，而不用自己翻遍所有資料
+        </blockquote>
+        
+        <h3>NotebookLM操作特點</h3>
+        <p>操作很簡單，但應用才精彩。提供使用者友善的介面和直觀的操作方式。</p>
+        
+        <h3>NotebookLM介面與功能詳解</h3>
+        <p>可建立至少100本筆記本(Notebook)，每本筆記本內有三個主要區塊：</p>
+        
+        <div class="two-cols">
+            <div class="col">
+                <h4>1. 來源(Sources)</h4>
+                <ul>
+                    <li>來源資料格式多元，支援多種檔案類型</li>
+                    <li>每個筆記本最多可包含50個sources</li>
+                    <li>每個source最多500,000字，意味一個筆記本可處理高達2500萬字內容</li>
+                    <li>資料上傳後自動進行處理和索引</li>
+                </ul>
+            </div>
+            
+            <div class="col">
+                <h4>2. 對話(Chat)</h4>
+                <ul>
+                    <li>「勾選」代表現在正在和哪些sources/notes進行對話互動</li>
+                    <li>系統生成3個建議對話提問，引導使用者開始交談</li>
+                    <li>對話結果可「儲存至記事」，方便整理和保存重要內容</li>
+                    <li>Plus版本可自訂對話回覆風格（例如學術、簡潔、詳細等）與回覆長度</li>
+                    <li>支援連續對話，保持上下文理解</li>
+                </ul>
+            </div>
+        </div>
+        
+        <h4>3. Studio區域</h4>
+        <ul>
+            <li>含記事Notes：保存和整理重要內容</li>
+            <li>指令Commands：提供特定功能操作</li>
+            <li>語音摘要：將內容轉為音頻形式</li>
+            <li>指令功能詳細說明：
+                <ul>
+                    <li>內建「簡介文件」：快速生成文件概述</li>
+                    <li>「研讀指南」：提供系統化的學習建議</li>
+                    <li>「常見問題」：自動生成關於內容的FAQ</li>
+                    <li>「時間軸」：生成事件時序脈絡</li>
+                    <li>所有生成結果均以記事形式保存</li>
+                </ul>
+            </li>
+            <li>記事可「轉換成來源」，實現內容的循環利用</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>二、NotebookLM實際應用案例</h2>
+        
+        <div class="application-card">
+            <h3 class="card-title">應用1：私人法務顧問</h3>
+            <div class="tag-container">
+                <span class="tag">法規遵循</span>
+                <span class="tag">行政管理</span>
+                <span class="tag">採購法規</span>
+            </div>
+            
+            <h4>情境描述</h4>
+            <blockquote>
+                "我是8月甫上任的總務主任，面對採購法規仍不熟悉，我的庶務組長也是新手，深怕不小心違反採購法引發爭議。"
+            </blockquote>
+            
+            <h4>實際應用</h4>
+            <p>上傳法規文件，檢查投標須知的合法性</p>
+            
+            <h4>運作機制</h4>
+            <ol>
+                <li>上傳相關法律文件（如採購法規）</li>
+                <li>上傳待檢查的招標文件</li>
+                <li>AI結合兩者進行分析比對</li>
+                <li>生成符合法規的修正建議</li>
+            </ol>
+            
+            <h4>實例展示</h4>
+            <p>檢查英越語營投標須知的問題點：</p>
+            <ul>
+                <li>具體指出須知中第48-1條「植栽工程養護期保證金」問題</li>
+                <li>指出「押標金保證金暨其他擔保作業辦法」相關條文編號錯誤</li>
+                <li>提供條款正確引用建議</li>
+                <li>每項建議皆附有法規依據，確保修正符合最新法規要求</li>
+            </ul>
+        </div>
+        
+        <div class="application-card">
+            <h3 class="card-title">應用2：跨域、跨時空激盪跨界想法</h3>
+            <div class="tag-container">
+                <span class="tag">創意思考</span>
+                <span class="tag">跨領域學習</span>
+                <span class="tag">歷史比較</span>
+            </div>
+            
+            <h4>情境主題</h4>
+            <p>當蘇東坡遇見賈伯斯——跨越千年的思想對話</p>
+            
+            <h4>執行方法</h4>
+            <ol>
+                <li>把描述兩人的作品、傳記上傳到NotebookLM</li>
+                <li>用對話功能探問兩人之間的觀點異同</li>
+            </ol>
+            
+            <h4>研究問題示例</h4>
+            <ul>
+                <li>蘇東坡與賈伯斯有哪些人格特質或生涯遭遇的相似處？</li>
+                <li>兩人面對挫折的態度有何異同？</li>
+                <li>他們對創新與傳統的看法如何比較？</li>
+            </ul>
+            
+            <h4>分析結果</h4>
+            <p>系統整理出兩位跨時代創新者的共同特質：</p>
+            <ul>
+                <li>才華橫溢、不拘束縛</li>
+                <li>遭遇挫折時的彈性與復原力</li>
+                <li>跨領域思維與創造力</li>
+            </ul>
+            
+            <h4>創意應用</h4>
+            <p>模仿蘇東坡寫作風格改寫「青蛙爬山」故事，展現古典意境，加入東坡詩詞風格的句式與意境</p>
+            
+            <h4>教育價值</h4>
+            <p>培養跨領域思考能力，理解不同時代創新者的共通思維</p>
+        </div>
+        
+        <div class="application-card">
+            <h3 class="card-title">應用3：分析歷屆試題</h3>
+            <div class="tag-container">
+                <span class="tag">教學研究</span>
+                <span class="tag">考試分析</span>
+                <span class="tag">命題趨勢</span>
+            </div>
+            
+            <h4>情境</h4>
+            <p>分析國中教育會考社會科命題趨勢</p>
+            
+            <h4>問題改進技巧</h4>
+            <p>透過改寫與擴寫任務說明，提升AI回答品質</p>
+            <div class="two-cols">
+                <div class="col">
+                    <p><strong>原始提問</strong></p>
+                    <blockquote>「從歷年試題來看，國中教育會考社會科命題趨勢為何」</blockquote>
+                </div>
+                <div class="col">
+                    <p><strong>改寫擴寫後提問</strong></p>
+                    <p>包含六大面向的詳細分析要求：</p>
+                    <ol>
+                        <li>命題主題演變：檢視近五年或更長時間的考題變化趨勢</li>
+                        <li>試題類型：比較不同題型比重與變化</li>
+                        <li>素養導向趨勢：分析跨領域整合、生活情境題的發展</li>
+                        <li>考試難度變化：評估高層次思考題目比例變化</li>
+                        <li>時事與政策影響：探討與108課綱相關的命題趨勢</li>
+                        <li>學生應試策略建議：基於趨勢分析提供準備建議</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <h4>改進成效</h4>
+            <ul>
+                <li>獲得更全面、系統化的分析結果</li>
+                <li>分析結果包含數據支持，更有說服力</li>
+                <li>便於教師掌握命題演變脈絡</li>
+            </ul>
+            
+            <h4>實際應用案例</h4>
+            <p>模擬命題實例：展示如何根據分析結果設計符合趨勢的公民科模擬試題，包含詳細解析與評分標準</p>
+        </div>
+        
+        <div class="application-card">
+            <h3 class="card-title">應用4：用AI提問閱讀</h3>
+            <div class="tag-container">
+                <span class="tag">閱讀策略</span>
+                <span class="tag">深度學習</span>
+                <span class="tag">問題導向</span>
+            </div>
+            
+            <h4>閱讀方式轉變</h4>
+            <p>從「循序式閱讀」到帶著問題意識的「跳躍式閱讀」</p>
+            
+            <h4>資料範例</h4>
+            <p>80K Hours、心經等深度閱讀材料</p>
+            
+            <h4>閱讀流程</h4>
+            <h5>1. 初步理解：利用Studio內建指令快速掌握文件框架</h5>
+            <ul>
+                <li>「簡介文件」：獲取內容概述</li>
+                <li>「研讀指南」：了解如何系統閱讀</li>
+                <li>「常見問題」：掌握關鍵疑點</li>
+                <li>「時間軸」：理解發展脈絡</li>
+            </ul>
+            
+            <h5>2. 深度提問：針對有疑處提出不同層次問題</h5>
+            <div class="two-cols">
+                <div class="col">
+                    <p><strong>直接提問</strong></p>
+                    <blockquote>例：「何謂五蘊皆空？」</blockquote>
+                </div>
+                <div class="col">
+                    <p><strong>簡單化提問</strong></p>
+                    <blockquote>例：「請用國小五年級學生能理解的語言解釋五蘊皆空」</blockquote>
+                </div>
+            </div>
+            <p><strong>類比化提問</strong></p>
+            <blockquote>例：「請用類比方式解釋什麼是五蘊皆空？」</blockquote>
+            
+            <h4>學習效益</h4>
+            <ul>
+                <li>提高閱讀效率：無需逐字閱讀即可掌握關鍵內容</li>
+                <li>增強理解深度：通過問答互動加深對核心概念的理解</li>
+                <li>培養批判思考：從不同角度提問促進多維思考</li>
+                <li>適應不同學習者：可根據學習者程度調整問題難度</li>
+            </ul>
+        </div>
+
+        <div class="application-card">
+            <h3 class="card-title">應用5：更大脈絡下閱讀心智圖</h3>
+            <div class="tag-container">
+                <span class="tag">視覺化學習</span>
+                <span class="tag">系統思考</span>
+                <span class="tag">知識關聯</span>
+            </div>
+            
+            <h4>功能說明</h4>
+            <p>NotebookLM可自動生成資料的關聯視覺化</p>
+            
+            <h4>操作方法</h4>
+            <ul>
+                <li>勾選多個相關來源文件</li>
+                <li>系統自動分析文件間的關聯性</li>
+                <li>生成互動式心智圖展現概念間連結</li>
+            </ul>
+            
+            <h4>使用技巧</h4>
+            <ul>
+                <li>點選心智圖上的任何節點可深入探索</li>
+                <li>系統會顯示該概念在更大脈絡下的位置與關聯</li>
+                <li>可放大縮小調整視圖範圍，聚焦特定主題</li>
+            </ul>
+            
+            <h4>學習優勢</h4>
+            <ul>
+                <li><strong>系統化思考</strong>：將零散知識點整合成系統化知識網絡</li>
+                <li><strong>關聯性學習</strong>：理解概念之間的連結與影響關係</li>
+                <li><strong>整體性把握</strong>：同時獲得宏觀視角和微觀細節</li>
+                <li><strong>減少認知負荷</strong>：視覺化展示降低處理複雜資訊的負擔</li>
+            </ul>
+            
+            <h4>教學應用</h4>
+            <ul>
+                <li>協助學生建立學科知識框架</li>
+                <li>輔助教師課程設計，確保知識點覆蓋全面</li>
+                <li>支持跨學科整合教學，展示不同領域知識的連結點</li>
+            </ul>
+        </div>
+
+        <!-- 剩餘應用卡片可以按照相同模式繼續添加 -->
+        
+        <div class="highlight-box">
+            <h3>更多應用案例摘要</h3>
+            <div class="two-cols">
+                <div class="col">
+                    <h4>應用6：剖析自我與回顧歷程</h4>
+                    <p>利用個人臉書貼文等資料，進行自我剖析、時間跨度分析、專業觀點分析，適用於準備評鑑自陳報告、競賽資料等。</p>
+                    
+                    <h4>應用7：撰寫班級學生期末評語</h4>
+                    <p>結合Google文件學生觀察紀錄與特定提示詞，生成個性化、全面且客觀的學生評估報告。</p>
+                </div>
+                
+                <div class="col">
+                    <h4>應用8：學習歷程自我審查</h4>
+                    <p>依據指引審查學生的學習自述檔案，檢視結構完整性、內容相關性、反思深度等方面，給予修正建議。</p>
+                    
+                    <h4>應用9：校務評鑑自我檢核</h4>
+                    <p>基於評鑑標準檢視學校自評與自陳文件，提出需要修正或補強的具體建議。</p>
+                </div>
+            </div>
+            <div class="two-cols">
+                <div class="col">
+                    <h4>應用10：快速「讀」Podcast、YouTube</h4>
+                    <p>透過下載音頻文件或複製字幕，快速分析並提取長篇內容的核心觀點，提高學習效率。</p>
+                </div>
+                <div class="col">
+                    <h4>應用11：NotebookLM + 其他工具整合</h4>
+                    <p>結合Gamma、Napkin等工具，實現知識整理、內容創作和視覺化表達的一站式工作流程。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>三、AI在教育場域的可能性分類</h2>
+        
+        <div class="two-cols">
+            <div class="col">
+                <h3>1. 工作輔助</h3>
+                <ul>
+                    <li>精準演講時間預測助手</li>
+                    <li>學生手冊查詢</li>
+                    <li>答客問</li>
+                    <li>國中教育會考模擬命題</li>
+                    <li>學校募款文案小編</li>
+                    <li>跳脫傳統的創新替代方案</li>
+                </ul>
+                
+                <h3>3. 生涯探索</h3>
+                <ul>
+                    <li>生涯畫布小幫手</li>
+                    <li>職業規劃與發展路徑分析</li>
+                    <li>專長與職涯配對系統</li>
+                </ul>
+                
+                <h3>5. 社會情感</h3>
+                <ul>
+                    <li>SEL與EF學習任務助教</li>
+                    <li>情緒行動力教練</li>
+                    <li>人際互動模擬與分析</li>
+                </ul>
+                
+                <h3>7. 知識學習</h3>
+                <ul>
+                    <li>學習歷程準備指南</li>
+                    <li>學思達新手村</li>
+                    <li>批判性思維教練</li>
+                    <li>提問力教練AI</li>
+                    <li>衝突模擬對話</li>
+                </ul>

@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI在教育領域的應用與發展</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --accent-color: #e74c3c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--dark-color));
+            color: white;
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+        
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .key-points {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .key-points h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .key-points-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .key-point {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        main {
+            padding: 50px 0;
+        }
+        
+        .quote-section {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+            margin: 40px 0;
+        }
+        
+        .quotes-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .quotes-title {
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+        }
+        
+        .quotes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+        
+        .quote-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 25px;
+            position: relative;
+        }
+        
+        .quote-card::before {
+            content: '"';
+            font-size: 4rem;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .quote-content {
+            font-style: italic;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-color);
+        }
+        
+        .section-intro {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .key-concept {
+            margin-bottom: 30px;
+        }
+        
+        .key-concept h4 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .key-concept-list {
+            margin-bottom: 15px;
+            padding-left: 18px;
+        }
+        
+        .key-concept-list li {
+            margin-bottom: 5px;
+        }
+        
+        .example-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .example-quote {
+            font-style: italic;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .example-list {
+            padding-left: 20px;
+        }
+        
+        .notice-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .notice-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #795548;
+        }
+        
+        .special-case-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .special-case-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #2e7d32;
+        }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .quotes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .key-points-list {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>AI在教育領域的應用與發展</h1>
+                <p class="subtitle">探索人工智慧如何協助教學創新、提升行政效率，迎接教育新時代</p>
+                
+                <div class="key-points">
+                    <h3>核心主題</h3>
+                    <div class="key-points-list">
+                        <span class="key-point">AI應用實務</span>
+                        <span class="key-point">教學與行政協作</span>
+                        <span class="key-point">專案時間管理</span>
+                        <span class="key-point">業界發展趨勢</span>
+                        <span class="key-point">AI工具操作</span>
+                        <span class="key-point">資訊安全與個資</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="section">
+            <h2 class="section-title">講座概述</h2>
+            <p class="section-intro">本講座聚焦AI在教育領域的應用與發展，涵蓋AI工具於教學與行政的實作、教師對業界發展的認知落差、專案與時間管理、個資保護、平台操作、以及學校行政協調等議題。內容強調教師需具備成長性思維，積極學習新知，並分享多種AI平台與工具在教學、行政、知識管理上的實際應用與操作流程，協助提升教育現場的效率與創新。</p>
+            
+            <div class="key-concept">
+                <h4>講座要點</h4>
+                <ul class="key-concept-list">
+                    <li>AI在教育領域的應用與發展</li>
+                    <li>校長主任對AI發展需求的探討</li>
+                    <li>專案管理與時間管理在學校行政中的重要性</li>
+                    <li>資訊工具與AI輔助行政工作的實作</li>
+                    <li>Padlet平台的使用與教學成果分享</li>
+                    <li>AI平台與工具的快速更新</li>
+                    <li>教師對業界發展的認知落差</li>
+                    <li>跨領域教師背景與經驗分享</li>
+                    <li>學校間教師流動與報到情況</li>
+                    <li>教學策略輔導小組的運作</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="quote-section">
+            <div class="quotes-container">
+                <h2 class="quotes-title">金句摘錄</h2>
+                <div class="quotes-grid">
+                    <div class="quote-card">
+                        <p class="quote-content">"如果老師們不知道外面的狀況，其實會有點，就叫出來的孩子可能出來才發現，原來世界已經變這樣了。"</p>
+                    </div>
+                    <div class="quote-card">
+                        <p class="quote-content">"你要怎麼樣讓AI聽得懂你說什麼就好了。"</p>
+                    </div>
+                    <div class="quote-card">
+                        <p class="quote-content">"設人設，給目標，給限制，加追問，加格式，給範例。就是這六個。"</p>
+                    </div>
+                    <div class="quote-card">
+                        <p class="quote-content">"因為你只有打繁體中文，香港也是繁體，但是香港的語料跟我們不太一樣。所以台灣用語一定要加。"</p>
+                    </div>
+                    <div class="quote-card">
+                        <p class="quote-content">"AI的產出啊知識迭代變少了，原本可能十年會做一個知識迭代現在可能兩年就一個知識迭代以後越來越快。"</p>
+                    </div>
+                    <div class="quote-card">
+                        <p class="quote-content">"所以要訓練孩子做自學，這是很重要的。"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="section">
+            <h2 class="section-title">AI在教育領域的應用與發展</h2>
+            <p class="section-intro">本次講座強調AI技術在教育領域的快速發展，並指出業界已經如火如荼地推進AI相關應用，學校端需與時俱進，提升校長與主任對AI的認識與應用能力。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>AI平台與工具持續快速更新，例如Google Notebook LN App於2025-05-19推出。</li>
+                    <li>學校需了解業界AI發展現況，避免師生脫節。</li>
+                    <li>AI可協助行政與教學專案管理、時間管理等工作。</li>
+                </ul>
+                
+                <p>講者以自身經驗說明AI如何協助行政與教學工作，並舉例最新AI工具的推出，強調學校應積極學習與應用。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">講者提到昨天（2025-05-19）Google Notebook LN App正式推出，從原本僅有網頁版到現在有App版，操作更方便，顯示AI工具持續進步。</p>
+                    <ul class="example-list">
+                        <li>AI工具的快速更新要求教育工作者持續學習。</li>
+                        <li>新工具的出現可提升行政與教學效率。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需持續關注AI工具的更新與應用。</li>
+                        <li>校內教師需提升對AI的認知與實作能力。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果遇到教師對AI工具不熟悉，應提供實作與客製化協助。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">專案管理與時間管理在學校行政中的重要性</h2>
+            <p class="section-intro">行政教師需同時兼顧多項計畫、專案與家庭，專案管理與時間管理成為重要能力，AI與資訊工具可協助提升效率。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>行政教師常需同時處理多項專案與計畫。</li>
+                    <li>時間管理對於兼任行政與教學的教師尤為重要。</li>
+                    <li>AI與資訊工具可協助專案與時間管理。</li>
+                </ul>
+                
+                <p>講者以自身為例，說明一學期有十二節課，還需包辦年段彈性課程，行政與教學壓力大，善用AI工具可有效分擔工作。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">講者本學期有十二節課，包辦一個年段的彈性課程，同時負責多項計畫與專案，需有效管理時間與任務。</p>
+                    <ul class="example-list">
+                        <li>合理安排課程與行政工作時間。</li>
+                        <li>利用AI工具協助專案進度追蹤與時間分配。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需根據個人與學校需求選擇合適的管理工具。</li>
+                        <li>行政與教學工作需協調，避免衝突。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果課程與行政工作時間衝突，應提前協調與調整。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">Padlet平台的使用與教學成果分享</h2>
+            <p class="section-intro">利用Padlet平台進行教學成果的即時分享與作業繳交，促進校長、主任間的互動與經驗交流。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>Padlet可用於成果展示與作業繳交。</li>
+                    <li>可自訂區段，輸入學校與姓名，方便管理。</li>
+                    <li>成果可直接帶走，便於後續應用與分享。</li>
+                </ul>
+                
+                <p>講者現場指導校長主任如何登入Padlet，建立區段並繳交作業，並強調平台蒐集了三年AI相關資源，供大家參考與應用。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">現場操作Padlet，校長主任輸入學校與姓名，於個人區段繳交作業，成果可直接複製帶走。</p>
+                    <ul class="example-list">
+                        <li>提升教學成果的可視化與分享效率。</li>
+                        <li>促進校內外經驗交流。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需確保網路連線穩定，避免操作中斷。</li>
+                        <li>指導參與者熟悉平台操作流程。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果遇到網路連線問題，建議重開機或更換設備。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">教師對業界發展的認知落差</h2>
+            <p class="section-intro">教育現場教師對於外部業界AI發展的認知有限，需加強資訊流通與經驗分享，避免學生畢業後才發現與社會脫節。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>教育圈資訊流通不如業界迅速。</li>
+                    <li>教師需主動了解外部AI發展現況。</li>
+                    <li>提升教師對AI應用的敏感度與能力。</li>
+                </ul>
+                
+                <p>講者指出目前教育圈資訊層層堆疊，教師對外部發展不夠了解，需透過分享與交流提升整體認知。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">講者提及教師若不了解外部AI發展，學生畢業後才發現世界已經大不相同，需提前補足認知差距。</p>
+                    <ul class="example-list">
+                        <li>定期舉辦AI相關講座與分享會。</li>
+                        <li>鼓勵教師參與業界交流活動。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需建立教師與業界的溝通橋樑。</li>
+                        <li>鼓勵教師持續學習與自我提升。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果教師對新知抗拒，應以實例與實作方式降低學習門檻。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI引導語設計原則</h2>
+            <p class="section-intro">設計AI引導語時需明確設定角色、目標、限制，並可進一步加入追問、格式與範例，以提升AI生成內容的精準度與實用性。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li><strong>設人設：</strong>給AI一個明確的身份角色。</li>
+                    <li><strong>給目標：</strong>明確告知AI要完成的任務。</li>
+                    <li><strong>給限制：</strong>設定具體要求，如數量、內容格式等。</li>
+                    <li><strong>加追問：</strong>針對特定內容要求深入分析。</li>
+                    <li><strong>加格式：</strong>如Markdown語法，方便後續編輯與應用。</li>
+                    <li><strong>給範例：</strong>提供範例讓AI模仿、仿寫。</li>
+                </ul>
+                
+                <p>講者以國中會考作文批改、計畫審閱等實例，說明如何設計AI引導語，並強調用字精準度與格式要求的重要性。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">設定AI為國中會考作文批改老師，要求針對圖片中的作文給予三個優點、兩個寫作建議及一個參考分數。</p>
+                    <ul class="example-list">
+                        <li>設人設：你是國中會考作文批改老師。</li>
+                        <li>給目標：請針對圖片中的作文給予批改。</li>
+                        <li>給限制：請給三個優點、兩個建議、一個分數。</li>
+                        <li>加追問：請針對第二點建議給予深入分析。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>用字需精準，避免模糊不清的指令。</li>
+                        <li>根據需求調整限制與格式，確保生成內容符合預期。</li>
+                        <li>提供範例有助於AI理解並仿寫。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <ul>
+                        <li>如果AI生成內容不符合需求，應檢查引導語是否明確並適時調整。</li>
+                        <li>如需特定格式，應明確告知AI格式要求。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI在教學與行政的應用</h2>
+            <p class="section-intro">AI工具可協助教師進行繪本教學、作文教學、英文教學等，亦可輔助行政工作如會議轉文字、計畫撰寫、專案管理與時間管理。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>語文老師可用AI生成繪本圖片，提升教學互動。</li>
+                    <li>英文老師可用AI生成圖片進行英文教學。</li>
+                    <li>作文教學可訓練學生描摹與引導語設計能力。</li>
+                    <li>行政人員可用AI進行會議轉文字、計畫案撰寫、時間管理等。</li>
+                </ul>
+                
+                <p>講者分享AI在國中小教學現場的實際應用經驗，並說明AI在行政管理上的輔助功能。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">教師輸入一段文字，AI生成對應圖片，組成繪本，並可播放成故事書形式。</p>
+                    <ul class="example-list">
+                        <li>教師輸入故事段落，AI生成圖片。</li>
+                        <li>多段落組成完整繪本。</li>
+                        <li>可用於語文、英文等多科教學。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需根據教學需求選擇合適的AI功能。</li>
+                        <li>行政應用時注意資料安全與隱私保護。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果AI生成內容不符教學需求，可多次修改描述或調整引導語。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI工具在教學現場的應用</h2>
+            <p class="section-intro">介紹如何將AI數位工具應用於國文課、數學課及彈性課程，並記錄教師實際操作心得與遇到的困難。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>AI可協助學生創作詩詞、圖像等內容</li>
+                    <li>教師需觀察學生是否真正體會學習內容</li>
+                    <li>學生會經歷新奇體驗、指令設計、評估與批判三階段</li>
+                </ul>
+                
+                <p>課堂中，教師將AI工具引入國文課，讓學生用AI創作新詩，並觀察學生從新奇體驗到學會精確溝通指令，最後能評估AI生成內容的品質，這不僅是技術操作，更是認知能力訓練。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">教師要求AI以唐代大詩人李白的身份，針對三仙臺風景圖片創作七言律詩，並進行詩意解析。</p>
+                    <ul class="example-list">
+                        <li>上傳三仙臺圖片至AI平台</li>
+                        <li>設定人設為李白，要求生成七言律詩並解析</li>
+                        <li>AI生成詩作後，教師檢查押韻和平仄，並討論詩意</li>
+                        <li>將詩作與解析匯出至Google文件，並分享連結</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需確保學生不僅停留在新奇體驗階段，能進入指令設計與批判評估階段</li>
+                        <li>教師需設計適當的引導語，明確設定人設、目標、限制、追問、格式與範例</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果學生僅將AI當作新奇工具而未深入學習，教師應加強指令設計與批判性思考訓練。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI自動化會議摘要與Podcast生成</h2>
+            <p class="section-intro">利用AI將會議內容自動轉換為文字摘要或Podcast，提升資訊整理效率。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>可將會議錄音丟給AI自動生成摘要</li>
+                    <li>AI可將文字檔轉為Podcast音頻</li>
+                    <li>6分20秒可聽完近兩小時會議重點</li>
+                </ul>
+                
+                <p>教師將2025-05-19社群開會內容丟給AI，AI自動生成語音摘要，並可轉為Podcast，讓未參與會議者也能快速掌握重點。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">教師將2025-05-19近兩小時的社群會議內容丟給AI，AI自動生成6分20秒的語音摘要Podcast。</p>
+                    <ul class="example-list">
+                        <li>將會議錄音檔上傳至AI平台</li>
+                        <li>AI自動辨識重點並生成語音摘要</li>
+                        <li>教師播放Podcast，確認重點完整</li>
+                        <li>可免費使用，提升會議資訊傳遞效率</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需確認AI摘要內容是否涵蓋所有重點</li>
+                        <li>適合用於未能參與會議者的資訊補充</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>若會議內容涉及個資，需先匿名化處理再上傳。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">設計有效AI引導語的六要素</h2>
+            <p class="section-intro">設計AI引導語時需包含六個要素：設人設、給目標、給限制、加追問、加格式、給範例。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>設人設（如：你是唐代大詩人李白）</li>
+                    <li>給目標（如：針對圖片創作詩詞）</li>
+                    <li>給限制（如：用繁體中文台灣用語）</li>
+                    <li>加追問（如：請解析詩意）</li>
+                    <li>加格式（如：七言律詩）</li>
+                    <li>給範例（如：參考鄭愁予的詩）</li>
+                </ul>
+                
+                <p>教師強調設計AI引導語時，需明確設定人設、目標、限制、追問、格式與範例，才能讓AI生成符合需求的內容。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">設定人設為李白，目標為針對三仙臺圖片創作七言律詩，限制為用繁體中文台灣用語，並要求解析詩意。</p>
+                    <ul class="example-list">
+                        <li>明確設定人設與目標</li>
+                        <li>加入語言與格式限制</li>
+                        <li>要求AI進行內容解析</li>
+                        <li>可加入範例提升生成品質</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>重要資訊應寫在指令最前面</li>
+                        <li>繁體中文台灣用語需明確指定</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>若AI生成內容不符需求，檢查是否六要素皆已明確設定。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">個資保護與匿名化處理</h2>
+            <p class="section-intro">在將資料上傳AI進行分析前，需將個人資料（如姓名）刪除或以代號取代，避免個資外洩。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>將真實姓名改為代號（如1到30、66等）</li>
+                    <li>小孩的期末評語等資料也需匿名化</li>
+                    <li>即使AI平台聲稱不會使用資料，仍應謹慎處理</li>
+                </ul>
+                
+                <p>教師提醒，無論是問卷回饋或學生資料，皆需先將個資移除或改為代號後再上傳AI平台，保障資料安全。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">收到回饋問卷時，將姓名等個資改為代號後再丟給AI分析。</p>
+                    <ul class="example-list">
+                        <li>檢查資料中是否有個資</li>
+                        <li>將姓名等敏感資訊改為代號</li>
+                        <li>再將資料上傳AI平台進行分析</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>個資保護為首要原則</li>
+                        <li>即使平台宣稱安全，也不可掉以輕心</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>若資料涉及未成年學生，必須特別注意匿名化。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">繁體中文台灣用語的重要性</h2>
+            <p class="section-intro">在AI生成內容時，需明確指定使用繁體中文台灣用語，避免生成香港或其他地區語料。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>僅指定繁體中文可能導致語料不符台灣用語</li>
+                    <li>台灣用語需明確寫入指令</li>
+                    <li>不同地區語料差異大，影響內容品質</li>
+                </ul>
+                
+                <p>教師強調，AI平台的繁體中文語料多來自不同地區，若未指定台灣用語，可能生成不符合本地需求的內容。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">在AI指令中加入「繁體中文台灣用語」八字，確保生成內容符合台灣語境。</p>
+                    <ul class="example-list">
+                        <li>在指令中明確加入「繁體中文台灣用語」</li>
+                        <li>避免生成香港或其他地區語料</li>
+                        <li>提升內容本地化品質</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>每次生成文件、詩詞等內容時都需加上台灣用語</li>
+                        <li>避免語料不符導致內容不自然</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>若生成內容出現不符合台灣用語，檢查指令是否有明確指定。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI協助學校網站無障礙內容生成</h2>
+            <p class="section-intro">利用AI協助學校網站產生符合無障礙規範的文字內容，減輕資訊組長負擔。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>每年需送交無障礙檢測</li>
+                    <li>AI可協助產生合規內容</li>
+                    <li>減少人工修改次數（如：曾送六次才過）</li>
+                </ul>
+                
+                <p>教師分享，學校網站每年需通過無障礙檢測，AI可協助產生合規文字內容，減少資訊組長重複修改的負擔。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">利用AI生成符合無障礙規範的網站文字，減少人工修改次數。</p>
+                    <ul class="example-list">
+                        <li>將網站內容需求丟給AI</li>
+                        <li>AI生成合規文字內容</li>
+                        <li>送交檢測，減少重複修改</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需確認AI生成內容是否完全符合無障礙規範</li>
+                        <li>每年都需重新檢測</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>若AI生成內容未通過檢測，需人工補充修改。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">Felo平台的多功能應用</h2>
+            <p class="section-intro">Felo平台可協助用戶產生心智圖、AI圖表、互動式網頁、簡報、小海報等多種內容，並支援下載、分享、上傳、個性化調整等功能。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>可產生心智圖、AI圖表、互動式網頁、簡報、小海報</li>
+                    <li>支援內容下載（圖片、PDF）、分享連結、上傳作業</li>
+                    <li>可個性化調整字體、字型、樣式</li>
+                    <li>與Canva串接，可進行簡報編輯</li>
+                    <li>每日免費生成簡報次數為三次</li>
+                </ul>
+                
+                <p>課堂中詳細演示了如何從來源網頁取得內容，並利用Felo平台產生各種視覺化成果。操作流程包括：選擇功能（如心智圖、AI圖表）、等待生成（如網頁需約五分鐘）、下載或分享生成內容、上傳至作業區。針對簡報，還可選擇模板、與Canva串接進行進階編輯。平台支援內容個性化調整，並有每日生成次數限制。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">學生需利用Felo產生AI圖表，下載後上傳至作業三區，並可選擇自己有興趣的主題（如暑假旅遊規劃等）。</p>
+                    <ul class="example-list">
+                        <li>進入Felo平台，選擇AI圖表功能</li>
+                        <li>等待約30秒生成圖表</li>
+                        <li>選擇喜歡的圖表並下載</li>
+                        <li>進入作業三區，點選加號上傳圖片</li>
+                        <li>發布作業</li>
+                    </ul>
+                </div>
+                
+                <div class="example-box">
+                    <p class="example-quote">學生需利用Felo產生互動網頁，將生成的網頁連結複製並貼到作業四區。</p>
+                    <ul class="example-list">
+                        <li>選擇互動式網頁功能，點擊產生</li>
+                        <li>等待約五分鐘生成網頁</li>
+                        <li>按分享，複製連結</li>
+                        <li>貼到作業四區並送出</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>生成內容時需耐心等待（如網頁約五分鐘）</li>
+                        <li>每日免費生成簡報次數為三次，需妥善規劃使用</li>
+                        <li>部分內容因版權限制無法下載，需注意提示</li>
+                        <li>下載內容時需確認檔案格式（如圖片、PDF）</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <ul>
+                        <li>如果遇到內容無法下載，可能因版權限制，請更換其他內容或樣式。</li>
+                        <li>如果生成內容後未顯示，請嘗試重新整理頁面或檢查歷史紀錄。</li>
+                        <li>如果簡報內容字體過小，可進入Canva進行進階編輯與調整。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">Notion專案與任務管理</h2>
+            <p class="section-intro">利用Notion進行專案與任務管理，將每日任務、專案、領域分開管理，並透過資料庫串接實現任務與專案的連動，方便追蹤與記錄。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>專案有明確期限，領域則無期限。</li>
+                    <li>每日任務可封存，未完成任務可暫存待處理。</li>
+                    <li>專案與任務資料庫可串接，任務完成後自動消失。</li>
+                    <li>可記錄每一天、每個專案的具體執行情況。</li>
+                    <li>知識管理與資源收集結合專案與領域。</li>
+                </ul>
+                
+                <p>講者以自身Notion管理流程為例，說明如何每日規劃任務、封存已完成事項，並將專案（如5G計畫、音樂會、領導力課程等）與無期限的領域（如個人健康、家庭旅行、資訊組等）分開管理。專案任務可設定Dayline，並與專案資料庫串接，確保資訊同步。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">以5G計畫為例，專案內有第5次、第6次及期末報告，分別於2025-06-02、2025-06-11、2025-10-31執行。新增任務如『2025-05-20下午通知社群成員準備報告內容』，設定Dayline為2025-05-20，並歸屬於瑞士社群專案，身份為數學輔導團成員。任務完成後打勾即消失，未完成則持續提醒。</p>
+                    <ul class="example-list">
+                        <li>在Notion中建立專案資料庫，輸入5G計畫相關任務。</li>
+                        <li>設定每個任務的Dayline與所屬專案。</li>
+                        <li>任務完成後打勾，資料庫自動更新。</li>
+                        <li>可查詢過往任務完成日期與所屬專案，方便回溯。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>資料庫串接較複雜，需花時間學習。</li>
+                        <li>每日任務需持續維護，避免遺漏。</li>
+                        <li>專案與領域需明確區分，避免混淆。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <ul>
+                        <li>如果遇到任務未設Dayline，系統會自動提醒，需及時補充。</li>
+                        <li>如果專案或領域內容過多，建議只收集與自身成長或專案相關的資訊，避免資訊過載。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI生成內容對教育與知識迭代的影響</h2>
+            <p class="section-intro">AI工具可快速生成研究報告、小論文等內容，極大提升效率，但也導致知識迭代速度加快，對學生自學能力提出更高要求。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>AI生成內容僅需1-2分鐘，遠快於傳統研究。</li>
+                    <li>知識迭代由原本10年縮短至2年，未來將更快。</li>
+                    <li>學生需培養自學能力，應對快速變化的知識環境。</li>
+                </ul>
+                
+                <p>講者指出，AI工具如Notebook LN可在2分鐘內生成一篇小論文，對比傳統需一週，知識產出與迭代速度大幅提升。未來學生面對的知識環境將更加快速變化，學校教育應重視自學能力的培養。</p>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>AI生成內容可能削弱學生自主學習與思考能力。</li>
+                        <li>教育應調整重點，強化自學與批判性思考訓練。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果學校舉辦小論文活動，AI工具可大幅縮短學生準備時間，需重新思考評量方式。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI聲音複製技術的風險與防範</h2>
+            <p class="section-intro">AI技術可於15秒內複製聲音，詐騙者可利用此技術進行聲音模仿，需提高警覺。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>15秒即可複製聲音</li>
+                    <li>詐騙者可利用聲音模仿進行詐騙</li>
+                    <li>接到陌生電話時避免隨意發聲</li>
+                </ul>
+                
+                <p>現今AI技術進步，僅需15秒錄音即可複製聲音，詐騙者可用於冒充本人進行詐騙。建議接到陌生電話時不要隨意發聲，並可訓練切換聲線以防被模仿。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">講者提醒現在詐騙者只需15秒即可複製聲音，過去需一分鐘錄音，現今技術大幅提升，需特別注意。</p>
+                    <ul class="example-list">
+                        <li>詐騙者致電錄音15秒即可複製聲音。</li>
+                        <li>利用AI模仿進行詐騙。</li>
+                        <li>建議接到陌生電話時不要隨意發聲。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>接到陌生電話時避免隨意發聲。</li>
+                        <li>提高警覺，防範聲音被複製。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果懷疑聲音被複製，應立即通知相關單位並加強防範措施。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI日曆助理Donut與Google行事曆整合</h2>
+            <p class="section-intro">Donut是一款AI日曆助理，可與Google行事曆整合，透過LINE操作，支援語音輸入、拍照辨識文字、自動新增行程等功能。</p>
+            
+            <div class="key-concept">
+                <h4>關鍵點</h4>
+                <ul class="key-concept-list">
+                    <li>需先將Donut機器人加入LINE好友。</li>
+                    <li>在LINE輸入「設置」取得後臺連結，綁定Google帳號與日曆。</li>
+                    <li>可用語音、拍照或複製貼上方式新增行程。</li>
+                    <li>目前免費，未來可能收費。</li>
+                </ul>
+                
+                <p>老師示範如何將Donut機器人加入LINE，並綁定Google行事曆。可直接用語音或拍照新增行程，適合行政管理與時間安排。</p>
+                
+                <div class="example-box">
+                    <p class="example-quote">老師用LINE語音輸入『下午4點半我要開車回竹光國中，進行核銷』，Donut自動將行程新增至Google行事曆。</p>
+                    <ul class="example-list">
+                        <li>將Donut機器人加入LINE。</li>
+                        <li>在LINE輸入『設置』取得後臺連結，綁定Google帳號與日曆。</li>
+                        <li>用語音、拍照或貼上方式新增行程。</li>
+                        <li>Donut自動將行程同步至Google行事曆。</li>
+                    </ul>
+                </div>
+                
+                <div class="notice-box">
+                    <p class="notice-title">注意事項</p>
+                    <ul>
+                        <li>需綁定Google帳號，若在意資安可僅用Donut本身日曆。</li>
+                        <li>目前免費，未來可能收費。</li>
+                    </ul>
+                </div>
+                
+                <div class="special-case-box">
+                    <p class="special-case-title">特殊情況</p>
+                    <p>如果網路不穩，可能導致行程新增延遲或失敗，建議用手機操作。</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <h2 class="section-title">AI工具在未來教育中的定位</h2>
+            <p class="section-intro">隨著AI技術的發展，教育工作者需思考如何調整教學方向，強化學生批判思考與自學能力，平衡科技與人文教育。</p>
+            
+            <div class="key-concept">
+                <h4>未來展望</h4>
+                <ul class="key-concept-list">
+                    <li>AI工具將成為教育常態，教師需積極學習應用。</li>
+                    <li>學生需培養自學能力，適應知識快速迭代的時代。</li>
+                    <li>教育重點將從知識灌輸轉向批判思考與問題解決能力培養。</li>
+                    <li>AI與人類協作將成為未來教育的重要課題。</li>
+                </ul>
+                
+                <p>透過講座分享的多元AI工具應用，教育工作者可以思考如何將科技融入教學與行政，提升效率的同時，也思考教育本質與未來方向，培養學生在AI時代的核心競爭力。</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2025 AI教育應用講座 | 內容僅供教育參考</p>
+                <p>本講座資料整理自2025-05-19日實際講座內容</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

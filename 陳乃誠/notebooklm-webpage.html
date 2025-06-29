@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NotebookLM AI教學應用研習詳細筆記</title>
+    <style>
+        :root {
+            --primary-color: #FF7F50; /* 珊瑚色 */
+            --secondary-color: #FFA07A; /* 淺鮭魚色 */
+            --highlight-color: #FF8C00; /* 深橙色 */
+            --text-color: #333333;
+            --light-bg: #FFF3E0; /* 淺橙背景 */
+            --card-bg: #FFFFFF;
+            --header-bg: linear-gradient(135deg, #FF7F50, #FF8C00);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: var(--header-bg);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        nav {
+            background-color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .nav-item {
+            margin: 0.5rem 1rem;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        .nav-item:hover {
+            color: var(--highlight-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .section {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        h3 {
+            color: var(--highlight-color);
+            margin: 1.5rem 0 1rem;
+        }
+        
+        ul, ol {
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 127, 80, 0.1);
+            padding: 1rem;
+            border-left: 4px solid var(--primary-color);
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        code {
+            background-color: #f5f5f5;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            color: var(--highlight-color);
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            background-color: #f5f5f5;
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .framework-box {
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            background-color: rgba(255, 160, 122, 0.1);
+        }
+        
+        .framework-title {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+        
+        .steps {
+            counter-reset: step-counter;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+        
+        .steps li::before {
+            content: counter(step-counter);
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            padding: 0.3rem 0.7rem;
+            border-radius: 50%;
+            position: absolute;
+            left: 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .comparison-table th {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: left;
+            padding: 1rem;
+        }
+        
+        .comparison-table td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: rgba(255, 127, 80, 0.05);
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        @media (max-width: 768px) {
+            .section {
+                padding: 1.5rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .framework-box {
+                padding: 1rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>NotebookLM AI教學應用研習詳細筆記</h1>
+        <p>第二場：家瑋老師主講應用技巧與指令設計</p>
+    </header>
+    
+    <nav>
+        <div class="nav-container">
+            <a href="#section1" class="nav-item">研習概述</a>
+            <a href="#section2" class="nav-item">AI指令設計原則</a>
+            <a href="#section3" class="nav-item">NotebookLM基本說明</a>
+            <a href="#section4" class="nav-item">界面與功能</a>
+            <a href="#section5" class="nav-item">教學應用案例</a>
+            <a href="#section6" class="nav-item">進階技巧</a>
+            <a href="#section7" class="nav-item">常見問題</a>
+            <a href="#section8" class="nav-item">最佳實踐</a>
+            <a href="#section9" class="nav-item">工具比較</a>
+            <a href="#section10" class="nav-item">未來展望</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <section id="section1" class="section">
+            <h2>一、研習背景與概述</h2>
+            
+            <h3>1.1 研習基本資訊</h3>
+            <ul>
+                <li><strong>主題</strong>：NotebookLM AI工具在教學上的應用</li>
+                <li><strong>主辦單位</strong>：雲林縣書辦</li>
+                <li><strong>研習系列</strong>：三場系列研習的第二場</li>
+                <ul>
+                    <li>第一場：聰顯老師主講基礎操作</li>
+                    <li>第二場：家瑋老師主講應用技巧與指令設計</li>
+                    <li>第三場：永言校長主講國高中應用（預告）</li>
+                </ul>
+                <li><strong>參與人數</strong>：約320位教師（含各縣市及海外教師）</li>
+            </ul>
+            
+            <h3>1.2 主講者背景</h3>
+            <ul>
+                <li><strong>姓名</strong>：家瑋老師</li>
+                <li><strong>專業背景</strong>：
+                    <ul>
+                        <li>蘋果教育專家（APLS）</li>
+                        <li>Google Channel認證講師</li>
+                        <li>金正恩科技教學部門負責人</li>
+                        <li>曾在教學現場任教8年（國中端）</li>
+                        <li>目前負責大中華區教學統籌工作</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>1.3 研習目標與特色</h3>
+            <ul>
+                <li>強調實用技巧與指令設計，不重複第一場的基礎操作</li>
+                <li>著重將NotebookLM整合到實際教學流程中</li>
+                <li>示範具體教學應用場景：備課、學習單、測驗題、模擬考等</li>
+                <li>交叉使用多種工具：NotebookLM、Quizizz、Google工作表等</li>
+            </ul>
+        </section>
+        
+        <section id="section2" class="section">
+            <h2>二、AI指令設計原則與框架</h2>
+            
+            <h3>2.1 下達有效指令的基本原則</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>明確的指令與目的</strong>：清楚表達想要AI完成的任務</li>
+                    <li><strong>提供足夠背景</strong>：給予AI所需的上下文資訊，特別是專業或領域相關資訊</li>
+                    <li><strong>明確角色定位</strong>：指定AI應扮演的角色（如教師、主任、專家等）</li>
+                    <li><strong>定義輸出格式</strong>：明確指定需要的格式（表格、列表、文字等）</li>
+                    <li><strong>提供範例</strong>：給予範例讓AI理解預期的輸出形式</li>
+                    <li><strong>避免模糊指令</strong>：不要使用含糊不清的語句，要具體明確</li>
+                </ul>
+            </div>
+            
+            <h3>2.2 Tree Ray原則（三要素框架）</h3>
+            <div class="framework-box">
+                <div class="framework-title">Tree Ray框架</div>
+                <ul>
+                    <li><strong>確立執行目的</strong>：明確定義要解決的問題或達成的目標</li>
+                    <li><strong>描述運用場景</strong>：提供任務的上下文和應用環境</li>
+                    <li><strong>指定角色扮演</strong>：明確AI應採取什麼角色或視角</li>
+                    <li><strong>追問與提問</strong>：設計後續問題，引導AI深入探討</li>
+                    <li><strong>參考答案</strong>：提供期望的回答範例或格式</li>
+                    <li><strong>輸出格式</strong>：明確指定結果應以何種形式呈現</li>
+                </ul>
+            </div>
+            
+            <h3>2.3 RTF框架（簡易入門方式）</h3>
+            <div class="framework-box">
+                <div class="framework-title">RTF框架</div>
+                <ul>
+                    <li><strong>R (Role)</strong>：「請扮演[角色]」- 指定AI應扮演的身份</li>
+                    <li><strong>T (Task)</strong>：「執行[任務]」- 明確任務內容</li>
+                    <li><strong>F (Format)</strong>：「輸出[格式]」- 指定結果呈現方式</li>
+                </ul>
+                <div class="highlight">
+                    <strong>範例：</strong>「請扮演國小自然科教師，根據以下內容設計一份五年級水循環單元的學習單，以表格形式輸出，包含標題、學習目標、活動內容和評量方式。」
+                </div>
+            </div>
+            
+            <h3>2.4 指令設計的關鍵考量</h3>
+            <ul>
+                <li><strong>了解工具特性</strong>：NotebookLM是「整理型」AI，需先提供資料</li>
+                <li><strong>考慮輸出目標</strong>：事先規劃輸出將用於何種場景或工具（如Google表單、Quizizz等）</li>
+                <li><strong>遇到問題即調整</strong>：如果輸出結果不如預期，調整指令再試</li>
+                <li><strong>不同工具不同策略</strong>：NotebookLM與ChatGPT等工具指令設計略有不同</li>
+            </ul>
+        </section>
+        
+        <section id="section3" class="section">
+            <h2>三、NotebookLM工具基本說明</h2>
+            
+            <h3>3.1 系統概述與定位</h3>
+            <div class="highlight">
+                <ul>
+                    <li>Google推出的AI研究助理工具，專注於資料整理和分析</li>
+                    <li>特色：「有一說一、有二說二」，不會超出提供的資料範圍</li>
+                    <li>網址：notebook.google.com</li>
+                    <li>需使用Google帳號登入，免費使用</li>
+                </ul>
+            </div>
+            
+            <h3>3.2 環境設定與準備</h3>
+            <ul>
+                <li><strong>推薦使用環境</strong>：
+                    <ul>
+                        <li>Chrome瀏覽器</li>
+                        <li>個人Gmail帳號（非學校帳號）</li>
+                        <li>雙載具操作（一個顯示、一個操作）</li>
+                    </ul>
+                </li>
+                <li><strong>學校帳號設定</strong>：
+                    <ul>
+                        <li>有些學校帳號預設無法使用NotebookLM</li>
+                        <li>需由資訊組長在管理控制台修改年齡和生成式AI設定</li>
+                    </ul>
+                </li>
+                <li><strong>介面與外觀</strong>：
+                    <ul>
+                        <li>支援深色/淺色模式切換</li>
+                        <li>介面縮放調整：Ctrl+滑鼠滾輪</li>
+                        <li>全螢幕模式：F11鍵</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>3.3 擴充功能安裝與使用</h3>
+            <ul>
+                <li><strong>Chrome擴充功能</strong>：NotebookLM Quick Capture</li>
+                <li><strong>安裝步驟</strong>：
+                    <ol class="steps">
+                        <li>在Chrome瀏覽器中前往擴充功能商店</li>
+                        <li>搜尋「NotebookLM」並安裝</li>
+                        <li>點擊拼圖圖示將其釘選到工具列</li>
+                    </ol>
+                </li>
+                <li><strong>功能</strong>：直接將網頁或YouTube影片添加到NotebookLM筆記本</li>
+            </ul>
+            
+            <h3>3.4 系統限制與容量</h3>
+            <ul>
+                <li><strong>筆記本數量</strong>：
+                    <ul>
+                        <li>免費版：100本筆記本</li>
+                        <li>Plus版：200本筆記本</li>
+                    </ul>
+                </li>
+                <li><strong>資料容量</strong>：
+                    <ul>
+                        <li>每本筆記本可放50筆來源</li>
+                        <li>每筆來源上限50萬字</li>
+                        <li>總容量上限：2500萬字</li>
+                    </ul>
+                </li>
+                <li><strong>支援格式</strong>：
+                    <ul>
+                        <li>PDF文件</li>
+                        <li>Google文件、Google簡報</li>
+                        <li>網站內容</li>
+                        <li>YouTube影片</li>
+                        <li>MP3聲音檔</li>
+                    </ul>
+                </li>
+                <li><strong>不支援格式</strong>：
+                    <ul>
+                        <li>Word文件（需轉換為PDF）</li>
+                        <li>PowerPoint、Excel（需轉換為Google格式）</li>
+                        <li>Keynote及其他非Google格式</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>3.5 共編與分享功能</h3>
+            <ul>
+                <li><strong>共享功能</strong>：可與他人共享筆記本</li>
+                <li><strong>共編限制</strong>：
+                    <ul>
+                        <li>僅能與相同網域的帳號共編</li>
+                        <li>Gmail.com只能與Gmail.com共編</li>
+                        <li>學校帳號只能與同網域學校帳號共編</li>
+                    </ul>
+                </li>
+                <li><strong>共編人數</strong>：最多可與50人共同編輯</li>
+                <li><strong>分享方式</strong>：
+                    <ol>
+                        <li>點擊「分享」按鈕</li>
+                        <li>設定編輯權限</li>
+                        <li>複製連結分享給他人</li>
+                    </ol>
+                </li>
+            </ul>
+        </section>
+        
+        <section id="section4" class="section">
+            <h2>四、NotebookLM界面與主要功能區塊</h2>
+            
+            <h3>4.1 界面布局（三大區塊）</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>左側區域</strong>：資料來源區</li>
+                    <li><strong>中間區域</strong>：AI對話框</li>
+                    <li><strong>右側區域</strong>：工作室（Studio）</li>
+                </ul>
+                <p><strong>調整顯示</strong>：各區域可展開/收合，調整畫面比例</p>
+            </div>
+            
+            <h3>4.2 資料來源區（左側）</h3>
+            <ul>
+                <li><strong>功能</strong>：管理和查看上傳的資料</li>
+                <li><strong>操作方式</strong>：
+                    <ul>
+                        <li>上傳檔案：點擊「新增」按鈕</li>
+                        <li>從雲端硬碟添加：連結Google雲端硬碟</li>
+                        <li>添加網站：輸入URL</li>
+                        <li>添加YouTube：輸入影片連結</li>
+                    </ul>
+                </li>
+                <li><strong>探索功能</strong>：自動搜尋相關資源</li>
+                <li><strong>展示內容</strong>：
+                    <ul>
+                        <li>文件摘要</li>
+                        <li>重要主題列表</li>
+                        <li>點擊主題可查看相關內容</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>4.3 AI對話區（中間）</h3>
+            <ul>
+                <li><strong>功能</strong>：與AI互動，提問問題與接收回答</li>
+                <li><strong>特色</strong>：
+                    <ul>
+                        <li>回答內容基於上傳的資料</li>
+                        <li>回答會標註來源（數字標記）</li>
+                        <li>點擊數字可查看原始參考內容</li>
+                    </ul>
+                </li>
+                <li><strong>使用方式</strong>：
+                    <ul>
+                        <li>直接輸入問題或指令</li>
+                        <li>可使用框架式指令</li>
+                        <li>對話內容預設不保存，需手動儲存</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>4.4 工作室功能（右側）</h3>
+            <ul>
+                <li><strong>研讀指南</strong>：生成測驗題目與答案、提供關鍵詞彙解釋、整理學習重點</li>
+                <li><strong>簡報文件</strong>：將內容整理為簡報架構、按主題分類內容、提供框架式大綱</li>
+                <li><strong>常見問題</strong>：生成相關問答對、提供批判性思考問題、覆蓋核心概念</li>
+                <li><strong>時間軸</strong>：依時間順序整理事件、特別適合歷史、發展類內容、呈現時間脈絡</li>
+                <li><strong>心智圖</strong>：將內容視覺化為樹狀結構、展示概念間關係、可展開/收合各節點</li>
+                <li><strong>語音摘要</strong>：生成英文podcast對話（僅支援英文）、每日免費使用次數有限、可下載為音頻檔案</li>
+                <li><strong>新增記事</strong>：手動添加筆記、可自由編輯內容、永久保存在工作室區域</li>
+                <li><strong>轉換成來源</strong>：將記事轉為來源資料、讓AI參考自己的筆記</li>
+            </ul>
+        </section>
+        
+        <section id="section5" class="section">
+            <h2>五、NotebookLM實際教學應用案例</h2>
+            
+            <h3>5.1 英語學習影片應用</h3>
+            <div class="framework-box">
+                <div class="framework-title">教學情境</div>
+                <ul>
+                    <li><strong>教學情境</strong>：利用YouTube英語學習影片製作教材</li>
+                    <li><strong>目標學生</strong>：國小或初學英語的學生</li>
+                    <li><strong>素材選擇</strong>：100+常用英語短句影片</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>操作步驟：</strong>
+                    <ol class="steps">
+                        <li>添加英語學習YouTube影片</li>
+                        <li>設計表格式指令：
+                            <pre><code>請用以下規則來整理英語短句：
+A欄：英文原句
+B欄：中文翻譯
+C欄：發音提示</code></pre>
+                        </li>
+                        <li>擴展應用（增加情境）：
+                            <pre><code>請新增以下欄位：
+D欄：在什麼情況下使用
+E欄：簡單的英文對話範例</code></pre>
+                        </li>
+                        <li>製作語音摘要供聽力練習使用</li>
+                    </ol>
+                </div>
+                
+                <strong>教學應用</strong>：
+                <ul>
+                    <li>製作個人化英語學習教材</li>
+                    <li>日常聽力練習素材</li>
+                    <li>情境對話演練指引</li>
+                </ul>
+            </div>
+            
+            <h3>5.2 知識型影片學習單製作</h3>
+            <div class="framework-box">
+                <div class="framework-title">教學情境</div>
+                <ul>
+                    <li><strong>教學情境</strong>：透過影片學習增強學生專注度</li>
+                    <li><strong>目標</strong>：確保學生在觀看影片時能留意重點</li>
+                    <li><strong>素材選擇</strong>：知識型YouTube頻道（如：Chip影片「古代如何製冰」）</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>操作步驟：</strong>
+                    <ol class="steps">
+                        <li>添加知識型YouTube影片</li>
+                        <li>設計學習單指令：
+                            <pre><code>我想要解決學生看影片不專注的問題。請依據影片的脈絡製作學習單，讓學生看影片時可以隨時留意重點並完成學習單。</code></pre>
+                        </li>
+                        <li>生成學習單包含：
+                            <ul>
+                                <li>學習目標</li>
+                                <li>影片前思考問題（引起動機）</li>
+                                <li>按影片順序排列的填空或選擇題</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <strong>教學應用</strong>：
+                <ul>
+                    <li>課前預習材料</li>
+                    <li>課中影片學習輔助</li>
+                    <li>自主學習檢核工具</li>
+                </ul>
+            </div>
+            
+            <h3>5.3 試題生成與測驗系統整合（Quizizz）</h3>
+            <div class="framework-box">
+                <div class="framework-title">教學情境</div>
+                <ul>
+                    <li><strong>教學情境</strong>：快速生成符合課程內容的測驗題目</li>
+                    <li><strong>目標</strong>：整合NotebookLM與Quizizz測驗平台</li>
+                    <li><strong>素材選擇</strong>：教科書PDF、課程資料</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>操作步驟：</strong>
+                    <ol class="steps">
+                        <li>添加教科書PDF或學習資料</li>
+                        <li>設計試題生成指令：
+                            <pre><code>根據資料設計十題選擇題，題目是單選題，每題有四個選項。
+請使用Google Sheet的格式：
+A欄：題號
+B欄：正確答案
+C欄：題目
+D-G欄：選項1-4
+H欄：題目解析</code></pre>
+                        </li>
+                        <li>調整Quizizz專用格式：
+                            <pre><code>根據資料設計十題選擇題。
+A欄：完整題目
+B欄：填入「選擇題」
+C-F欄：選項1-4
+G欄：選項5（留空）
+H欄：正確答案（用數字表示）
+I欄：作答時間（填入45）
+J欄：圖片URL（留空）
+K欄：題目解析</code></pre>
+                        </li>
+                        <li>複製結果到Quizizz模板</li>
+                        <li>下載為Excel檔案</li>
+                        <li>匯入Quizizz系統</li>
+                    </ol>
+                </div>
+                
+                <strong>教學應用</strong>：
+                <ul>
+                    <li>課堂即時評量</li>
+                    <li>課後複習測驗</li>
+                    <li>形成性評量工具</li>
+                </ul>
+            </div>
+            
+            <h3>5.4 WSQ學習單製作</h3>
+            <div class="framework-box">
+                <div class="framework-title">教學情境</div>
+                <ul>
+                    <li><strong>教學情境</strong>：公開課自學材料準備</li>
+                    <li><strong>目標</strong>：製作符合WSQ框架的學習單</li>
+                    <li><strong>素材選擇</strong>：教學影片或學習資料</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>WSQ框架說明</strong>：
+                    <ul>
+                        <li>W (Watch)：觀看影片環節</li>
+                        <li>S (Summary)：內容摘要與重點整理</li>
+                        <li>Q (Question)：提問與思考問題</li>
+                    </ul>
+                </div>
+                
+                <strong>操作步驟</strong>：
+                <ol class="steps">
+                    <li>添加教學影片或資料</li>
+                    <li>設計WSQ學習單指令：
+                        <pre><code>WSQ學習單的製作重點是學習影片中的知識重點。學習單需要包含以下三個部分：
+1. Watch：學生觀看影片的重要知識重點，設計填空題，填入正確答案。
+2. Summary：根據影片中的重點做總結，關鍵字句或重要資訊用填空的方式呈現。
+3. Question：根據影片內容提出對於學習遇到的問題，從低階到高階思考。</code></pre>
+                    </li>
+                </ol>
+                
+                <strong>教學應用</strong>：
+                <ul>
+                    <li>翻轉教學設計</li>
+                    <li>公開課自學指引</li>
+                    <li>學生自主學習工具</li>
+                </ul>
+            </div>
+            
+            <h3>5.5 會考資料分析與模擬試題</h3>
+            <div class="framework-box">
+                <div class="framework-title">教學情境</div>
+                <ul>
+                    <li><strong>教學情境</strong>：分析歷年會考題目與製作模擬試題</li>
+                    <li><strong>目標</strong>：了解考試趨勢並製作針對性練習</li>
+                    <li><strong>素材選擇</strong>：歷年會考試題PDF</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>操作步驟</strong>：
+                    <ol class="steps">
+                        <li>添加歷年會考試題</li>
+                        <li>統計各科題目分布：
+                            <pre><code>請統計這五份資料中歷史、地理、公民科各占的題目數量，並以表格形式顯示。</code></pre>
+                        </li>
+                        <li>製作模擬試題：
+                            <pre><code>根據資料設計50題的選擇題，題目要完整呈現，不要用有圖片的題目。歷史、地理、公民科的題目比重分別是4:3:3。請標示出正確答案以及題目解析。</code></pre>
+                        </li>
+                    </ol>
+                </div>
+                
+                <strong>教學應用</strong>：
+                <ul>
+                    <li>針對性複習指導</li>
+                    <li>模擬考試準備</li>
+                    <li>分析考試趨勢和重點單元</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="section6" class="section">
+            <h2>六、進階技巧與整合應用</h2>
+            
+            <h3>6.1 YouTube影片處理技巧</h3>
+            <ul>
+                <li><strong>支援條件</strong>：
+                    <ul>
+                        <li>公開影片（非私人或未列出）</li>
+                        <li>發布超過3天的影片</li>
+                        <li>單一影片（非播放清單）</li>
+                    </ul>
+                </li>
+                <li><strong>處理方式</strong>：
+                    <ol>
+                        <li>使用純淨URL：
+                            <ul>
+                                <li>避免使用播放清單格式（含index參數）</li>
+                                <li>使用分享功能獲取純淨連結</li>
+                            </ul>
+                        </li>
+                        <li>不支援時的替代方案：
+                            <ul>
+                                <li>下載為MP3後上傳</li>
+                                <li>修改YouTube網址（刪除"ube"）下載</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+            </ul>
+            
+            <h3>6.2 檔案格式轉換技巧</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>Word轉PDF</strong>：使用「另存新檔」功能選擇PDF格式</li>
+                    <li><strong>PPT轉Google簡報</strong>：上傳至Google雲端硬碟自動轉換</li>
+                    <li><strong>不支援格式處理</strong>：
+                        <ul>
+                            <li>電子書：轉換為PDF後上傳</li>
+                            <li>圖片為主的資料：提取文字內容後上傳</li>
+                            <li>音頻資料：轉換為MP3後上傳</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>6.3 指令優化技巧</h3>
+            <ul>
+                <li><strong>分析資料結構</strong>：先了解資料內容與組織方式</li>
+                <li><strong>預設格式對應</strong>：考慮最終使用平台的要求（如Quizizz格式）</li>
+                <li><strong>循序漸進測試</strong>：
+                    <ul>
+                        <li>從簡單指令開始，逐步添加細節</li>
+                        <li>遇到格式問題，調整指令再試</li>
+                        <li>保存成功的指令模板供日後使用</li>
+                    </ul>
+                </li>
+                <li><strong>具體化指令</strong>：
+                    <ul>
+                        <li>明確指定欄位與格式</li>
+                        <li>提供清晰的例子</li>
+                        <li>指定數量和範圍</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>6.4 與其他工具整合</h3>
+            <ul>
+                <li><strong>與Google工作表整合</strong>：
+                    <ul>
+                        <li>複製生成的表格到Google試算表</li>
+                        <li>調整格式後再轉存為所需格式</li>
+                    </ul>
+                </li>
+                <li><strong>與Google文件整合</strong>：
+                    <ul>
+                        <li>將生成的文字複製到Google文件</li>
+                        <li>調整排版後可共享或列印</li>
+                    </ul>
+                </li>
+                <li><strong>與測驗平台整合</strong>：
+                    <ul>
+                        <li>Quizizz：按特定格式輸出後匯入</li>
+                        <li>Kahoot：調整為符合格式後上傳</li>
+                        <li>Wordwall：準備符合要求的題目格式</li>
+                    </ul>
+                </li>
+                <li><strong>與學習管理系統整合</strong>：
+                    <ul>
+                        <li>生成的材料可上傳至Google Classroom</li>
+                        <li>或其他校內使用的LMS系統</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        
+        <section id="section7" class="section">
+            <h2>七、常見問題與解決方案</h2>
+            
+            <h3>7.1 帳號與登入問題</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>學校帳號無法使用</strong>：
+                        <ul>
+                            <li>解決方案1：請資訊組長修改Google管理控制台設定</li>
+                            <li>解決方案2：使用個人Gmail帳號</li>
+                        </ul>
+                    </li>
+                    <li><strong>登入顯示與筆記本不同步</strong>：
+                        <ul>
+                            <li>確認頁面頂部與底部帳號頭像一致</li>
+                            <li>如不一致，登出後以正確帳號登入</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>7.2 資料上傳問題</h3>
+            <ul>
+                <li><strong>檔案太大無法上傳</strong>：
+                    <ul>
+                        <li>將PDF檔案分割為較小的部分</li>
+                        <li>減少不必要的圖片或格式</li>
+                    </ul>
+                </li>
+                <li><strong>YouTube影片不支援</strong>：
+                    <ul>
+                        <li>檢查URL格式是否正確</li>
+                        <li>確認影片是否公開發布超過3天</li>
+                        <li>嘗試其他影片或下載後上傳</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>7.3 輸出格式問題</h3>
+            <ul>
+                <li><strong>表格格式跑版</strong>：
+                    <ul>
+                        <li>調整指令，明確指定每一欄的內容</li>
+                        <li>避免使用過於複雜的表格結構</li>
+                    </ul>
+                </li>
+                <li><strong>無法生成圖片</strong>：
+                    <ul>
+                        <li>NotebookLM不支援生成圖片</li>
+                        <li>需使用其他工具（如Canva AI）生成圖片</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>7.4 指令效果不如預期</h3>
+            <ul>
+                <li><strong>回答內容不符合預期</strong>：
+                    <ul>
+                        <li>重新分析資料結構</li>
+                        <li>調整指令更加明確</li>
+                        <li>提供更多背景或示例</li>
+                    </ul>
+                </li>
+                <li><strong>超出處理能力</strong>：
+                    <ul>
+                        <li>資料量過大時分批處理</li>
+                        <li>聚焦於特定部分或主題</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+        
+        <section id="section8" class="section">
+            <h2>八、教學應用的最佳實踐</h2>
+            
+            <h3>8.1 備課階段應用</h3>
+            <div class="framework-box">
+                <div class="framework-title">備課應用</div>
+                <ul>
+                    <li><strong>課程大綱規劃</strong>：
+                        <ul>
+                            <li>上傳教科書或課程標準</li>
+                            <li>生成單元學習目標與重點</li>
+                            <li>設計學習活動流程</li>
+                        </ul>
+                    </li>
+                    <li><strong>教材開發</strong>：
+                        <ul>
+                            <li>將教科書轉為結構化筆記</li>
+                            <li>生成各種難度的問題</li>
+                            <li>製作學習單和補充資料</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>8.2 教學階段應用</h3>
+            <div class="framework-box">
+                <div class="framework-title">教學應用</div>
+                <ul>
+                    <li><strong>引起動機</strong>：
+                        <ul>
+                            <li>處理知識性影片為預習材料</li>
+                            <li>生成思考性問題引導討論</li>
+                        </ul>
+                    </li>
+                    <li><strong>課程指引</strong>：
+                        <ul>
+                            <li>WSQ學習單引導自主學習</li>
+                            <li>差異化學習任務設計</li>
+                        </ul>
+                    </li>
+                    <li><strong>即時評量</strong>：
+                        <ul>
+                            <li>結合Quizizz等工具進行檢測</li>
+                            <li>根據學習內容快速生成測驗</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+            <h3>8.3 評量與回饋階段</h3>
+            <ul>
+                <li><strong>多元評量工具</strong>：
+                    <ul>
+                        <li>生成不同類型的評量題目</li>
+                        <li>按學習目標分類評量項目</li>
+                    </ul>
+                </li>
+                <li><strong>學習歷程分析</strong>：
+                    <ul>
+                        <li>整理學生作業與測驗結果</li>
+                        <li>分析常見錯誤和迷思概念</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>8.4 專業成長應用</h3>
+            <ul>
+                <li><strong>課程研究</strong>：
+                    <ul>
+                        <li>分析教學資源與研究文獻</li>
+                        <li>整理教學反思與經驗</li>
+                    </ul>
+                </li>
+                <li><strong>專業社群協作</strong>：
+                    <ul>
+                        <li>共享和協作NotebookLM筆記本</li>
+                        <li>共同開發教學資源</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h3>8.5 注意事項與倫理考量</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>資料來源檢核</strong>：確保使用的資料無版權問題，優先使用開放教育資源</li>
+                    <li><strong>AI產出內容的審核</strong>：教師必須審核AI生成的內容，根據學生實際情況調整難度和內容</li>
+                    <li><strong>尊重學生差異</strong>：考慮不同學習風格和程度，調整AI生成內容以符合學生需求</li>
+                    <li><strong>正確引導學生使用AI</strong>：教導學生正確使用AI工具，培養學生的媒體素養和批判思考</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="section9" class="section">
+            <h2>九、AI工具比較與選擇</h2>
+            
+            <h3>9.1 NotebookLM vs ChatGPT</h3>
+            <table class="comparison-table">
+                <tr>
+                    <th>功能/特性</th>
+                    <th>NotebookLM</th>
+                    <th>ChatGPT</th>
+                </tr>
+                <tr>
+                    <td><strong>資料控制</strong></td>
+                    <td>精確控制資料範圍</td>
+                    <td>廣泛知識但無法精確控制</td>
+                </tr>
+                <tr>
+                    <td><strong>回答特性</strong></td>
+                    <td>不會超出給定資料回答</td>
+                    <td>可能產生「幻覺」或超出範圍</td>
+                </tr>
+                <tr>
+                    <td><strong>來源引用</strong></td>
+                    <td>清晰標註來源</td>
+                    <td>來源通常不明確</td>
+                </tr>
+                <tr>
+                    <td><strong>生態系統</strong></td>
+                    <td>整合Google系統</td>
+                    <td>獨立運作</td>
+                </tr>
+                <tr>
+                    <td><strong>創意性</strong></td>
+                    <td>較低</td>
+                    <td>較高</td>
+                </tr>
+                <tr>
+                    <td><strong>圖片生成</strong></td>
+                    <td>不支援</td>
+                    <td>部分版本支援</td>
+                </tr>
+            </table>
+            
+            <h3>9.2 不同教學階段的工具選擇</h3>
+            <div class="framework-box">
+                <div class="framework-title">工具選擇指南</div>
+                <ul>
+                    <li><strong>備課階段</strong>：
+                        <ul>
+                            <li>課程設計：ChatGPT</li>
+                            <li>資料整理：NotebookLM</li>
+                            <li>內容創作：各有優勢</li>
+                        </ul>
+                    </li>
+                    <li><strong>教學階段</strong>：
+                        <ul>
+                            <li>即時回應：ChatGPT</li>
+                            <li>資料引用：NotebookLM</li>
+                            <li>問題解答：視需求選擇</li>
+                        </ul>
+                    </li>
+                    <li><strong>評量階段</strong>：
+                        <ul>
+                            <li>試題生成：NotebookLM更精確</li>
+                            <li>評量回饋：各有優勢</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="section10" class="section">
+            <h2>十、未來發展與技術展望</h2>
+            
+            <h3>10.1 NotebookLM功能更新趨勢</h3>
+            <ul>
+                <li><strong>語言支援擴展</strong>：語音摘要可能未來支援中文</li>
+                <li><strong>更多格式支援</strong>：可能增加對Word等格式的原生支援</li>
+                <li><strong>更強大的視覺化</strong>：可能增加圖表和圖片生成功能</li>
+                <li><strong>與Google其他工具更深度整合</strong></li>
+            </ul>
+            
+            <h3>10.2 AI教育應用發展趨勢</h3>
+            <div class="highlight">
+                <ul>
+                    <li><strong>個人化學習助手</strong>：更精準地適應學生個別需求</li>
+                    <li><strong>教師協作平台</strong>：促進全球教師資源共享</li>
+                    <li><strong>多模態教學資源</strong>：整合文字、圖像、音頻、視頻</li>
+                    <li><strong>實時評量與回饋</strong>：智能分析學習進展</li>
+                </ul>
+            </div>
+            
+            <h3>10.3 教師角色轉變與專業發展</h3>
+            <ul>
+                <li><strong>從知識傳授者轉為學習引導者</strong></li>
+                <li><strong>重視培養批判思考和問題解決能力</strong></li>
+                <li><strong>強調AI工具使用倫理和媒體素養</strong></li>
+                <li><strong>持續學習新技術並整合到教學中</strong></li>
+            </ul>
+        </section>
+        
+        <section class="section">
+            <h2>結語</h2>
+            <div class="highlight">
+                <p>NotebookLM作為Google推出的AI研究助理工具，特別適合整合到教學流程中。透過有效的指令設計，教師可以快速將現有教材、影片、考題轉化為學習單、測驗題、學習重點等教學資源。與ChatGPT等生成型AI不同，NotebookLM強調「有一說一、有二說二」，不會超出給定資料範圍，為需要精確控制內容的教學場景提供了理想選擇。</p>
+                <p>然而，AI產出的內容仍需教師根據學生實際情況審核調整，這也是AI無法取代教師的關鍵價值所在。在AI迅速發展的時代，教師應積極學習新工具，同時保持批判思考，將AI視為強大的輔助工具，而非替代品。透過持續學習和實踐，教師能夠有效利用NotebookLM等AI工具，創造更豐富、更有效的教學體驗。</p>
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <p>© 2025 NotebookLM AI教學應用研習</p>
+        <p>研習主講：家瑋老師</p>
+        <p>筆記整理：研習團隊</p>
+    </footer>
+</body>
+</html>

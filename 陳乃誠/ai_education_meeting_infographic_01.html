@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教育系統會議資訊圖表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe6d9 100%);
+            color: #4a4a4a;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header .date {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.1);
+            border-left: 5px solid #ff6b35;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff5f0, #ffe6d9);
+            border-radius: 10px;
+            border: 2px solid #ffcc99;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b35;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .progress-bar {
+            background: #ffe6d9;
+            border-radius: 10px;
+            height: 20px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            border-radius: 10px;
+            transition: width 0.8s ease;
+            position: relative;
+        }
+        
+        .progress-text {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .issue-list {
+            list-style: none;
+        }
+        
+        .issue-item {
+            background: #fff5f0;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff6b35;
+            position: relative;
+        }
+        
+        .issue-priority {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b35;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .priority-high { background: #d63031 !important; }
+        .priority-medium { background: #fdcb6e !important; }
+        .priority-low { background: #00b894 !important; }
+        
+        .action-items {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .action-items h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .action-list {
+            list-style: none;
+        }
+        
+        .action-list li {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .action-list li::before {
+            content: "📋";
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 康軒AI系統討論紀錄</h1>
+            <div class="date">2025-05-25 系統調整、AI生成題目、作文批改</div>
+        </div>
+        
+        <div class="main-grid">
+            <!-- 系統效能卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <div class="card-title">系統效能指標</div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-number">2000+</span>
+                        <div class="stat-label">每日批改篇數</div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">70-80%</span>
+                        <div class="stat-label">OCR辨識率</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div style="margin-bottom: 10px;">作文批改系統使用率</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%;">
+                            <div class="progress-text">95%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI技術應用卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🤖</div>
+                    <div class="card-title">AI技術應用</div>
+                </div>
+                <div style="background: #fff5f0; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                    <strong>✅ 成功應用</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>自動題目生成與標示單元頁數</li>
+                        <li>HTML表格整合簡報輸出</li>
+                        <li>快速班級建立與QR碼分享</li>
+                    </ul>
+                </div>
+                <div style="background: #ffe6d9; padding: 15px; border-radius: 8px;">
+                    <strong>⚠️ 待改進</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>2.5版本回應速度過慢</li>
+                        <li>數學解題答案準確性</li>
+                        <li>圖片辨識易誤判問題</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 檔案處理挑戰卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📁</div>
+                    <div class="card-title">檔案處理挑戰</div>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <div style="margin-bottom: 10px;">檔案格式處理效果比較</div>
+                    <div style="margin-bottom: 8px;">TXT格式</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;">
+                            <div class="progress-text">85%</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 8px;">PDF直接輸入</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%;">
+                            <div class="progress-text">45%</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 8px;">PDF轉圖檔OCR</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%;">
+                            <div class="progress-text">30%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 國際交流回饋卡片 -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🌍</div>
+                    <div class="card-title">國際交流回饋</div>
+                </div>
+                <div style="background: linear-gradient(135deg, #fff5f0, #ffe6d9); padding: 20px; border-radius: 10px; text-align: center;">
+                    <h4 style="color: #ff6b35; margin-bottom: 15px;">🇨🇦 加拿大參訪成果</h4>
+                    <p style="margin-bottom: 10px;"><strong>參與層級：</strong>教授、國中、高中、小學教師</p>
+                    <p style="margin-bottom: 10px;"><strong>重點關注：</strong>批次批改功能</p>
+                    <p style="color: #ff6b35; font-weight: bold;">評價：務實有用的創舉</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 關鍵議題 -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-icon">⚠️</div>
+                <div class="card-title">關鍵議題與挑戰</div>
+            </div>
+            <ul class="issue-list">
+                <li class="issue-item">
+                    <div class="issue-priority priority-high">高</div>
+                    <strong>PDF與OCR識別率低問題</strong><br>
+                    系統處理PDF檔案直接輸入常導致錯誤辨識，TXT檔案較穩定但無法過濾特殊字元
+                </li>
+                <li class="issue-item">
+                    <div class="issue-priority priority-high">高</div>
+                    <strong>AI數學解答準確性</strong><br>
+                    現行系統在數學問題解答出現計算錯誤，影響教師與學生使用體驗
+                </li>
+                <li class="issue-item">
+                    <div class="issue-priority priority-medium">中</div>
+                    <strong>學生登入驗證機制</strong><br>
+                    學生無須登入導致無法合併同一學生的歷程記錄，影響資料整合
+                </li>
+                <li class="issue-item">
+                    <div class="issue-priority priority-medium">中</div>
+                    <strong>教學模型整合流程</strong><br>
+                    現有教學資源整合機制不明確，需要進一步討論標準流程
+                </li>
+                <li class="issue-item">
+                    <div class="issue-priority priority-low">低</div>
+                    <strong>成本控制與配置</strong><br>
+                    雲端機器成本隨使用率增長，需要持續監控與優化
+                </li>
+            </ul>
+        </div>
+        
+        <!-- 行動項目 -->
+        <div class="action-items">
+            <h3>🎯 後續行動項目</h3>
+            <ul class="action-list">
+                <li><strong>教師回饋收集：</strong>請老師提供針對目前流程改進的建議與回饋</li>
+                <li><strong>自學模式優化：</strong>請老師就自學模式及口寫辨識部分提供建議</li>
+                <li><strong>技術流程標準化：</strong>建立PDF轉換與上傳的標準作業流程</li>
+                <li><strong>品質控管機制：</strong>建立AI生成內容的品質控管與驗證機制</li>
+                <li><strong>使用者體驗改善：</strong>優化系統回應速度與介面操作流暢度</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // 添加進入動畫
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 150);
+            });
+        });
+        
+        // 進度條動畫
+        setTimeout(() => {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+        }, 1000);
+    </script>
+</body>
+</html>

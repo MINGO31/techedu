@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音表達進階班 - 反擊之聲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 50%, #fb923c 100%);
+            min-height: 100vh;
+            color: #7c2d12;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(45deg, #ea580c, #fb923c);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(234, 88, 12, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .course-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 12px 24px;
+            background: #fed7aa;
+            border: 2px solid #fb923c;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            color: #9a3412;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: #fb923c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(251, 146, 60, 0.4);
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(124, 45, 18, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #ea580c;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #fed7aa;
+            padding-bottom: 10px;
+        }
+
+        .student-share {
+            background: linear-gradient(135deg, #fff7ed, #fed7aa);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #fb923c;
+        }
+
+        .student-name {
+            font-weight: bold;
+            color: #ea580c;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .practice-item {
+            background: #fef3c7;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #fbbf24;
+        }
+
+        .voice-level {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #fb923c;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .voice-level:hover {
+            background: #ea580c;
+            transform: scale(1.05);
+        }
+
+        .interactive-quote {
+            background: linear-gradient(45deg, #ea580c, #fb923c);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-quote:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(234, 88, 12, 0.4);
+        }
+
+        .interactive-quote::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .interactive-quote:hover::before {
+            opacity: 1;
+            animation: shine 0.5s ease;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .exercise-box {
+            background: rgba(251, 146, 60, 0.1);
+            border: 2px dashed #fb923c;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .btn-practice {
+            background: linear-gradient(45deg, #ea580c, #fb923c);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn-practice:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+        }
+
+        .homework-section {
+            background: linear-gradient(135deg, #fef3c7, #fed7aa);
+            padding: 25px;
+            border-radius: 15px;
+            border: 3px solid #fbbf24;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #fed7aa;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ea580c, #fb923c);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #7c2d12;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .collapsible {
+            background-color: #fed7aa;
+            color: #7c2d12;
+            cursor: pointer;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .collapsible:hover {
+            background-color: #fb923c;
+            color: white;
+        }
+
+        .collapsible-content {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .collapsible-content.active {
+            padding: 15px;
+            max-height: 500px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .course-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-btn {
+                width: 80%;
+                text-align: center;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎭 聲音表達進階班</h1>
+            <p>第二堂課：反擊之聲 - 善良要有底線，反擊可以很精準</p>
+        </div>
+
+        <div class="course-nav">
+            <div class="nav-btn active" onclick="showSection('overview')">課程概覽</div>
+            <div class="nav-btn" onclick="showSection('sharing')">學員分享</div>
+            <div class="nav-btn" onclick="showSection('theory')">理論基礎</div>
+            <div class="nav-btn" onclick="showSection('practice')">實戰練習</div>
+            <div class="nav-btn" onclick="showSection('homework')">作業說明</div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- 課程概覽 -->
+        <div id="overview" class="content-section active">
+            <h2 class="section-title">📚 課程概覽</h2>
+            
+            <div class="interactive-quote" onclick="playQuote(this)">
+                「常為低眉菩薩，偶為怒目金剛」
+                <div style="font-size: 0.8em; margin-top: 10px; opacity: 0.9;">點擊聆聽示範</div>
+            </div>
+
+            <div class="exercise-box">
+                <h3 style="color: #ea580c; margin-bottom: 15px;">🎯 課程目標</h3>
+                <p><strong>培養適當的反擊能力</strong></p>
+                <ul style="text-align: left; margin-top: 15px; color: #7c2d12;">
+                    <li>建立戰鬥意識與底線</li>
+                    <li>掌握反擊之聲的技巧</li>
+                    <li>學會在不同情境下運用</li>
+                    <li>保護自己與珍視的人事物</li>
+                </ul>
+            </div>
+
+            <button class="collapsible">🔍 為什麼需要反擊之聲？</button>
+            <div class="collapsible-content">
+                <p>在生活中，我們可能遇到：</p>
+                <ul>
+                    <li><strong>侵占地盤的人：</strong>看你溫和就想佔便宜</li>
+                    <li><strong>無理之人：</strong>需要適當威嚇制止</li>
+                    <li><strong>緊急狀況：</strong>需要命令他人配合</li>
+                    <li><strong>保護家人：</strong>捍衛珍視的人事物</li>
+                </ul>
+            </div>
+
+            <button class="collapsible">💡 課程金句回顧</button>
+            <div class="collapsible-content">
+                <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>「心若不難，事就不難」</strong><br>
+                    <em>突破心理障礙是關鍵</em>
+                </div>
+                <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>「跳脫應該，進入我決定」</strong><br>
+                    <em>從被動轉為主動選擇</em>
+                </div>
+            </div>
+        </div>
+
+        <!-- 學員分享 -->
+        <div id="sharing" class="content-section">
+            <h2 class="section-title">👥 學員分享環節</h2>
+            
+            <div class="student-share">
+                <div class="student-name">🌟 Emma的開心分享</div>
+                <p>終於做了近視雷射手術！擺脫眼鏡的束縛，就像結婚一樣需要有衝動才會去做的決定。上完課後就去做手術，真的很開心！</p>
+                <div class="tooltip">
+                    <span style="color: #fb923c; font-weight: bold;">💡 啟發</span>
+                    <span class="tooltiptext">有時候重要決定需要一點衝動和勇氣</span>
+                </div>
+            </div>
+
+            <div class="student-share">
+                <div class="student-name">🌟 Kathy的突破</div>
+                <p>在法國參加商務早餐會，原本害怕用法語交流，但發現其實可以直接對話，不需要先道歉說自己法語不好。是自己先設限了！</p>
+                <div class="tooltip">
+                    <span style="color: #fb923c; font-weight: bold;">💡 啟發</span>
+                    <span class="tooltiptext">很多限制都是自己給自己的</span>
+                </div>
+            </div>
+
+            <div class="student-share">
+                <div class="student-name">🌟 Kyria的生活應用</div>
+                <p>兒子長牙會咬人，發現自己說「不要」的時候聲音太溫和，孩子以為是在玩。需要學習用適當的聲音制止，但又不能太兇。</p>
+                <div class="tooltip">
+                    <span style="color: #fb923c; font-weight: bold;">💡 啟發</span>
+                    <span class="tooltiptext">聲音的力道要適中，既要有效又要有愛</span>
+                </div>
+            </div>
+
+            <div class="exercise-box">
+                <h3 style="color: #ea580c;">📝 反思練習</h3>
+                <p>想想你最近有沒有遇到需要「反擊」的情況？</p>
+                <textarea style="width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #fed7aa; margin-top: 10px;" rows="3" placeholder="寫下你的想法..."></textarea>
+            </div>
+        </div>
+
+        <!-- 理論基礎 -->
+        <div id="theory" class="content-section">
+            <h2 class="section-title">📖 反擊之聲理論基礎</h2>
+
+            <div class="practice-item">
+                <h3 style="color: #ea580c;">🎯 反擊之聲的四個階段</h3>
+                <div style="margin: 15px 0;">
+                    <div class="voice-level" onclick="showLevel(1)">1. 戰鬥意識</div>
+                    <div class="voice-level" onclick="showLevel(2)">2. 氣息控制</div>
+                    <div class="voice-level" onclick="showLevel(3)">3. 聲音技巧</div>
+                    <div class="voice-level" onclick="showLevel(4)">4. 情境應用</div>
+                </div>
+                <div id="levelDetail" style="background: rgba(255,255,255,0.8); padding: 15px; border-radius: 8px; margin-top: 15px; display: none;">
+                    <!-- 動態內容 -->
+                </div>
+            </div>
+
+            <div class="practice-item">
+                <h3 style="color: #ea580c;">🔊 聲音層次分析</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                    <div style="background: #fff7ed; padding: 15px; border-radius: 8px; text-align: center;">
+                        <strong>吶喊</strong><br>
+                        <small>用口腔上端發聲</small>
+                    </div>
+                    <div style="background: #fff7ed; padding: 15px; border-radius: 8px; text-align: center;">
+                        <strong>嘶吼</strong><br>
+                        <small>喉嚨肌肉摩擦感</small>
+                    </div>
+                    <div style="background: #fff7ed; padding: 15px; border-radius: 8px; text-align: center;">
+                        <strong>咆哮</strong><br>
+                        <small>胸口力量推出</small>
+                    </div>
+                </div>
+            </div>
+
+            <button class="collapsible">📊 反擊等級表（1-11級）</button>
+            <div class="collapsible-content">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+                    <div style="background: #dcfce7; padding: 10px; border-radius: 5px;">
+                        <strong>1級 面對：</strong>直視問題不逃避
+                    </div>
+                    <div style="background: #dbeafe; padding: 10px; border-radius: 5px;">
+                        <strong>2級 宣告：</strong>表達意願與立場
+                    </div>
+                    <div style="background: #fef3c7; padding: 10px; border-radius: 5px;">
+                        <strong>3級 防衛：</strong>保護自己的界限
+                    </div>
+                    <div style="background: #fed7aa; padding: 10px; border-radius: 5px;">
+                        <strong>4級 喝阻：</strong>阻止對方靠近
+                    </div>
+                    <div style="background: #fecaca; padding: 10px; border-radius: 5px;">
+                        <strong>5級 命令：</strong>要求對方配合
+                    </div>
+                    <div style="background: #fca5a5; padding: 10px; border-radius: 5px;">
+                        <strong>7級 威脅：</strong>警告不客氣
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #7c2d12; font-style: italic;">
+                    ※ 日常溝通建議使用1-5級，特殊情況才使用更高等級
+                </p>
+            </div>
+        </div>
+
+        <!-- 實戰練習 -->
+        <div id="practice" class="content-section">
+            <h2 class="section-title">🎭 實戰練習</h2>
+
+            <div class="practice-item">
+                <h3 style="color: #ea580c;">💬 對話練習：借錢情境</h3>
+                <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>甲：</strong>「這麼點錢都不借，太小氣了吧！」<br>
+                    <strong>乙：</strong>「這麼點錢你還要跟我借，太沒用了吧！」
+                </div>
+                <button class="btn-practice" onclick="startPractice('dialogue')">🎯 開始練習</button>
+            </div>
+
+            <div class="practice-item">
+                <h3 style="color: #ea580c;">🏥 角色扮演：護士情境</h3>
+                <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <div><strong>台灣護士：</strong>「請問有什麼問題嗎？」</div>
+                    <div><strong>觀察者：</strong>「沒問題，就覺得你跟北京護士不一樣」</div>
+                    <div><strong>北京護士：</strong>「叫你了嗎？沒叫你給我出去！」</div>
+                </div>
+                <button class="btn-practice" onclick="startPractice('roleplay')">🎭 角色練習</button>
+            </div>
+
+            <div class="practice-item">
+                <h3 style="color: #ea580c;">⚔️ 戰場情境：楚橋傳</h3>
+                <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 10px 0;">
+                    <strong>楚橋：</strong>「燕北的戰士們！燕北沒有拋棄你們！聽我的命令，跟隨我，我要帶你們回家！」<br>
+                    <strong>賀蕭：</strong>「楚教頭，要走一起走！」
+                </div>
+                <button class="btn-practice" onclick="startPractice('battle')">⚔️ 戰鬥練習</button>
+            </div>
+
+            <div class="exercise-box">
+                <h3 style="color: #ea580c;">🎵 氣息練習：喊麥體驗</h3>
+                <p>配合音樂練習氣息控制和持續力</p>
+                <div style="background: #f9fafb; padding: 10px; border-radius: 5px; margin: 10px 0; font-family: monospace;">
+                    「一人我飲酒醉，醉把佳人成雙對<br>
+                    兩眼是淚，只求他日能雙歸<br>
+                    娘子她人貌美，我不配...」
+                </div>
+                <button class="btn-practice" onclick="startPractice('breathing')">🎵 開始練習</button>
+            </div>
+
+            <div id="practiceResult" style="display: none; background: #dcfce7; padding: 20px; border-radius: 10px; margin-top: 20px;">
+                <h4 style="color: #16a34a;">✅ 練習完成！</h4>
+                <p>很好！記住這種感覺，持續練習能讓你的聲音更有力量。</p>
+            </div>
+        </div>
+
+        <!-- 作業說明 -->
+        <div id="homework" class="content-section">
+            <h2 class="section-title">📝 作業說明</h2>
+            
+            <div class="homework-section">
+                <h3 style="color: #ea580c; margin-bottom: 15px;">🎵 正氣歌朗誦練習</h3>
+                
+                <div style="background: #fff; padding: 20px; border-radius: 10px; margin: 15px 0;">
+                    <h4 style="color: #7c2d12;">📜 正氣歌 - 文天祥</h4>
+                    <div style="line-height: 1.8; margin: 15px 0; color: #374151;">
+                        天地有正氣，雜然賦流形。<br>
+                        下則為河嶽，上則為日星。<br>
+                        於人曰浩然，沛乎塞蒼冥。<br>
+                        皇路當清夷，含和吐明庭。<br>
+                        時窮節乃見，一一垂丹青。
+                    </div>
+                </div>
+
+                <div class="exercise-box">
+                    <h4 style="color: #ea580c;">🎯 練習要求</h4>
+                    <ul style="text-align: left; color: #7c2d12;">
+                        <li><strong>配樂練習：</strong>使用提供的岳飛《精忠報國》背景音樂</li>
+                        <li><strong>聲音要求：</strong>聲音要蓋過背景音樂</li>
+                        <li><strong>氣息控制：</strong>保持穩定的氣息支撐</li>
+                        <li><strong>情感表達：</strong>展現正氣凜然的感覺</li>
+                    </ul>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin: 20px 0; flex-wrap: wrap;">
+                    <button class="btn-practice" onclick="downloadMusic()">🎵 下載背景音樂</button>
+                    <button class="btn-practice" onclick="showDemo()">🎤 聽老師示範</button>
+                    <button class="btn-practice" onclick="uploadHomework()">📤 上傳作業</button>
+                </div>
+
+                <div style="background: #fef3c7; padding: 15px; border-radius: 8px; border-left: 4px solid #fbbf24;">
+                    <strong>💡 小提醒：</strong><br>
+                    這次練習重點在於氣息的持續力和聲音的穿透力。不要被音樂吃掉，要有壓過音樂的霸氣！
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="color: #7c2d12; font-style: italic;">下下週見！（下週末停課）</p>
+                <button class="btn-practice" onclick="completeCourse()">🎓 完成本堂課</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'overview';
+        let completedSections = new Set(['overview']);
+
+        function showSection(sectionId) {
+            // 隱藏所有section
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 移除所有nav按鈕的active狀態
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // 顯示選中的section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 激活對應的nav按鈕
+            event.target.classList.add('active');
+            
+            currentSection = sectionId;
+            completedSections.add(sectionId);
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalSections = 5;
+            const completedCount = completedSections.size;
+            const percentage = (completedCount / totalSections) * 100;
+            document.getElementById('progressFill').style.width = percentage + '%';
+        }
+
+        function showLevel(level) {
+            const details = {
+                1: {
+                    title: "戰鬥意識",
+                    content: "建立「我決定要反擊」的念頭。突破心理障礙，從被動轉為主動。"
+                },
+                2: {
+                    title: "氣息控制", 
+                    content: "學習吶喊、嘶吼、咆哮三種發聲方式。氣息要飽滿，能夠支撐整句話。"
+                },
+                3: {
+                    title: "聲音技巧",
+                    content: "掌握音調、音量、語速的變化。讓聲音帶有威嚇力但不失控制。"
+                },
+                4: {
+                    title: "情境應用",
+                    content: "在不同場合運用適當等級的反擊。保護自己和珍視的人事物。"
+                }
+            };
+            
+            const detail = details[level];
+            const detailDiv = document.getElementById('levelDetail');
+            detailDiv.innerHTML = `
+                <h4 style="color: #ea580c;">${detail.title}</h4>
+                <p>${detail.content}</p>
+            `;
+            detailDiv.style.display = 'block';
+        }
+
+        function playQuote(element) {
+            element.style.animation = 'none';
+            setTimeout(() => {
+                element.style.animation = 'shine 0.8s ease';
+            }, 10);
+            
+            // 模擬播放聲音
+            setTimeout(() => {
+                alert('🎵 想像周老師威嚴的聲音：「常為低眉菩薩，偶為怒目金剛！」');
+            }, 300);
+        }
+
+        function startPractice(type) {
+            const practices = {
+                dialogue: "很好！記住要有「懟回去」的念頭，聲音要直接往對方那邊推過去！",
+                roleplay: "練習角色切換，台灣護士要溫柔，北京護士要有威嚇力！", 
+                battle: "展現領導力！聲音要有貫徹到底的決心，帶領大家回家！",
+                breathing: "配合音樂節奏，氣息要撐住整句話，聲音要壓過背景音樂！"
+            };
+            
+            document.getElementById('practiceResult').innerHTML = `
+                <h4 style="color: #16a34a;">✅ 練習提醒</h4>
+                <p>${practices[type]}</p>
+                <button class="btn-practice" onclick="hidePracticeResult()" style="margin-top: 10px;">繼續練習</button>
+            `;
+            document.getElementById('practiceResult').style.display = 'block';
+        }
+
+        function hidePracticeResult() {
+            document.getElementById('practiceResult').style.display = 'none';
+        }
+
+        function downloadMusic() {
+            alert('🎵 背景音樂下載中...（實際課程中會提供音檔連結）');
+        }
+
+        function showDemo() {
+            alert('🎤 播放老師示範朗誦...（實際課程中會有音檔）');
+        }
+
+        function uploadHomework() {
+            alert('📤 開啟作業上傳頁面...（實際課程中會有上傳功能）');
+        }
+
+        function completeCourse() {
+            alert('🎉 恭喜完成本堂課！記得練習正氣歌作業喔！');
+            completedSections = new Set(['overview', 'sharing', 'theory', 'practice', 'homework']);
+            updateProgress();
+        }
+
+        // 摺疊內容功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapsibles = document.querySelectorAll('.collapsible');
+            
+            collapsibles.forEach(function(collapsible) {
+                collapsible.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('active');
+                });
+            });
+        });
+
+        // 初始化進度條
+        updateProgress();
+    </script>
+</body>
+</html>

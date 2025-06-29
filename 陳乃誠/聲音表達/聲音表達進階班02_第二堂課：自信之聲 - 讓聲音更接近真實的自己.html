@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音表達進階班 - 自信之聲</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffebe0 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .course-info {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.1);
+            border-left: 5px solid #ff6b35;
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.15);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #ff8c42, #ff6b35);
+            color: white;
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .section-header:hover {
+            background: linear-gradient(135deg, #ff7a35, #ff5722);
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            margin: 0;
+        }
+
+        .toggle-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .section-content {
+            padding: 25px;
+            display: none;
+            border-top: 1px solid #ffe0d6;
+        }
+
+        .section-content.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 1000px;
+            }
+        }
+
+        .student-card {
+            background: linear-gradient(135deg, #fff8f5, #ffece0);
+            border: 2px solid #ffb890;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .student-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.15);
+        }
+
+        .student-name {
+            font-weight: bold;
+            color: #d84315;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .student-name::before {
+            content: "🎤";
+            margin-right: 8px;
+        }
+
+        .homework-item {
+            background: #fff3e0;
+            border-left: 4px solid #ff8c42;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .teacher-feedback {
+            background: linear-gradient(135deg, #e8f5e8, #f0f8f0);
+            border: 2px solid #81c784;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            position: relative;
+        }
+
+        .teacher-feedback::before {
+            content: "👨‍🏫 老師回饋";
+            position: absolute;
+            top: -10px;
+            left: 15px;
+            background: #4caf50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .practice-exercise {
+            background: linear-gradient(135deg, #e3f2fd, #f0f7ff);
+            border: 2px solid #64b5f6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .exercise-text {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+            font-style: italic;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #ff5722, #e65100);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeb3b 0%, #ffeb3b 100%);
+            background-size: 100% 0.3em;
+            background-repeat: no-repeat;
+            background-position: 0 80%;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .quote {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        .interactive-panel {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .confidence-tips {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .tip-card {
+            background: linear-gradient(135deg, #fff3e0, #ffe0cc);
+            border: 2px solid #ffab91;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.2);
+        }
+
+        .tip-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .homework-assignment {
+            background: linear-gradient(135deg, #ffecb3, #fff8e1);
+            border: 2px solid #ffcc02;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .homework-assignment h3 {
+            color: #f57f17;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .homework-assignment h3::before {
+            content: "📝";
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .section-content {
+                padding: 15px;
+            }
+        }
+
+        .audio-player {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            height: 100%;
+            width: 75%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎙️ 聲音表達進階班</h1>
+            <p>第二堂課：自信之聲 - 讓聲音更接近真實的自己</p>
+        </div>
+
+        <div class="course-info">
+            <h3>📅 課程資訊</h3>
+            <p><strong>授課老師：</strong>周震宇老師</p>
+            <p><strong>課程主題：</strong>自信之聲的五個來源</p>
+            <p><strong>學習重點：</strong>思考、眼神、發聲、身體、臨場表現</p>
+            
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+            <p style="text-align: center; color: #666;">課程進度：2/12 堂</p>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('students')">
+                <h2>👥 學員風采</h2>
+                <span class="toggle-icon" id="students-icon">▼</span>
+            </div>
+            <div class="section-content" id="students-content">
+                <div class="student-card">
+                    <div class="student-name">Emma</div>
+                    <p>分享了美術館導覽員考核經驗，展現出知性的聲音特質。老師點評：聲音具有九星人風格，適合文化空間的導覽工作。</p>
+                    <div class="teacher-feedback">
+                        聲音有邀請感，帶有知性和歷史累積感，非常適合美術館導覽工作。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">憶慈</div>
+                    <p>具有嘴角上揚的帶笑聲音，節奏輕快，善於洞察。適合以人為本的關懷表達。</p>
+                    <div class="teacher-feedback">
+                        聲音有腳踏雲的感覺，親和力大於思考能力，很有魅力。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">政倫</div>
+                    <p>分享工作春酒體驗，聲音前段自然，後段因準備不足而有拉扯感。</p>
+                    <div class="teacher-feedback">
+                        開場很棒，建議先準備稿子再練習脫稿，循序漸進建立自信。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">孟庭</div>
+                    <p>聲音帶有靈性感，適合形象廣告和藝術解說，需要多關心人際互動。</p>
+                    <div class="teacher-feedback">
+                        聲音有空靈感，適合文化藝術領域，建議多問兩個問題來表達關心。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">Kathy</div>
+                    <p>聲音具有點狀穿透力，適合教練工作，有探尋者特質。</p>
+                    <div class="teacher-feedback">
+                        聲音有行動性，適合引導他人發現問題並找到解決方案。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">Joy</div>
+                    <p>聲音穩定有底蘊，反應能力佳，具有創造者能量。</p>
+                    <div class="teacher-feedback">
+                        人生歷練豐富，聲音展現出審慎、穩定的特質，正在發光發亮。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('theory')">
+                <h2>🧠 自信之聲理論</h2>
+                <span class="toggle-icon" id="theory-icon">▼</span>
+            </div>
+            <div class="section-content" id="theory-content">
+                <div class="quote">
+                    "真正的自信並非來自於贏過別人，而是明白和相信自己的價值。"
+                </div>
+
+                <h3>自信的五個來源</h3>
+                <div class="confidence-tips">
+                    <div class="tip-card">
+                        <div class="tip-icon">🤔</div>
+                        <h4>思考的自信</h4>
+                        <p>對錯、輸贏的價值觀建立，清楚自己的原則與底線</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">👀</div>
+                        <h4>眼神的自信</h4>
+                        <p>穩定的眼神接觸，不迴避也不過度強勢</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🎵</div>
+                        <h4>發聲的自信</h4>
+                        <p>聲音穩定傳達，不會中途降下或顫抖</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">🧍</div>
+                        <h4>身體的自信</h4>
+                        <p>適當的姿態，既不過度謙虛也不傲慢</p>
+                    </div>
+                    <div class="tip-card">
+                        <div class="tip-icon">⚡</div>
+                        <h4>臨場的自信</h4>
+                        <p>在實際情境中發揮所學，應對突發狀況</p>
+                    </div>
+                </div>
+
+                <div class="interactive-panel">
+                    <h3>💡 核心概念</h3>
+                    <p>自信 = 意願 + 能力</p>
+                    <p>意願：是否願意認同自己</p>
+                    <p>能力：聲音表現是否能支持內在意願</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('practice')">
+                <h2>🎭 實戰練習</h2>
+                <span class="toggle-icon" id="practice-icon">▼</span>
+            </div>
+            <div class="section-content" id="practice-content">
+                <div class="practice-exercise">
+                    <h4>📖 台詞練習：處事哲學</h4>
+                    <div class="exercise-text">
+                        "事情不來，我不主動惹事。<br>
+                        事情來了，我也並不怕事。<br>
+                        為人處事，無非就是兵來將擋，水來土掩。<br>
+                        若是處處擔憂，心懷恐懼，那還活什麼勁啊？"
+                    </div>
+                    <button class="btn" onclick="playAudio('practice1')">🎵 播放示範</button>
+                    <button class="btn" onclick="recordAudio()">🎤 開始錄音</button>
+                </div>
+
+                <div class="practice-exercise">
+                    <h4>🎯 目標設定練習</h4>
+                    <div class="exercise-text">
+                        "我的目標是先求有，再求好。<br>
+                        好，還要更好。<br>
+                        不放手，直到夢想到手。"
+                    </div>
+                    <p><strong>練習重點：</strong>區分夢想與目標。夢想是真正的生活方式，不是遙不可及的目標。</p>
+                </div>
+
+                <div class="audio-player">
+                    <p>🎧 練習錄音播放器</p>
+                    <button class="btn" onclick="startRecording()">開始錄音</button>
+                    <button class="btn" onclick="stopRecording()">停止錄音</button>
+                    <button class="btn" onclick="playRecording()">播放錄音</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header" onclick="toggleSection('insights')">
+                <h2>💎 課程洞察</h2>
+                <span class="toggle-icon" id="insights-icon">▼</span>
+            </div>
+            <div class="section-content" id="insights-content">
+                <div class="quote">
+                    "每個人現在的講話方式，都是當前最有自信的說話方式。"
+                </div>
+
+                <h3>重要觀念</h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin: 10px 0; padding: 10px; background: #fff3e0; border-radius: 8px;">
+                        🎯 <strong>內外合一：</strong>讓聲音與內容、語氣與念頭合而為一
+                    </li>
+                    <li style="margin: 10px 0; padding: 10px; background: #fff3e0; border-radius: 8px;">
+                        🌱 <strong>漸進式成長：</strong>從小改變開始，建立真實的自信
+                    </li>
+                    <li style="margin: 10px 0; padding: 10px; background: #fff3e0; border-radius: 8px;">
+                        🤝 <strong>關係導向：</strong>溝通是為了建立有意義的關係，不是為了表演
+                    </li>
+                    <li style="margin: 10px 0; padding: 10px; background: #fff3e0; border-radius: 8px;">
+                        💭 <strong>思考清理：</strong>清除腦中的木馬程式，建立清晰的價值觀
+                    </li>
+                </ul>
+
+                <div class="teacher-feedback">
+                    <strong>老師金句：</strong>「意念影響態度，態度改變行為，行為造成結果。你的呼吸就是你的氣質，運用這口氣的方式就是你的運氣。」
+                </div>
+            </div>
+        </div>
+
+        <div class="homework-assignment">
+            <h3>本週作業</h3>
+            <p><strong>主題：</strong>支持你的那一句話</p>
+            <p><strong>內容：</strong>每個人都有懷疑膽怯、害怕退縮的時候，這時候會給你能量、讓你有勇氣面對的一句話會是什麼？請分享你的故事。</p>
+            <p><strong>時間：</strong>3分鐘小單元</p>
+            <p><strong>要求：</strong>以自己的自信和方式進行自我省思，將力量透過省思回到聲音中。</p>
+            <button class="btn" onclick="uploadHomework()">📤 上傳作業</button>
+        </div>
+
+        <div class="interactive-panel">
+            <h3>🎉 下次課程預告</h3>
+            <p>反擊之聲 - 學習在不同情境下的聲音運用</p>
+            <button class="btn" onclick="showNextLesson()">查看詳情</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleSection(sectionId) {
+            const content = document.getElementById(sectionId + '-content');
+            const icon = document.getElementById(sectionId + '-icon');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.textContent = '▼';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                icon.textContent = '▲';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function playAudio(audioId) {
+            alert('🎵 播放音頻功能：' + audioId + '\n(實際使用時會播放對應的音頻檔案)');
+        }
+
+        function recordAudio() {
+            alert('🎤 開始錄音功能\n(實際使用時會開啟麥克風錄音)');
+        }
+
+        function startRecording() {
+            alert('🔴 錄音開始\n(實際功能會使用Web Audio API錄音)');
+        }
+
+        function stopRecording() {
+            alert('⏹️ 錄音停止\n(實際功能會停止錄音並儲存)');
+        }
+
+        function playRecording() {
+            alert('▶️ 播放錄音\n(實際功能會播放剛才的錄音)');
+        }
+
+        function uploadHomework() {
+            alert('📤 上傳作業功能\n(實際使用時會開啟檔案上傳對話框)');
+        }
+
+        function showNextLesson() {
+            alert('📚 下次課程：反擊之聲\n主題：學習在衝突與挑戰情境下的聲音運用\n內容：眼神、發聲、身體姿態的整合練習');
+        }
+
+        // 頁面載入時自動展開第一個區塊
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleSection('students');
+            
+            // 添加滾動動畫效果
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'slideIn 0.6s ease forwards';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // 添加CSS動畫
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

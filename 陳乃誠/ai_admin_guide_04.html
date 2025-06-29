@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI行政工作流程圖指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .flowchart-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flowchart-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .main-title {
+            font-size: 3em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            position: relative;
+        }
+
+        /* 起始節點 */
+        .start-node {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+            height: 80px;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        /* 工具選擇區 */
+        .tool-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .tool-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border: 3px solid #e9ecef;
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 0 auto 15px auto;
+        }
+
+        .tool-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .tool-features {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* 應用情境區 */
+        .scenarios-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #dee2e6;
+            margin: 20px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 25px;
+        }
+
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+        }
+
+        .scenario-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .scenario-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .scenario-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .scenario-title {
+            font-size: 1em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .scenario-desc {
+            font-size: 0.8em;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        /* 流程步驟區 */
+        .process-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .process-step {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            border: 3px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 15px auto;
+        }
+
+        .step-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .step-desc {
+            font-size: 0.9em;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        /* 提示詞範例區 */
+        .prompts-section {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border-radius: 20px;
+            padding: 30px;
+            border: 2px solid #ffeaa7;
+            margin: 20px 0;
+        }
+
+        .prompts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .prompt-category {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .category-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .prompt-example {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        .prompt-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        /* 注意事項區 */
+        .warnings-section {
+            background: linear-gradient(135deg, #ffe6e6, #ffcccb);
+            border-radius: 20px;
+            padding: 25px;
+            border: 2px solid #ffcccb;
+            margin: 20px 0;
+        }
+
+        .warnings-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .warning-item {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .warning-icon {
+            font-size: 1.5em;
+            margin-bottom: 8px;
+        }
+
+        .warning-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .warning-desc {
+            font-size: 0.8em;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        /* 連接箭頭 */
+        .arrow {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .arrow-down {
+            width: 3px;
+            height: 40px;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            position: relative;
+        }
+
+        .arrow-down::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #764ba2;
+        }
+
+        /* 交互效果 */
+        .interactive-element {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .interactive-element:hover {
+            transform: scale(1.02);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 1200px) {
+            .scenarios-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .process-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .flowchart-container {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 2em;
+            }
+            
+            .tool-selection {
+                grid-template-columns: 1fr;
+            }
+            
+            .scenarios-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .process-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .prompts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .warnings-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* 浮動提示 */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8em;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* 進度指示器 */
+        .progress-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .progress-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 6px;
+            background: #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="flowchart-container">
+        <div class="flowchart-header">
+            <h1 class="main-title">🚀 AI賦能學校行政工作流程圖</h1>
+            <p class="subtitle">一頁掌握Gemini與Notebook LM完整應用流程</p>
+        </div>
+
+        <div class="flowchart">
+            <!-- 起始節點 -->
+            <div class="start-node fade-in">
+                <span>🎯 開始使用AI工具</span>
+            </div>
+
+            <!-- 箭頭 -->
+            <div class="arrow">
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 工具選擇區 -->
+            <div class="tool-selection fade-in">
+                <div class="tool-card interactive-element tooltip" data-tooltip="點擊查看詳細功能" onclick="highlightTool('gemini')">
+                    <div class="tool-icon">G</div>
+                    <div class="tool-name">Gemini Workspace</div>
+                    <div class="tool-features">
+                        📧 智慧信件撰寫<br>
+                        📅 自動行程安排<br>
+                        📊 表格文件生成<br>
+                        🔄 多語言翻譯
+                    </div>
+                </div>
+
+                <div class="tool-card interactive-element tooltip" data-tooltip="點擊查看詳細功能" onclick="highlightTool('notebook')">
+                    <div class="tool-icon">N</div>
+                    <div class="tool-name">Notebook LM</div>
+                    <div class="tool-features">
+                        📋 法規專家查詢<br>
+                        🎤 會議記錄轉寫<br>
+                        📹 研習影片整理<br>
+                        🔍 多檔案交叉分析
+                    </div>
+                </div>
+            </div>
+
+            <!-- 箭頭 -->
+            <div class="arrow">
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 應用情境區 -->
+            <div class="scenarios-section fade-in">
+                <h2 class="section-title">🎯 五大核心應用情境</h2>
+                <div class="scenarios-grid">
+                    <div class="scenario-card interactive-element" onclick="showDetails('law')">
+                        <div class="scenario-icon">📋</div>
+                        <div class="scenario-title">法規專家助手</div>
+                        <div class="scenario-desc">快速查詢教育法規<br>智慧比對分析<br>合規性檢查</div>
+                    </div>
+
+                    <div class="scenario-card interactive-element" onclick="showDetails('document')">
+                        <div class="scenario-icon">📝</div>
+                        <div class="scenario-title">公文寫作助手</div>
+                        <div class="scenario-desc">公文格式生成<br>用語規範建議<br>簽呈範本製作</div>
+                    </div>
+
+                    <div class="scenario-card interactive-element" onclick="showDetails('student')">
+                        <div class="scenario-icon">👥</div>
+                        <div class="scenario-title">學生事務管理</div>
+                        <div class="scenario-desc">校規智慧查詢<br>懲處建議生成<br>家長通知書製作</div>
+                    </div>
+
+                    <div class="scenario-card interactive-element" onclick="showDetails('meeting')">
+                        <div class="scenario-icon">🎤</div>
+                        <div class="scenario-title">會議記錄處理</div>
+                        <div class="scenario-desc">錄音轉逐字稿<br>發言者辨識<br>會議重點摘要</div>
+                    </div>
+
+                    <div class="scenario-card interactive-element" onclick="showDetails('research')">
+                        <div class="scenario-icon">📚</div>
+                        <div class="scenario-title">研習資料整理</div>
+                        <div class="scenario-desc">影片內容提取<br>重點快速摘要<br>知識庫建立</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 箭頭 -->
+            <div class="arrow">
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 操作流程步驟 -->
+            <div class="process-section fade-in">
+                <div class="process-step interactive-element">
+                    <div class="step-number">1</div>
+                    <div class="step-title">準備資料</div>
+                    <div class="step-desc">建立Google文件<br>整理法規內容<br>放置來源網址</div>
+                </div>
+
+                <div class="process-step interactive-element">
+                    <div class="step-number">2</div>
+                    <div class="step-title">匯入平台</div>
+                    <div class="step-desc">開啟Notebook LM<br>上傳文件資料<br>建立知識庫</div>
+                </div>
+
+                <div class="process-step interactive-element">
+                    <div class="step-number">3</div>
+                    <div class="step-title">智慧提問</div>
+                    <div class="step-desc">使用明確問句<br>避免決定性問題<br>獲取參考資料</div>
+                </div>
+
+                <div class="process-step interactive-element">
+                    <div class="step-number">4</div>
+                    <div class="step-title">分享協作</div>
+                    <div class="step-desc">設定適當權限<br>分享給同事<br>建立團隊知識庫</div>
+                </div>
+            </div>
+
+            <!-- 箭頭 -->
+            <div class="arrow">
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 提示詞範例區 -->
+            <div class="prompts-section fade-in">
+                <h2 class="section-title">💡 實用提示詞範例庫</h2>
+                <div class="prompts-grid">
+                    <div class="prompt-category">
+                        <div class="category-title">📋 法規查詢 & 📝 公文寫作</div>
+                        <div class="prompt-example">
+                            <div class="prompt-label">課業輔導收費規定</div>
+                            請幫我整理學校在辦理課業輔導課的時候應該注意的事項，特別是收費規定的部分。
+                        </div>
+                        <div class="prompt-example">
+                            <div class="prompt-label">邀請函撰寫</div>
+                            幫我寫一封邀請講師到學校演講的信件，主題是「AI在教育上的應用」。
+                        </div>
+                    </div>
+
+                    <div class="prompt-category">
+                        <div class="category-title">🎤 會議記錄 & 📚 研習整理</div>
+                        <div class="prompt-example">
+                            <div class="prompt-label">會議逐字稿製作</div>
+                            請幫我將來源檔案製作成會議逐字稿，以表格輸出，角色以A、B、C、D呈現。
+                        </div>
+                        <div class="prompt-example">
+                            <div class="prompt-label">研習重點整理</div>
+                            請幫我整理出校園網路管理的重點，並以條列方式輸出主要管理策略。
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 箭頭 -->
+            <div class="arrow">
+                <div class="arrow-down"></div>
+            </div>
+
+            <!-- 重要注意事項 -->
+            <div class="warnings-section fade-in">
+                <h2 class="section-title">⚠️ 重要注意事項</h2>
+                <div class="warnings-grid">
+                    <div class="warning-item">
+                        <div class="warning-icon">🔒</div>
+                        <div class="warning-title">資訊安全</div>
+                        <div class="warning-desc">機敏會議內容絕對不可上傳至AI工具</div>
+                    </div>
+
+                    <div class="warning-item">
+                        <div class="warning-icon">🤖</div>
+                        <div class="warning-title">AI使用原則</div>
+                        <div class="warning-desc">不要將決定權交給AI，僅供參考建議</div>
+                    </div>
+
+                    <div class="warning-item">
+                        <div class="warning-icon">✅</div>
+                        <div class="warning-title">品質檢核</div>
+                        <div class="warning-desc">AI生成內容需人工檢視確認</div>
+                    </div>
+
+                    <div class="warning-item">
+                        <div class="warning-icon">💰</div>
+                        <div class="warning-title">費用考量</div>
+                        <div class="warning-desc">部分功能需付費訂閱，可先試用評估</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 進度指示器 -->
+    <div class="progress-indicator">
+        <div class="progress-title">閱讀進度</div>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <script>
+        // 工具高亮功能
+        function highlightTool(tool) {
+            document.querySelectorAll('.tool-card').forEach(card => {
+                card.style.transform = 'scale(0.95)';
+                card.style.opacity = '0.7';
+            });
+            
+            event.target.closest('.tool-card').style.transform = 'scale(1.05)';
+            event.target.closest('.tool-card').style.opacity = '1';
+            
+            setTimeout(() => {
+                document.querySelectorAll('.tool-card').forEach(card => {
+                    card.style.transform = 'scale(1)';
+                    card.style.opacity = '1';
+                });
+            }, 2000);
+        }
+
+        // 情境詳情顯示
+        function showDetails(scenario) {
+            const card = event.target.closest('.scenario-card');
+            const originalBg = card.style.background;
+            
+            card.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+            card.style.color = 'white';
+            card.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+                card.style.background = originalBg;
+                card.style.color = '';
+                card.style.transform = 'scale(1)';
+            }, 1500);
+        }
+
+        // 滾動進度更新
+        function updateProgress() {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            
+            document.querySelector('.progress-fill').style.width = Math.min(scrollPercent, 100) + '%';
+        }
+
+        // 初始化動畫
+        function initAnimations() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        }
+
+        // 交互元素點擊效果
+        function addClickEffects() {
+            document.querySelectorAll('.interactive-element').forEach(element => {
+                element.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                });
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initAnimations();
+            addClickEffects();
+            
+            // 滾動事件監聽
+            window.addEventListener('scroll', updateProgress);
+            
+            // 初始進度
+            updateProgress();
+        });
+
+        // 鍵盤快捷鍵
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowDown' || e.key === ' ') {
+                e.preventDefault();
+                window.scrollBy(0, 300);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                window.scrollBy(0, -300);
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                window.scrollTo(0, 0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                window.scrollTo(0, document.body.scrollHeight);
+            }
+        });
+
+        // 響應式布局調整
+        function adjustLayout() {
+            const width = window.innerWidth;
+            const container = document.querySelector('.flowchart-container');
+            
+            if (width < 768) {
+                container.style.padding = '15px';
+            } else if (width < 1200) {
+                container.style.padding = '25px';
+            } else {
+                container.style.padding = '40px';
+            }
+        }
+
+        window.addEventListener('resize', adjustLayout);
+        adjustLayout();
+    </script>
+</body>
+</html>

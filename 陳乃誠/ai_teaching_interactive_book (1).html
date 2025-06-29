@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教學實務 - 互動資訊圖卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.2em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .speaker-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            border-radius: 25px;
+            color: #2c3e50;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(255, 154, 158, 0.3);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            perspective: 1000px;
+        }
+
+        .info-card {
+            position: relative;
+            height: 400px;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .info-card:hover {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+        }
+
+        /* 不同主題的卡片配色 */
+        .card-intro .card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-gemini .card-front {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .card-community .card-front {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .card-felo .card-front {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .card-video .card-front {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .card-experience .card-front {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #2c3e50;
+        }
+
+        .card-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .card-subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .card-back h3 {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .card-back .content {
+            color: #34495e;
+            line-height: 1.8;
+            font-size: 0.95em;
+        }
+
+        .highlight-point {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .step-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            position: relative;
+        }
+
+        .step-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 100%;
+            width: 60px;
+            height: 2px;
+            background: #ecf0f1;
+            transform: translateY(-50%);
+        }
+
+        .step-dot:last-child::after {
+            display: none;
+        }
+
+        .interactive-demo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+        }
+
+        .demo-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            display: none;
+        }
+
+        .close-demo {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            color: #2c3e50;
+        }
+
+        .demo-content {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .demo-content h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .demo-steps {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .demo-steps .step {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .floating-cards {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .floating-card {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        .stats-section {
+            margin-top: 60px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .info-card {
+                height: 350px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .interactive-demo {
+                width: 95%;
+                padding: 30px 20px;
+            }
+        }
+
+        .progress-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            padding: 15px 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+
+        .progress-text {
+            font-size: 0.9em;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-cards" id="floatingCards"></div>
+    
+    <div class="progress-indicator">
+        <div class="progress-text">探索進度: <span id="progressCount">0</span>/6</div>
+    </div>
+
+    <div class="header">
+        <h1>🚀 AI教學實務指南</h1>
+        <div class="subtitle">互動式資訊圖卡學習體驗</div>
+        <div class="speaker-badge">
+            👨‍🏫 竹光國中 陳乃誠老師 × 丹鳳高中閱讀社群
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="cards-grid">
+            <!-- 基礎概念卡片 -->
+            <div class="info-card card-intro" onclick="flipCard(this, 'intro')">
+                <div class="card-front">
+                    <div class="card-icon">🎯</div>
+                    <div class="card-title">AI教學基礎架構</div>
+                    <div class="card-subtitle">建立系統化的AI溝通引導語設計方法</div>
+                </div>
+                <div class="card-back">
+                    <h3>引導語設計核心架構</h3>
+                    <div class="content">
+                        <div class="highlight-point">
+                            基礎五步驟：角色設定 → 任務描述 → 輸入格式 → 輸出要求 → 範例示範
+                        </div>
+                        <p>這套系統化方法幫助教師們快速掌握與AI有效對話的技巧。透過清晰的架構設計，即使是AI新手也能輕鬆上手，創造出符合教學需求的高品質內容。</p>
+                        <div class="step-indicator">
+                            <div class="step-dot"></div>
+                            <div class="step-dot"></div>
+                            <div class="step-dot"></div>
+                            <div class="step-dot"></div>
+                            <div class="step-dot"></div>
+                        </div>
+                        <p><strong>進階技巧：</strong>在基礎架構上加入情境脈絡與品質控制，讓生成內容更貼近實際教學場景。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gemini平台卡片 -->
+            <div class="info-card card-gemini" onclick="flipCard(this, 'gemini')">
+                <div class="card-front">
+                    <div class="card-icon">🎨</div>
+                    <div class="card-title">Gemini平台應用</div>
+                    <div class="card-subtitle">多模態AI工具的教學整合與圖片生成實務</div>
+                </div>
+                <div class="card-back">
+                    <h3>Gemini平台核心優勢</h3>
+                    <div class="content">
+                        <div class="highlight-point">
+                            個人Google帳號登入 + 強大圖片生成功能 = 完整教學工具
+                        </div>
+                        <p>Gemini平台以直觀操作介面著稱，特別適合製作教學簡報和視覺化教材。教師可以透過簡單的文字描述，快速生成符合教學主題的高品質圖片。</p>
+                        <div class="demo-steps">
+                            <div class="step">🔐 使用個人Google帳號登入確保功能完整</div>
+                            <div class="step">🖼️ 輸入圖片描述進行生成練習</div>
+                            <div class="step">💾 學習下載與管理生成內容技巧</div>
+                        </div>
+                        <p><strong>與ChatGPT比較：</strong>Gemini在多模態整合方面表現優異，而ChatGPT在文字處理上更為強大。建議根據具體需求選擇合適工具。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 社群教學卡片 -->
+            <div class="info-card card-community" onclick="flipCard(this, 'community')">
+                <div class="card-front">
+                    <div class="card-icon">👥</div>
+                    <div class="card-title">社群協作教學</div>
+                    <div class="card-subtitle">閱讀社群中的AI輔助文學創作與分享機制</div>
+                </div>
+                <div class="card-back">
+                    <h3>社群學習的核心原則</h3>
+                    <div class="content">
+                        <div class="highlight-point">
+                            「一個對話處理一件工作」- AI操作的黃金法則
+                        </div>
+                        <p>這個原則確保每次AI互動都能達到最佳效果。閱讀社群的教師們透過這個方法，成功將AI應用於古典文學創作，包括絕句、律詩，甚至仿作蘇東坡詞風。</p>
+                        <div class="demo-steps">
+                            <div class="step">📤 下載素材並上傳至AI平台</div>
+                            <div class="step">🎭 設定創作角色與目標</div>
+                            <div class="step">📝 複製優化的引導語範例</div>
+                            <div class="step">🔗 分享成果並設定協作權限</div>
+                        </div>
+                        <p><strong>創作成果：</strong>教師們不僅學會使用AI工具，更建立了相互學習分享的良好氛圍，讓教學創新成為團隊協作的美好成果。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Felo平台卡片 -->
+            <div class="info-card card-felo" onclick="flipCard(this, 'felo')">
+                <div class="card-front">
+                    <div class="card-icon">🔍</div>
+                    <div class="card-title">Felo研究平台</div>
+                    <div class="card-subtitle">智能搜尋、自動整理與視覺化生成的一站式解決方案</div>
+                </div>
+                <div class="card-back">
+                    <h3>Felo平台功能特色</h3>
+                    <div class="content">
+                        <div class="highlight-point">
+                            自動閱讀 + 整理筆記 + 撰寫文章 + 資料來源標註
+                        </div>
+                        <p>Felo平台提供比Google搜尋更快的研究體驗，自動生成心智圖、AI圖表與資訊圖表，並支援多種下載格式。這些功能大幅節省教師的研究與備課時間。</p>
+                        <div class="demo-steps">
+                            <div class="step">🔬 每日5次免費深入研究</div>
+                            <div class="step">📊 每日3次簡報生成服務</div>
+                            <div class="step">🎨 自動轉換心智圖與圖表</div>
+                            <div class="step">🔗 一鍵分享研究成果</div>
+                        </div>
+                        <p><strong>付費版優勢：</strong>每日300次搜尋額度，支援多次Pro級深入研究，適合需要大量資料分析的教學準備工作。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI影片製作卡片 -->
+            <div class="info-card card-video" onclick="flipCard(this, 'video')">
+                <div class="card-front">
+                    <div class="card-icon">🎬</div>
+                    <div class="card-title">AI影片製作</div>
+                    <div class="card-subtitle">Storyteller平台的自動分鏡與高效影片生成技術</div>
+                </div>
+                <div class="card-back">
+                    <h3>影片製作完整流程</h3>
+                    <div class="content">
+                        <div class="highlight-point">
+                            文章內容 → 自動分鏡（最多16幕）→ 高品質影片生成
+                        </div>
+                        <p>Storyteller平台革命性地簡化了影片製作流程。只需提供故事內容，平台即可自動完成分鏡、繪圖與影片生成，人物一致性表現優異，大幅縮短製作時程。</p>
+                        <div class="demo-steps">
+                            <div class="step">📝 準備文章內容並選擇風格</div>
+                            <div class="step">🎥 系統自動進行場景分鏡</div>
+                            <div class="step">🎨 AI自動繪圖與角色設計</div>
+                            <div class="step">📱 調整字幕格式並匯出</div>
+                        </div>
+                        <p><strong>教學應用：</strong>生成的影片可用於課程前導、內容活化，也可製作成Podcast形式，提供學生多元的學習管道。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 教學心得卡片 -->
+            <div class="info-card card-experience" onclick="flipCard(this, 'experience')">
+                <div class="card-front">
+                    <div class="card-icon">💡</div>
+                    <div class="card-title">實務經驗分享</div>
+                    <div class="card-subtitle">教學現場的真實回饋與未來發展建議</div>
+                </div>
+                <div class="card-back">
+                    <h3>教學現場的寶貴經驗</h3>
+                    <div class="content">
+                        <div class="highlight-point">
+                            AI工具 + 人工確認 = 最佳教學輔助方案
+                        </div>
+                        <p>現場教師們對AI工具展現高度興趣，但也提出安全性疑慮。重要的是理解AI是輔助工具而非取代方案，人類的最終確認與判斷仍然不可或缺。</p>
+                        <div class="demo-steps">
+                            <div class="step">🎯 特別適合無程式背景的教師</div>
+                            <div class="step">🔍 資料搜尋仍需人工最終確認</div>
+                            <div class="step">🖥️ 硬體設備升級提升教學效率</div>
+                            <div class="step">🌟 建立分享協作的學習文化</div>
+                        </div>
+                        <p><strong>未來展望：</strong>AI教學不僅是技術應用，更是教育思維的革新。透過教師們的共同努力，將為學生創造更優質的學習體驗。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <h2 style="color: #2c3e50; margin-bottom: 20px;">📊 學習成效統計</h2>
+            <p style="color: #7f8c8d; font-size: 1.1em;">透過數據了解AI教學分享的實際影響力</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">核心主題模組</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">AI平台深度解析</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">實用操作技巧</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">互動式學習體驗</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 互動示範視窗 -->
+    <div class="demo-overlay" id="demoOverlay" onclick="closeDemoModal()"></div>
+    <div class="interactive-demo" id="demoModal">
+        <button class="close-demo" onclick="closeDemoModal()">×</button>
+        <div class="demo-content" id="demoContent">
+            <!-- 動態內容將在這裡顯示 -->
+        </div>
+    </div>
+
+    <script>
+        let exploredCards = new Set();
+        let currentDemo = null;
+
+        // 建立浮動裝飾元素
+        function createFloatingCards() {
+            const container = document.getElementById('floatingCards');
+            const icons = ['📚', '🤖', '💡', '🎯', '🚀', '⭐'];
+            
+            for (let i = 0; i < 12; i++) {
+                const card = document.createElement('div');
+                card.className = 'floating-card';
+                card.style.left = Math.random() * 100 + '%';
+                card.style.top = Math.random() * 100 + '%';
+                card.style.animationDelay = Math.random() * 6 + 's';
+                card.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+                card.style.fontSize = '20px';
+                card.style.display = 'flex';
+                card.style.alignItems = 'center';
+                card.style.justifyContent = 'center';
+                container.appendChild(card);
+            }
+        }
+
+        function flipCard(card, cardType) {
+            // 記錄已探索的卡片
+            exploredCards.add(cardType);
+            updateProgress();
+            
+            // 延遲顯示詳細示範
+            setTimeout(() => {
+                showDetailedDemo(cardType);
+            }, 600);
+        }
+
+        function updateProgress() {
+            const progressCount = document.getElementById('progressCount');
+            progressCount.textContent = exploredCards.size;
+            
+            if (exploredCards.size === 6) {
+                // 所有卡片都已探索，顯示祝賀訊息
+                setTimeout(() => {
+                    showCompletionModal();
+                }, 1000);
+            }
+        }
+
+        function showDetailedDemo(cardType) {
+            const modal = document.getElementById('demoModal');
+            const overlay = document.getElementById('demoOverlay');
+            const content = document.getElementById('demoContent');
+            
+            const demoData = {
+                'intro': {
+                    title: '🎯 AI引導語設計實戰練習',
+                    content: `
+                        <h3>基礎五步驟實作範例</h3>
+                        <div class="demo-steps">
+                            <div class="step"><strong>步驟1 - 角色設定：</strong>「你是一位資深的國文老師，擅長將古典文學與現代教學結合。」</div>
+                            <div class="step"><strong>步驟2 - 任務描述：</strong>「請幫我設計一個關於《紅樓夢》的創新教學活動。」</div>
+                            <div class="step"><strong>步驟3 - 輸入格式：</strong>「我會提供課程目標、學生程度、可用時間等資訊。」</div>
+                            <div class="step"><strong>步驟4 - 輸出要求：</strong>「請以活動流程表格式呈現，包含時間分配與評量方式。」</div>
+                            <div class="step"><strong>步驟5 - 範例示範：</strong>「參考格式如下：[時間] | [活動內容] | [教學目標] | [評量方式]」</div>
+                        </div>
+                        <p style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px;">
+                            <strong>💡 實用提示：</strong>每次與AI對話時，記住「一個對話處理一件工作」的原則，這樣能確保AI專注於您的特定需求，提供更精準的回應。
+                        </p>
+                    `
+                },
+                'gemini': {
+                    title: '🎨 Gemini平台圖片生成工作坊',
+                    content: `
+                        <h3>教學圖片生成實戰指南</h3>
+                        <div class="demo-steps">
+                            <div class="step"><strong>登入設定：</strong>使用個人Google帳號登入，確保完整功能存取權限</div>
+                            <div class="step"><strong>提示詞技巧：</strong>「請生成一張適合國中生的古詩詞學習插圖，包含山水意境與書法元素，風格溫和清雅」</div>
+                            <div class="step"><strong>參數調整：</strong>選擇適合的風格設定，如「教育友善」、「中國古典」等選項</div>
+                            <div class="step"><strong>批次下載：</strong>學習一次生成多張圖片並批次下載的技巧</div>
+                        </div>
+                        <p style="margin-top: 20px; padding: 15px; background: #fff5f5; border-radius: 8px;">
+                            <strong>🔄 平台比較：</strong>Gemini在圖片生成方面表現優異，ChatGPT在文字邏輯處理更強。建議根據教學需求靈活選擇工具。
+                        </p>
+                    `
+                },
+                'community': {
+                    title: '👥 社群協作學習體驗',
+                    content: `
+                        <h3>文學創作AI輔助實務</h3>
+                        <div class="demo-steps">
+                            <div class="step"><strong>角色扮演：</strong>「請以蘇東坡的文學風格，創作一首描寫現代校園生活的詞作」</div>
+                            <div class="step"><strong>創作指導：</strong>AI會提供詞牌格律說明，並逐句解釋創作理念</div>
+                            <div class="step"><strong>成果分享：</strong>在作業區新增個人主題，貼上創作內容供同儕交流</div>
+                            <div class="step"><strong>權限設定：</strong>學習Gemini平台的共用設定，促進教師間資源分享</div>
+                        </div>
+                        <p style="margin-top: 20px; padding: 15px; background: #f0fff0; border-radius: 8px;">
+                            <strong>🌟 社群效益：</strong>透過集體創作與分享，教師們不僅掌握了AI工具，更建立了相互學習的專業社群，讓教學創新成為團隊協作的美好成果。
+                        </p>
+                    `
+                },
+                'felo': {
+                    title: '🔍 Felo智能研究平台導覽',
+                    content: `
+                        <h3>一站式研究解決方案</h3>
+                        <div class="demo-steps">
+                            <div class="step"><strong>深入研究：</strong>輸入研究主題，系統自動搜尋相關資料並生成完整報告</div>
+                            <div class="step"><strong>視覺化生成：</strong>自動轉換心智圖、生成AI圖表與資訊圖表</div>
+                            <div class="step"><strong>簡報製作：</strong>一鍵生成教學簡報，可直接串接Canva進行精美編輯</div>
+                            <div class="step"><strong>資源下載：</strong>支援多種格式下載，方便整合至現有教學資源</div>
+                        </div>
+                        <p style="margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 8px;">
+                            <strong>💎 免費 vs 付費：</strong>免費版每日5次深入研究+3次簡報生成，付費版每日300次搜尋+無限Pro研究，建議依據使用頻率選擇合適方案。
+                        </p>
+                    `
+                },
+                'video': {
+                    title: '🎬 AI影片製作工作室',
+                    content: `
+                        <h3>Storyteller平台操作指南</h3>
+                        <div class="demo-steps">
+                            <div class="step"><strong>內容準備：</strong>將教學故事或課程內容整理成完整文本</div>
+                            <div class="step"><strong>風格選擇：</strong>選擇適合的影片風格，如「教育解說」、「故事敘述」等</div>
+                            <div class="step"><strong>自動分鏡：</strong>系統將內容分割為最多16個場景，每個場景自動配圖</div>
+                            <div class="step"><strong>後製調整：</strong>調整字幕格式、配音語調，確保符合教學需求</div>
+                        </div>
+                        <p style="margin-top: 20px; padding: 15px; background: #fffacd; border-radius: 8px;">
+                            <strong>🎯 教學應用：</strong>生成的影片可用於課程前導、概念解釋、故事教學等多種場景，也可轉換為Podcast格式，提供學生多元的學習體驗。
+                        </p>
+                    `
+                },
+                'experience': {
+                    title: '💡 教學現場實務分享',
+                    content: `
+                        <h3>真實經驗與未來展望</h3>
+                        <div class="demo-steps">
+                            <div class="step"><strong>適用對象：</strong>特別適合無程式設計背景的教師，透過直觀介面輕鬆上手</div>
+                            <div class="step"><strong>安全考量：</strong>面對AI安全性疑慮，強調人工最終確認的重要性</div>
+                            <div class="step"><strong>設備升級：</strong>短焦投影機等新設備顯著提升教學效率</div>
+                            <div class="step"><strong>社群建立：</strong>現場氣氛輕鬆愉快，教師們積極參與交流分享</div>
+                        </div>
+                        <p style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-radius: 8px;">
+                            <strong>🚀 未來願景：</strong>AI教學不僅是工具應用，更是教育思維的革新。透過教師們的共同努力，將為學生創造更豐富、更個人化的學習體驗。
+                        </p>
+                    `
+                }
+            };
+            
+            content.innerHTML = demoData[cardType].content;
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+            currentDemo = cardType;
+        }
+
+        function closeDemoModal() {
+            const modal = document.getElementById('demoModal');
+            const overlay = document.getElementById('demoOverlay');
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+            currentDemo = null;
+        }
+
+        function showCompletionModal() {
+            const content = document.getElementById('demoContent');
+            content.innerHTML = `
+                <h3 style="color: #667eea;">🎉 恭喜完成所有學習模組！</h3>
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="font-size: 4em;">🏆</div>
+                    <p style="font-size: 1.2em; color: #2c3e50; margin: 20px 0;">
+                        您已成功探索了AI教學的所有核心概念！
+                    </p>
+                </div>
+                <div class="demo-steps">
+                    <div class="step">✅ 掌握了AI引導語設計的系統化方法</div>
+                    <div class="step">✅ 學會了Gemini、Felo等平台的實務應用</div>
+                    <div class="step">✅ 了解了社群協作與資源分享的重要性</div>
+                    <div class="step">✅ 體驗了AI影片製作的完整流程</div>
+                    <div class="step">✅ 獲得了寶貴的教學現場實務經驗</div>
+                </div>
+                <p style="margin-top: 25px; padding: 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 10px; text-align: center;">
+                    <strong>持續學習，共創教育未來！</strong><br>
+                    感謝您與陳乃誠老師一同探索AI教學的無限可能
+                </p>
+            `;
+            document.getElementById('demoModal').style.display = 'block';
+            document.getElementById('demoOverlay').style.display = 'block';
+        }
+
+        // 鍵盤快捷鍵支援
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && currentDemo) {
+                closeDemoModal();
+            }
+        });
+
+        // 頁面載入完成後初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingCards();
+            
+            // 添加一些互動提示
+            setTimeout(() => {
+                if (exploredCards.size === 0) {
+                    alert('💡 提示：點擊任一卡片即可翻轉查看詳細內容，並體驗互動式學習！');
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

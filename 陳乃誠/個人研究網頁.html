@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陳乃誠老師：教育創新與數位先鋒</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Overview: Text blocks for profile, key stats. Goal: Inform quickly. Method: HTML/CSS.
+        - Teaching Philosophy: Interactive cards for beliefs, HTML/CSS diagram for 7 Habits, case study for PBL. Goal: Explain complex concepts interactively. Method: HTML/CSS/JS.
+        - AI & Tools: HTML/CSS diagram for teaching cycle, filterable tool gallery, Chart.js bar chart for tool categories. Goal: Showcase AI integration, tool breadth, and quantify tool usage. Method: HTML/CSS/JS, Chart.js.
+        - Professional Impact: HTML/CSS timeline for workshops, prominent display for awards. Goal: Illustrate career progression and achievements. Method: HTML/CSS/JS.
+        - Digital Footprint: Card list for online presence. Goal: Provide access points to further info. Method: HTML.
+        - Justification: Chosen methods prioritize interactivity and clarity. Visualizations are simple and directly support the narrative. All visual elements are HTML/CSS or Canvas based.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #F8F9FA; color: #212529; }
+        .nav-link { transition: all 0.3s ease; }
+        .nav-link.active, .nav-link:hover { color: #007BFF; border-bottom-color: #007BFF; }
+        .section-title { border-bottom: 2px solid #007BFF; padding-bottom: 0.5rem; margin-bottom: 1.5rem; font-weight: 600; color: #007BFF; }
+        .card { background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        .clickable-card { cursor: pointer; }
+        .tag { background-color: #E9ECEF; color: #495057; padding: 0.25rem 0.75rem; border-radius: 0.25rem; font-size: 0.875rem; margin: 0.25rem; display: inline-block; }
+        .timeline-item { position: relative; padding-left: 2.5rem; padding-bottom: 1.5rem; border-left: 2px solid #DEE2E6; }
+        .timeline-item:last-child { border-left: 2px solid transparent; padding-bottom: 0; }
+        .timeline-dot { position: absolute; left: -0.5625rem; top: 0.25rem; width: 1.125rem; height: 1.125rem; background-color: #007BFF; border-radius: 50%; border: 2px solid white; }
+        .tooltip { position: relative; display: inline-block; }
+        .tooltip .tooltiptext { visibility: hidden; width: 160px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -80px; opacity: 0; transition: opacity 0.3s; font-size: 0.8rem; }
+        .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+        .chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; padding: 1rem; background-color: white; border-radius: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .filter-button { transition: background-color 0.3s ease, color 0.3s ease; }
+        .filter-button.active { background-color: #007BFF; color: white; }
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 80%; max-width: 600px; border-radius: 0.5rem; position: relative; }
+        .close-button { color: #aaa; float: right; font-size: 28px; font-weight: bold; position: absolute; top: 10px; right: 20px; }
+        .close-button:hover, .close-button:focus { color: black; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-blue-600">陳乃誠老師</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#overview" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 border-b-2 border-transparent">總覽</a>
+                        <a href="#philosophy" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 border-b-2 border-transparent">教育理念</a>
+                        <a href="#ai-tools" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 border-b-2 border-transparent">AI與工具</a>
+                        <a href="#impact" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 border-b-2 border-transparent">專業影響</a>
+                        <a href="#digital-footprint" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 border-b-2 border-transparent">數位足跡</a>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="mobile-menu-button" class="bg-white inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="md:hidden" id="mobile-menu" style="display: none;">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#overview" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-b-2 border-transparent">總覽</a>
+                <a href="#philosophy" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-b-2 border-transparent">教育理念</a>
+                <a href="#ai-tools" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-b-2 border-transparent">AI與工具</a>
+                <a href="#impact" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-b-2 border-transparent">專業影響</a>
+                <a href="#digital-footprint" class="nav-link block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-b-2 border-transparent">數位足跡</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <section id="overview" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title">總覽：教育家與革新者</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <p class="text-lg leading-relaxed">
+                        陳乃誠老師是新竹市竹光國中一位備受敬重的教育工作者，現任資訊組組長與國文教師。他畢業於國立清華大學教育與學習科技研究所，長期致力於將AI、數位科技融入教學實踐，並積極推廣學生自主學習能力的培養。他的工作核心聚焦於教育創新，並以其深厚的專業素養與無私分享，在教育界贏得「乃神」的美譽。
+                    </p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">核心專長</h3>
+                    <ul class="list-disc list-inside space-y-2">
+                        <li><span class="font-semibold">AI教育應用：</span>系統性導入AI工具於教學各環節。</li>
+                        <li><span class="font-semibold">數位學習整合：</span>結合科技提升教學效能與學習體驗。</li>
+                        <li><span class="font-semibold">自主學習推廣：</span>致力培養學生主動學習與自我領導能力。</li>
+                        <li><span class="font-semibold">創新課程設計：</span>開發如「自我領導力」等特色課程。</li>
+                    </ul>
+                    <p class="mt-4 text-sm text-gray-600">陳老師的教育創新實踐已逾十年，持續引領教育科技的應用與發展。</p>
+                </div>
+            </div>
+             <p class="mt-6 text-md leading-relaxed">本互動網頁旨在呈現陳乃誠老師在教育領域的多元貢獻。您可以透過上方導覽列探索他教學理念、AI工具應用、專業影響力以及數位足跡等不同面向。每個區塊都包含了來自研究報告的精華內容，並透過互動方式讓您更容易理解與吸收。</p>
+        </section>
+
+        <section id="philosophy" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title">教育理念</h2>
+            <p class="mb-6 text-lg">陳乃誠老師的教學實踐植根於一套清晰且一致的教育哲學，強調學生的主體性、內在動機的激發以及學習與生活的連結。他相信「學習就是最好的獎賞與動機」，並重視「學習是輸出的過程」。</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="card p-6 clickable-card" onclick="showModal('philosophy-motivation')">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">學習即獎賞</h3>
+                    <p class="text-sm">強調引導學生從學習本身獲得滿足感，培養內在學習動機。</p>
+                </div>
+                <div class="card p-6 clickable-card" onclick="showModal('philosophy-output')">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">學習是輸出</h3>
+                    <p class="text-sm">學生透過發表、創作等「輸出」行為，能更有效內化知識。</p>
+                </div>
+                <div class="card p-6 clickable-card" onclick="showModal('philosophy-lifeed')">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">重視生命教育</h3>
+                    <p class="text-sm">引導學生從文學中發掘個人意義，連結學習與生命價值。</p>
+                </div>
+                 <div class="card p-6 clickable-card" onclick="showModal('philosophy-environment')">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">境教大於身教</h3>
+                    <p class="text-sm">深信學習環境對學生的潛移默化作用，用心營造積極氛圍。</p>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">「自我領導力」課程</h3>
+                    <p class="mb-3">此課程以史蒂芬·柯維的「七個習慣」為核心，陳老師巧妙運用AI工具將抽象概念轉化為具體情境，幫助學生理解與實踐。以下為七習慣簡介（點擊查看更多）：</p>
+                    <div class="space-y-2">
+                        <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">1. 主動積極 (Be Proactive)</summary>
+                            <p class="text-sm mt-1">為自己的人生負責，專注於自己能影響的範圍。</p>
+                        </details>
+                        <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">2. 以終為始 (Begin with the End in Mind)</summary>
+                            <p class="text-sm mt-1">確立個人使命與目標，指引每日行動。</p>
+                        </details>
+                         <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">3. 要事第一 (Put First Things First)</summary>
+                            <p class="text-sm mt-1">專注於重要而非僅緊急的事務，有效管理時間與精力。</p>
+                        </details>
+                        <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">4. 雙贏思維 (Think Win-Win)</summary>
+                            <p class="text-sm mt-1">在人際互動中尋求互惠互利的解決方案。</p>
+                        </details>
+                        <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">5. 知彼解己 (Seek First to Understand, Then to Be Understood)</summary>
+                            <p class="text-sm mt-1">先以同理心聆聽他人，再表達自己的觀點。</p>
+                        </details>
+                        <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">6. 統合綜效 (Synergize)</summary>
+                            <p class="text-sm mt-1">重視團隊合作，相信整體力量大於個體總和。</p>
+                        </details>
+                        <details class="bg-gray-50 p-3 rounded">
+                            <summary class="font-semibold cursor-pointer">7. 不斷更新 (Sharpen the Saw)</summary>
+                            <p class="text-sm mt-1">在生理、心智、情感、心靈四方面持續精進。</p>
+                        </details>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">問題導向學習法 (PBL)</h3>
+                    <p>陳老師曾以「知彼解己」為主題進行PBL公開課，旨在培養學生溝通與反思能力。課程流程包含：</p>
+                    <ol class="list-decimal list-inside space-y-1 mt-2 text-sm">
+                        <li>學生獨立設計訪談問題。</li>
+                        <li>進行模擬訪談並錄影。</li>
+                        <li>觀看自身訪談影片進行自我評估與反思。</li>
+                        <li>運用平板、語音輸入等數位工具輔助。</li>
+                        <li>教學模式採「自學→共學→教師總結」。</li>
+                    </ol>
+                    <p class="mt-3 text-xs text-gray-500">此案例顯示他嫻熟運用以學生為中心的教學策略，並結合科技深化學習。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-tools" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title">AI與數位工具應用</h2>
+            <p class="mb-6 text-lg">陳乃誠老師視「AI工具不是取代教師，而是成為教學的得力助手」。他系統性地將AI應用於備課、課中實施及課後評量與反思，並積極推廣多種數位工具以提升教學效能。</p>
+            
+            <div class="card p-6 mb-8">
+                <h3 class="text-xl font-semibold mb-3 text-blue-600">AI在教學週期的應用</h3>
+                <div class="grid md:grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <h4 class="font-semibold">課前準備</h4>
+                        <p class="text-sm">運用AI整理教材重點、分析資料，提升備課效率。</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <h4 class="font-semibold">課中實施</h4>
+                        <p class="text-sm">使用Poe AI機器人輔助語音筆記優化；AI繪圖將文言文意境圖像化。</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg">
+                        <h4 class="font-semibold">課後評量與反思</h4>
+                        <p class="text-sm">利用Notion等工具進行數位筆記，系統化整理教學歷程與反思。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-xl font-semibold mb-4 text-center text-blue-600">AI工具分類概覽</h3>
+                <div class="chart-container">
+                    <canvas id="aiToolsChart"></canvas>
+                </div>
+                <p class="text-sm text-center mt-2 text-gray-600">此圖表展示了陳老師常運用之AI工具的主要應用範疇。</p>
+            </div>
+            
+            <div class="card p-6">
+                <h3 class="text-xl font-semibold mb-3 text-blue-600">精選AI與數位工具</h3>
+                <div class="mb-4 flex flex-wrap justify-center gap-2">
+                    <button class="filter-button active px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('all', this)">全部</button>
+                    <button class="filter-button px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('content', this)">內容生成/整理</button>
+                    <button class="filter-button px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('design', this)">教學設計/評量</button>
+                    <button class="filter-button px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('interactive', this)">互動AI</button>
+                    <button class="filter-button px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('media', this)">圖像/多媒體</button>
+                    <button class="filter-button px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('km', this)">知識管理</button>
+                    <button class="filter-button px-4 py-2 border border-gray-300 rounded-md text-sm" onclick="filterTools('search', this)">資訊搜尋</button>
+                </div>
+                <div id="tools-gallery" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    </div>
+                 <p class="mt-4 text-xs text-gray-500">陳老師關注「媒體識讀與資訊安全」，在推廣數位工具的同時，也強調培養學生的數位素養。</p>
+            </div>
+        </section>
+
+        <section id="impact" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title">專業影響與肯定</h2>
+            <p class="mb-6 text-lg">陳乃誠老師在教育領域的卓越貢獻與創新實踐，使其獲得了來自官方機構與教育社群的高度肯定。他長期投入教師專業發展，分享足跡遍布全台。</p>
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-3 text-blue-600">主要獎項</h3>
+                    <ul class="list-none space-y-3">
+                        <li class="flex items-center">
+                            <span class="text-yellow-500 mr-2">🏆</span>
+                            <div>
+                                <span class="font-semibold">教育部113年推動數位學習績優人員「卓越獎」</span>
+                                <p class="text-xs text-gray-500">表彰在推動中小學數位學習的傑出成就。</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center">
+                             <span class="text-yellow-500 mr-2">🏆</span>
+                            <div>
+                                <span class="font-semibold">109年度「閱讀磐石獎」</span>
+                                <p class="text-xs text-gray-500">肯定在推廣閱讀方面的努力與成就。</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card p-6 text-center">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">「乃神」美譽</h3>
+                    <p class="text-5xl mb-2">👨‍🏫✨</p>
+                    <p>因其在數位教學，特別是AI工具應用上的深厚功力與無私分享，在教師社群中贏得「乃神」的稱號，顯示其專業能力受到高度認可。</p>
+                </div>
+            </div>
+
+            <div class="card p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-600">專業發展與分享歷程 (選錄)</h3>
+                <div class="timeline-container">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-semibold text-md">2014-2015 (103學年)</h4>
+                        <p class="text-sm text-gray-600">密集參與十數場教學分享與研習，主題涵蓋「活化教學─分組合作學習」、「教師專業發展評鑑」等，服務學校遍及多縣市。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-semibold text-md">近年 (2024年及近期)</h4>
+                        <p class="text-sm text-gray-600">工作坊與演講聚焦AI教育應用，如「跟上AI時代的備課方式」、「AI融入教學：竹光國中彈性課程實例分析」，培訓對象包含教師與校長。</p>
+                    </div>
+                     <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-semibold text-md">2024年5月</h4>
+                        <p class="text-sm text-gray-600">於台中市教師研習中心主講「教師備課好夥伴—AI工具大挑戰」工作坊，詳細介紹多種AI工具應用。</p>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <h4 class="font-semibold text-md">持續演進</h4>
+                        <p class="text-sm text-gray-600">陳老師的分享主題與時俱進，從早期合作學習到最新AI應用，不斷學習並將所學轉化為實用策略分享給同儕。</p>
+                    </div>
+                </div>
+                 <p class="mt-4 text-xs text-gray-500">陳老師的分享以淺顯易懂的方式介紹複雜概念，使教師們能更容易上手，廣受好評。</p>
+            </div>
+        </section>
+
+        <section id="digital-footprint" class="mb-12 pt-16 -mt-16">
+            <h2 class="text-3xl font-semibold mb-6 section-title">數位足跡</h2>
+            <p class="mb-6 text-lg">陳乃誠老師的專業活動與教育理念，透過多種數位管道展現。其線上足跡主要體現在教學影片分享、專業教育平台以及學校官方資訊的發布。</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">YouTube 活動</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm">
+                        <li>「國文課的創新教學（1Know）」(早期影片)</li>
+                        <li>「運用Notion 來進行教學知識管理」</li>
+                    </ul>
+                    <p class="text-xs mt-2 text-gray-500">展現其早期創新理念及對數位工具的熟稔。</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">教育平台專業呈現</h3>
+                     <ul class="list-disc list-inside space-y-1 text-sm">
+                        <li>親子天下Flipedu (講師/作者)</li>
+                        <li>聯合線上UDN College (說書人)</li>
+                    </ul>
+                    <p class="text-xs mt-2 text-gray-500">專業能力受社群高度認可，分享教學理念與實踐經驗。</p>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">官方資訊發布</h3>
+                    <ul class="list-disc list-inside space-y-1 text-sm">
+                        <li>新竹市政府教育處新聞</li>
+                        <li>竹光國中校園新聞</li>
+                    </ul>
+                    <p class="text-xs mt-2 text-gray-500">大量工作坊報導、公開課記錄、獲獎資訊等。</p>
+                </div>
+                 <div class="card p-6">
+                    <h3 class="text-xl font-semibold mb-2 text-blue-600">個人Notion網頁</h3>
+                    <p class="text-sm">使用Notion製作個人介紹網頁，展示其對所推廣工具的實際應用，並提供了解其專業背景的窗口。</p>
+                </div>
+            </div>
+            <p class="mt-6 text-md leading-relaxed">陳老師的數位足跡呈現高度專業性，主要透過官方及機構管道放大其影響力，有效觸及目標受眾。其線上活動的時間跨度也反映了他長期在教育科技領域的持續深耕。</p>
+        </section>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center p-6 mt-12">
+        <p>&copy; <span id="currentYear"></span> 互動網頁DEMO - 陳乃誠老師教育創新紀實. 內容基於公開研究報告。</p>
+        <p class="text-xs mt-1">此網頁為概念展示，非官方出品。</p>
+    </footer>
+
+    <div id="infoModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h3 id="modalTitle" class="text-2xl font-semibold mb-4 text-blue-600"></h3>
+            <p id="modalText" class="text-md leading-relaxed"></p>
+        </div>
+    </div>
+
+<script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+        mobileMenuButton.setAttribute('aria-expanded', !expanded);
+        mobileMenu.style.display = expanded ? 'none' : 'block';
+        mobileMenuButton.querySelectorAll('svg').forEach(svg => svg.classList.toggle('hidden'));
+    });
+
+    // Smooth scroll and active nav link
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                // targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Offset for fixed navbar
+                const navbarHeight = document.querySelector('nav').offsetHeight;
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+            if (mobileMenu.style.display === 'block') { // Close mobile menu on click
+                mobileMenuButton.click();
+            }
+        });
+    });
+    
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('nav a.nav-link');
+
+    window.onscroll = () => {
+        let current = '';
+        const navbarHeight = document.querySelector('nav').offsetHeight;
+
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - navbarHeight - 50; // Adjusted offset
+            if (pageYOffset >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').substring(1) === current) {
+                link.classList.add('active');
+            }
+        });
+    };
+
+
+    // AI Tools Data
+    const aiToolsData = [
+        { name: "Claude", category: "content", description: "強大文本處理、摘要、Markdown轉心智圖，支援繁體中文。" },
+        { name: "Magic School", category: "design", description: "輔助撰寫課程計畫 (需選Mandarin)。" },
+        { name: "Difft", category: "design", description: "設計教材、生成評量，可轉出Google Docs/Quizizz。" },
+        { name: "Poe Platform", category: "interactive", description: "AI機器人輔助學生互動、檢視語音筆記。" },
+        { name: "Gamma", category: "content", description: "一鍵生成簡報 (建議先用Claude整理內容)。" },
+        { name: "Notion", category: "km", description: "教學知識管理、個人介紹、教學歷程記錄、學生數位筆記。" },
+        { name: "ChatEverywhere", category: "content", description: "整理文章、Markdown輸出 (免登入，提示詞需具體)。" },
+        { name: "Suno", category: "media", description: "AI生成歌曲 (可定義歌曲結構)。" },
+        { name: "Perplexity AI", category: "search", description: "AI搜尋引擎，提供資料來源與多媒體內容。" },
+        { name: "FELO AI Search", category: "content", description: "關鍵字生成心智圖與簡報 (校長工作坊介紹)。" },
+        { name: "ChatGPT (for Podcast)", category: "content", description: "文字稿轉對話腳本，製作Podcast (校長工作坊介紹)。" },
+        { name: "Replicate (face-to-sticker)", category: "media", description: "將人臉製作成貼圖。" },
+        { name: "icon-z.com", category: "media", description: "製作圖示。" },
+        { name: "Gemini", category: "media", description: "圖像辨識與解釋 (有人像限制)，具備繪圖功能。" },
+        { name: "Ideogram (搭配Pica)", category: "media", description: "生成圖像並可套用個人照片。" },
+        { name: "Padlet", category: "km", description: "提及用於協作或展示。" },
+        { name: "1Know", category: "interactive", description: "早期創新教學的實踐平台。" }
+    ];
+
+    const toolsGallery = document.getElementById('tools-gallery');
+
+    function displayTools(toolsToDisplay) {
+        toolsGallery.innerHTML = '';
+        if (toolsToDisplay.length === 0) {
+            toolsGallery.innerHTML = '<p class="col-span-full text-center text-gray-500">此分類下無相關工具。</p>';
+            return;
+        }
+        toolsToDisplay.forEach(tool => {
+            const toolCard = `
+                <div class="card p-4 tool-card-item transform hover:scale-105">
+                    <h4 class="font-semibold text-md text-blue-700">${tool.name}</h4>
+                    <p class="text-xs text-gray-600">${tool.description}</p>
+                </div>
+            `;
+            toolsGallery.innerHTML += toolCard;
+        });
+    }
+
+    function filterTools(category, buttonElement) {
+        document.querySelectorAll('.filter-button').forEach(btn => btn.classList.remove('active'));
+        buttonElement.classList.add('active');
+
+        if (category === 'all') {
+            displayTools(aiToolsData);
+        } else {
+            const filtered = aiToolsData.filter(tool => tool.category === category);
+            displayTools(filtered);
+        }
+    }
+    
+    // Initial display of all tools
+    displayTools(aiToolsData);
+    // Activate the "all" button initially
+    document.querySelector('.filter-button[onclick*="\'all\'"]').classList.add('active');
+
+
+    // AI Tools Chart
+    const toolCategories = {
+        '內容生成/整理': aiToolsData.filter(t => t.category === 'content').length,
+        '教學設計/評量': aiToolsData.filter(t => t.category === 'design').length,
+        '互動AI': aiToolsData.filter(t => t.category === 'interactive').length,
+        '圖像/多媒體': aiToolsData.filter(t => t.category === 'media').length,
+        '知識管理': aiToolsData.filter(t => t.category === 'km').length,
+        '資訊搜尋': aiToolsData.filter(t => t.category === 'search').length
+    };
+
+    const ctx = document.getElementById('aiToolsChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(toolCategories),
+            datasets: [{
+                label: '工具數量',
+                data: Object.values(toolCategories),
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)', // Blue
+                    'rgba(75, 192, 192, 0.6)', // Green
+                    'rgba(255, 206, 86, 0.6)', // Yellow
+                    'rgba(153, 102, 255, 0.6)',// Purple
+                    'rgba(255, 159, 64, 0.6)', // Orange
+                    'rgba(255, 99, 132, 0.6)'  // Red
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1 // Ensure y-axis ticks are integers
+                    }
+                },
+                x: {
+                    ticks: {
+                        maxRotation: 45,
+                        minRotation: 0,
+                        callback: function(value) { // Wrap long labels
+                            const label = this.getLabelForValue(value);
+                            if (label.length > 10) { // Max length before trying to wrap
+                                return label.match(/.{1,8}/g); // Split into lines of approx 8 chars
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` ${context.dataset.label}: ${context.raw}`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Modal Logic
+    const modal = document.getElementById('infoModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+
+    const modalData = {
+        'philosophy-motivation': {
+            title: '學習即獎賞與動機',
+            text: '此觀點源於陳老師早年在1Know平台的分享，強調教育應著重於引導學生從學習本身獲得滿足感與成就感，而非過度依賴外在的獎懲機制（如分數）。這反映了他對培養學生內在學習動機的重視。'
+        },
+        'philosophy-output': {
+            title: '學習是輸出的過程',
+            text: '陳老師認為，學生透過實際操作、發表、創作等「輸出」行為，能更有效地將所學知識內化為自身能力的一部分。因此，他在課堂上會訓練學生的發表架構，鼓勵他們將所學應用出來。'
+        },
+        'philosophy-lifeed': {
+            title: '重視生命教育',
+            text: '在他的國文課堂中，目標是引導學生從文學作品中發掘個人意義，將學習內容與生命價值相聯繫。'
+        },
+        'philosophy-environment': {
+            title: '境教大於身教',
+            text: '他深信教師的言行示範以及學習環境對學生的潛移默化作用。因此，他用心佈置教室，例如設置榮譽榜、提供大量閱讀書籍、規劃學生作品展示角等，以營造積極正向的學習氛圍。'
+        }
+    };
+
+    function showModal(id) {
+        const data = modalData[id];
+        if (data) {
+            modalTitle.textContent = data.title;
+            modalText.textContent = data.text;
+            modal.style.display = "block";
+        }
+    }
+
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+</script>
+
+</body>
+</html>

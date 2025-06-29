@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5G智慧學校計畫 - 教育工作會議活動摘要</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .tab-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-button.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: white;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #28a745;
+        }
+
+        .subsection h4 {
+            color: #28a745;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        ul {
+            padding-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        li::marker {
+            color: #667eea;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .highlight h4 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .timeline {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #667eea;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 50px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px #667eea;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-date {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+        }
+
+        .footer p {
+            margin-bottom: 10px;
+        }
+
+        .footer .social-links {
+            margin-top: 15px;
+        }
+
+        .footer .social-links a {
+            color: white;
+            font-size: 1.5em;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .footer .social-links a:hover {
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .tab-button {
+                min-width: 150px;
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #5a6fd8;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header fade-in">
+            <h1><i class="fas fa-graduation-cap"></i> 5G智慧學校計畫</h1>
+            <p>教育工作會議活動摘要 | 竹光國中數位教學成果</p>
+        </header>
+
+        <input type="text" class="search-box" placeholder="🔍 搜索會議內容..." id="searchBox">
+
+        <nav class="nav-tabs fade-in">
+            <div class="tab-buttons">
+                <button class="tab-button active" data-tab="overview">
+                    <i class="fas fa-chart-line"></i> 計畫概覽
+                </button>
+                <button class="tab-button" data-tab="teaching">
+                    <i class="fas fa-chalkboard-teacher"></i> 教學實踐
+                </button>
+                <button class="tab-button" data-tab="ai-tools">
+                    <i class="fas fa-robot"></i> AI工具應用
+                </button>
+                <button class="tab-button" data-tab="schedules">
+                    <i class="fas fa-calendar-alt"></i> 活動安排
+                </button>
+                <button class="tab-button" data-tab="resources">
+                    <i class="fas fa-tools"></i> 資源管理
+                </button>
+                <button class="tab-button" data-tab="future">
+                    <i class="fas fa-rocket"></i> 未來展望
+                </button>
+            </div>
+
+            <div class="tab-content active" id="overview">
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle"></i> 計畫基本資訊
+                    </h3>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">5</span>
+                            <div class="stat-label">執行年度</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">2</span>
+                            <div class="stat-label">主要領域</div>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">3</span>
+                            <div class="stat-label">AI融合階段</div>
+                        </div>
+                    </div>
+
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">110年</div>
+                                <h4>計畫啟動</h4>
+                                <p>竹光國中申請5G智慧學校計畫，以數學領域為主，結合因材網進行教學</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">111-113年</div>
+                                <h4>領域拓展</h4>
+                                <p>國文領域老師加入，開始運用數位學習平臺，逐步擴大應用範圍</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">114年</div>
+                                <h4>AI整合</h4>
+                                <p>結合AI數位備課，延續前期成果，擴展至彈性課程及其他領域</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-star"></i> 重點成果
+                    </h3>
+                    <div class="highlight">
+                        <h4>國文教學AI融合三階段</h4>
+                        <ul>
+                            <li><strong>體驗階段：</strong>學生初次運用AI工具，體驗AI輔助藝術創作</li>
+                            <li><strong>指令設計階段：</strong>學會設計精確指令語，將抽象意境圖像化</li>
+                            <li><strong>評估與批判階段：</strong>培養檢視、修改AI生成內容的能力</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="teaching">
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-book-open"></i> 國文教學AI融合實踐
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>新詩教學</h4>
+                        <ul>
+                            <li>學生自創詩作，結合書農AI譜曲，體驗詩歌音樂性</li>
+                            <li>運用Suno AI將學生作品圖像化，強化詩歌情感傳遞</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>寫景教學</h4>
+                        <ul>
+                            <li>以AI生成技術將徐志摩《我所知道的康橋》寫景文本視覺化</li>
+                            <li>利用AI深讀技術，讓學生以指令語將抽象文字視覺化</li>
+                            <li>提升學生對文本意境的理解能力</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>論說文教學</h4>
+                        <ul>
+                            <li>結合AI協作製作Podcast腳本與錄音</li>
+                            <li>培養學生表達與論述能力</li>
+                            <li>實際錄製Podcast，提升議論觀點表達技巧</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-clipboard-check"></i> 課堂教學實踐案例
+                    </h3>
+                    
+                    <div class="highlight">
+                        <h4>運動家風度課程</h4>
+                        <p><strong>主題：</strong>801可以跟班 - 運動家風度</p>
+                        <ul>
+                            <li>分發三張任務卡，原預計6分鐘，實際延長至15分鐘</li>
+                            <li>文本包含四個運動家風度特質，分七組討論與報告</li>
+                            <li>運用NotebookLM進行拍照與畫線操作</li>
+                            <li>延伸活動以棒球選手陳傑憲為例，讓學生反思特質應用</li>
+                            <li>採用學生互評制度，每組最多給予兩顆星並說明理由</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>教學建議與改進</h4>
+                        <ul>
+                            <li>加強組內共學的社交技巧引導</li>
+                            <li>建立討論制度：從組長左手邊開始發言，訓練規則討論</li>
+                            <li>建立明確的行動模組，讓學生知道下一步</li>
+                            <li>培養學生共識建立、規矩發表及禮貌呈現能力</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="ai-tools">
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-microchip"></i> AI工具應用與分享
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>Gemini語音摘要功能</h4>
+                        <ul>
+                            <li>支援中文語音摘要，上傳文件即可自動生成</li>
+                            <li>實例：46頁成癮式學習文件自動產生語音摘要</li>
+                            <li>可直接用於Podcast或其他平台</li>
+                            <li>建議將課程內容生成雙人對話形式的語音摘要作為預習素材</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>Felo自訂指定條件</h4>
+                        <ul>
+                            <li>支援根據自訂條件產生符合需求的答案</li>
+                            <li>需先設定背景、需求、身份等資訊</li>
+                            <li>應用實例：研究日本機頭腦成癮式學習</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>Canva AI智能圖形</h4>
+                        <ul>
+                            <li>智能圖形自動生成，精緻度大幅提升</li>
+                            <li>適合報告、簡報製作</li>
+                            <li>支援SVG檔（可修改）、PNG（圖檔）、PDF格式</li>
+                            <li>教育版逐步開放新功能</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>其他數位工具</h4>
+                        <ul>
+                            <li><strong>NotebookLM：</strong>教學演示與備課輔助</li>
+                            <li><strong>Quizlet：</strong>結合教學科目應用</li>
+                            <li><strong>NotebookLA：</strong>戲劇小說類課程自學工具</li>
+                            <li><strong>PyTeach：</strong>計畫購買十四套帳號，每帳號供四十名學生使用</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="schedules">
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-tasks"></i> 重要活動安排
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>睿師報告日程</h4>
+                        <ul>
+                            <li><strong>6月2日：</strong>第一場報告（第一組第四位，第四間學校）</li>
+                            <li><strong>6月11日：</strong>第二場報告（學校實體進行）</li>
+                            <li>每位老師分享10-15分鐘，不超過20分鐘</li>
+                            <li>內容需與前4次工具相關（Felo、Chrysalis、OneNote、HiTeach），計畫加入Padlet</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>錄影與海報製作</h4>
+                        <ul>
+                            <li>嬿如先藝課錄影安排，討論錄影方式</li>
+                            <li>5G簡報安排於第七節課</li>
+                            <li>海報設計協助，印刷費用充足</li>
+                            <li>合照數量不足，需補拍作為簡報使用</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>課程試講規劃</h4>
+                        <ul>
+                            <li>第七節課程試講，三人同時上台</li>
+                            <li>輪流操控簡報，採同問同答方式</li>
+                            <li>分工：前後各兩分鐘不同成員負責，中間六分鐘主講人負責</li>
+                            <li>重在參與與經驗累積，不以得獎為目標</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-presentation"></i> 期末報告安排
+                    </h3>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">開場</div>
+                                <h4>三位老師共同開場</h4>
+                                <p>介紹新竹市竹光國中，由主講人進行期末報告</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">主體報告</div>
+                                <h4>課程規劃與數位融入</h4>
+                                <p>聚焦課程規劃、數位融入及校園特色發展</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-content">
+                                <div class="timeline-date">時間控制</div>
+                                <h4>精準時間管理</h4>
+                                <p>報告九分五十五秒完成，建議專人倒數協助</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>報告重點建議</h4>
+                        <ul>
+                            <li>多著墨於成長階段與反思，知識性內容快速帶過</li>
+                            <li>以大綱為主，適時銜接下一位老師</li>
+                            <li>多與評審互動，減少依賴簡報</li>
+                            <li>強調現場表達與交流</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="resources">
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-users"></i> 教師專業成長
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>數位能力提升</h4>
+                        <ul>
+                            <li>通過A1、A2、A3數位能力檢核，通過率高</li>
+                            <li>符合新竹市iPad平板研習規範</li>
+                            <li>參與V2研習、V3講師訓、睿師社群等大型研習</li>
+                            <li>鼓勵教師取得證照、參與校內外分享交流</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>校內外推廣</h4>
+                        <ul>
+                            <li>學校為新竹市國文科數位輔導團</li>
+                            <li>校內實際練習AI數位備課，分享至其他學校</li>
+                            <li>央團入校輔導國語文老師及數位報導團</li>
+                            <li>清華大學子華教授長期陪伴近十年</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>資源整合與社群參與</h4>
+                        <ul>
+                            <li>應用圖卡等教學資源</li>
+                            <li>積極參加睿師社群等專業團體</li>
+                            <li>提升數位能力與國文科專業</li>
+                            <li>推動AI備課與出題</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-chart-bar"></i> 教學成效評估
+                    </h3>
+                    
+                    <div class="highlight">
+                        <h4>學習成效提升三階段</h4>
+                        <ul>
+                            <li><strong>匪夷所思期：</strong>初次接觸，學生感到新奇</li>
+                            <li><strong>指派任務期：</strong>開始理解AI工具的教育價值</li>
+                            <li><strong>AI科技融入期：</strong>趣味與科技有效結合</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>教學靈活度提升</h4>
+                        <ul>
+                            <li>差異化教學：設計不同任務符合不同程度學生</li>
+                            <li>多元評量：錄音、紋身圖等方式檢核文本理解</li>
+                            <li>發表與回應更透明公開</li>
+                            <li>回收與回饋更快速有效</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>學習成就實證</h4>
+                        <ul>
+                            <li>學生投入度明顯提升</li>
+                            <li>課堂吸收度提高</li>
+                            <li>成績亦有明顯提升</li>
+                            <li>結論：科技融入確實能提升學生國文成績</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="future">
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-forward"></i> 計畫未來發展
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>第四年計畫展望</h4>
+                        <ul>
+                            <li>今年為第三年，明年進入第四年</li>
+                            <li>發展需視KPI達成狀況而定</li>
+                            <li>數位計畫要求逐年增加</li>
+                            <li>未來發展仍有不確定性</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>資源分配考量</h4>
+                        <ul>
+                            <li>設備盡量分配實用，感謝團隊投入</li>
+                            <li>部分經費需處理學校相關事務</li>
+                            <li>努力提供可用設備回饋團隊</li>
+                            <li>未來資源分配需再觀察調整</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>外掛計畫與學習輔助</h4>
+                        <ul>
+                            <li>「手把手」計畫：陪伴內部國中15小時，外部15小時</li>
+                            <li>學習輔助老師需參加因材網研習並撰寫成果報告</li>
+                            <li>主持人以「用一個換另一個」方式協調外部要求</li>
+                            <li>減輕團隊負擔，自己承擔部分工作</li>
+                        </ul>
+                    </div>
+
+                    <div class="highlight">
+                        <h4>持續發展目標</h4>
+                        <ul>
+                            <li>探索國文教學融入AI的多元可能性</li>
+                            <li>發展歷程式導向評量</li>
+                            <li>強調以人類為主導的AI應用</li>
+                            <li>建立學生從使用者到評估者的能力</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-lightbulb"></i> 創新教學法探索
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>特色教學方法</h4>
+                        <ul>
+                            <li><strong>密室逃脫教學法：</strong>邀請國文科專家分享經驗，作為校本課程發展參考</li>
+                            <li><strong>寓言文本教學：</strong>結合詩說新語、御理等文章，強調時空背景理解</li>
+                            <li><strong>戲劇小說課程：</strong>學生研究劇本、理解主旨，以肢體語言呈現</li>
+                            <li><strong>V4討論與Holio應用：</strong>嘗試新工具，考慮邀請專家協助</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>平台工具整合</h4>
+                        <ul>
+                            <li><strong>Padlet：</strong>引導學生提問與討論</li>
+                            <li><strong>Loyal Note：</strong>遇到登入與切換問題</li>
+                            <li><strong>PyTeach：</strong>部分功能僅限少數學生同時使用</li>
+                            <li>考量年級學生數量與平板數量限制</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>設備與場地限制</h4>
+                        <ul>
+                            <li>部分班級因場地與設備不足，無法靈活調配電腦教室</li>
+                            <li>已投入一至兩百萬經費進行網路建設</li>
+                            <li>設備調整需考慮既有投資</li>
+                            <li>尋求更有效的資源配置方案</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section fade-in">
+                    <h3 class="section-title">
+                        <i class="fas fa-calendar-check"></i> 學生活動與班級經營
+                    </h3>
+                    
+                    <div class="subsection">
+                        <h4>班級活動規劃</h4>
+                        <ul>
+                            <li>銜接高中與學生習歷的重要性</li>
+                            <li>舉辦班級活動如謝師早餐，安排學生表演</li>
+                            <li>七、八年級適合進行桌遊活動（咕咕哇哇）</li>
+                            <li>需注意分組與活動秩序管理</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>考試與違規處理</h4>
+                        <ul>
+                            <li><strong>案例分享：</strong>學生忘記清空抽屜，英文閱讀考試被扣0.75分</li>
+                            <li>提醒學生養成考前清空抽屜的好習慣</li>
+                            <li>強調個人責任，監考老師無義務提醒</li>
+                            <li>其他違規案例：攜帶違規物品被沒收</li>
+                        </ul>
+                    </div>
+
+                    <div class="subsection">
+                        <h4>課程安排與教學正常化</h4>
+                        <ul>
+                            <li>討論不同屆別、班級（甲班、乙班）安排</li>
+                            <li>新竹地區九年級才有第八節課</li>
+                            <li>七年級需上滿第八節，教務處要求教學正常化</li>
+                            <li>家長未投訴則學校不會特別處理，老師彈性大</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <footer class="footer fade-in">
+            <p><i class="fas fa-school"></i> 新竹市竹光國中 5G智慧學校計畫</p>
+            <p>數位教育創新 • AI融合教學 • 未來教育實踐</p>
+            <div class="social-links">
+                <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">
+                最後更新：2024年5月 | 版權所有 © 竹光國中教育團隊
+            </p>
+        </footer>
+    </div>
+
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script>
+        // Tab切換功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    // 移除所有active類別
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    
+                    // 添加active類別到被點擊的按鈕和對應內容
+                    button.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+
+            // 搜索功能
+            const searchBox = document.getElementById('searchBox');
+            const sections = document.querySelectorAll('.section, .subsection');
+
+            searchBox.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                
+                sections.forEach(section => {
+                    const text = section.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        section.style.display = 'block';
+                        section.style.backgroundColor = searchTerm ? '#fff3cd' : '';
+                    } else {
+                        section.style.display = searchTerm ? 'none' : 'block';
+                    }
+                });
+
+                // 如果搜索為空，恢復所有section的顯示
+                if (!searchTerm) {
+                    sections.forEach(section => {
+                        section.style.display = 'block';
+                        section.style.backgroundColor = '';
+                    });
+                }
+            });
+
+            // Intersection Observer for fade-in animation
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // 觀察所有fade-in元素
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Back to top功能
+            const backToTopButton = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // 統計數字動畫
+            const animateNumbers = () => {
+                const statNumbers = document.querySelectorAll('.stat-number');
+                statNumbers.forEach(stat => {
+                    const finalNumber = parseInt(stat.textContent);
+                    let currentNumber = 0;
+                    const increment = finalNumber / 50;
+                    
+                    const counter = setInterval(() => {
+                        currentNumber += increment;
+                        if (currentNumber >= finalNumber) {
+                            stat.textContent = finalNumber;
+                            clearInterval(counter);
+                        } else {
+                            stat.textContent = Math.ceil(currentNumber);
+                        }
+                    }, 30);
+                });
+            };
+
+            // 當統計卡片進入視窗時觸發動畫
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                        animateNumbers();
+                        entry.target.classList.add('animated');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.stats-grid').forEach(el => {
+                statsObserver.observe(el);
+            });
+
+            // 鍵盤快捷鍵支持
+            document.addEventListener('keydown', function(e) {
+                // 按 Ctrl+K 或 Cmd+K 聚焦搜索框
+                if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                    e.preventDefault();
+                    searchBox.focus();
+                }
+                
+                // 按數字鍵1-6切換到對應的標籤
+                if (e.key >= '1' && e.key <= '6' && !e.ctrlKey && !e.metaKey && document.activeElement !== searchBox) {
+                    const tabIndex = parseInt(e.key) - 1;
+                    const buttons = document.querySelectorAll('.tab-button');
+                    if (buttons[tabIndex]) {
+                        buttons[tabIndex].click();
+                    }
+                }
+            });
+
+            // 添加快捷鍵提示
+            const shortcutHint = document.createElement('div');
+            shortcutHint.style.cssText = `
+                position: fixed; 
+                bottom: 90px; 
+                right: 30px; 
+                background: rgba(0,0,0,0.8); 
+                color: white; 
+                padding: 10px; 
+                border-radius: 5px; 
+                font-size: 12px; 
+                opacity: 0; 
+                transition: opacity 0.3s;
+                z-index: 1000;
+            `;
+            shortcutHint.innerHTML = `
+                <div>快捷鍵：</div>
+                <div>Ctrl+K: 搜索</div>
+                <div>1-6: 切換標籤</div>
+            `;
+            document.body.appendChild(shortcutHint);
+
+            // 滑鼠懸停顯示快捷鍵提示
+            setTimeout(() => {
+                shortcutHint.style.opacity = '1';
+                setTimeout(() => {
+                    shortcutHint.style.opacity = '0';
+                }, 3000);
+            }, 2000);
+        });
+
+        // 打印功能
+        function printPage() {
+            window.print();
+        }
+
+        // 導出功能（模擬）
+        function exportData() {
+            alert('導出功能即將推出，敬請期待！');
+        }
+
+        // 分享功能
+        function shareContent() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '5G智慧學校計畫 - 教育工作會議活動摘要',
+                    text: '竹光國中數位教學成果分享',
+                    url: window.location.href
+                });
+            } else {
+                // 複製URL到剪貼板
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    alert('網頁連結已複製到剪貼板！');
+                });
+            }
+        }
+
+        // 動態加載更多內容（模擬）
+        function loadMoreContent() {
+            // 這裡可以添加動態加載內容的邏輯
+            console.log('加載更多內容...');
+        }
+
+        // 響應式導航
+        window.addEventListener('resize', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const windowWidth = window.innerWidth;
+            
+            if (windowWidth < 768) {
+                tabButtons.forEach(button => {
+                    button.style.minWidth = '100px';
+                });
+            } else {
+                tabButtons.forEach(button => {
+                    button.style.minWidth = '200px';
+                });
+            }
+        });
+
+        // 深色模式切換（可選功能）
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        }
+
+        // 載入深色模式偏好
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // 添加深色模式CSS
+        const darkModeStyles = `
+            .dark-mode {
+                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+                color: #e4e4e4;
+            }
+            .dark-mode .section {
+                background: #2d3748;
+                color: #e4e4e4;
+            }
+            .dark-mode .subsection {
+                background: #4a5568;
+            }
+            .dark-mode .nav-tabs {
+                background: #2d3748;
+            }
+            .dark-mode .tab-button {
+                color: #a0aec0;
+            }
+            .dark-mode .tab-button:hover {
+                background: #4a5568;
+                color: #e4e4e4;
+            }
+            .dark-mode .search-box {
+                background: #4a5568;
+                color: #e4e4e4;
+                border-color: #718096;
+            }
+        `;
+
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = darkModeStyles;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
+                        

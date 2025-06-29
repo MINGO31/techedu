@@ -1,0 +1,83 @@
+<html><head><base href="https://dynamic-visitor-counter.com/" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>訪客計數器</title>
+<style>
+  body {
+    font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .container {
+    background-color: #f8f8f8;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 90%;
+    width: 600px;
+  }
+  #counter {
+    font-size: clamp(24px, 6vw, 48px);
+    color: #1a1a1a;
+    margin: 20px 0;
+  }
+  #time, #weather {
+    font-size: clamp(16px, 3vw, 24px);
+    color: #333;
+    margin: 15px 0;
+  }
+  .highlight {
+    color: #e74c3c;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div id="counter">你是第 <span class="highlight">1</span> 位來到這裡的人</div>
+    <div id="time"></div>
+    <div id="weather"></div>
+  </div>
+
+  <script>
+    const counterElement = document.querySelector('#counter .highlight');
+    const timeElement = document.getElementById('time');
+    const weatherElement = document.getElementById('weather');
+
+    function updateTime() {
+      const now = new Date();
+      timeElement.textContent = `當前時間：${now.toLocaleTimeString('zh-TW')}`;
+    }
+
+    function updateWeather() {
+      // 這裡使用模擬的天氣資料，實際應用中您需要替換為真實的API調用
+      const weatherConditions = ['晴朗', '多雲', '雨天', '雪天'];
+      const randomWeather = weatherConditions[Math.floor(Math.random() * weatherConditions.length)];
+      const randomTemperature = Math.floor(Math.random() * 30) + 10; // 10°C to 40°C
+      weatherElement.textContent = `天氣：${randomWeather}，${randomTemperature}°C`;
+    }
+
+    // 初始更新
+    updateTime();
+    updateWeather();
+
+    // 設定定時器以定期更新時間和天氣
+    setInterval(updateTime, 1000);
+    setInterval(updateWeather, 600000); // 每10分鐘更新一次天氣
+
+    // 模擬計數器增加（僅用於演示）
+    setInterval(() => {
+      let currentCount = parseInt(counterElement.textContent);
+      counterElement.textContent = currentCount + 1;
+    }, 60000); // 每分鐘增加一次訪客數（實際應用中應該由後端控制）
+  </script>
+</body></html>

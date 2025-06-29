@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新詩書寫系統</title>
+    <style>
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #FFF3E0;
+            color: #5D4037;
+        }
+        h1 {
+            color: #FF7043;
+            text-shadow: 1px 1px 2px #FFCCBC;
+        }
+        #input-area {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 20px;
+            border: 2px solid #FFB74D;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        #poem-area {
+            width: 80%;
+            height: 400px;
+            border: 2px solid #FFB74D;
+            padding: 10px;
+            background-color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 183, 77, 0.3);
+        }
+        .word-block {
+            position: absolute;
+            padding: 5px;
+            background-color: #FFE0B2;
+            border: 1px solid #FFB74D;
+            border-radius: 3px;
+            cursor: move;
+            user-select: none;
+            transition: all 0.1s ease-in-out;
+        }
+        .vertical {
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #F57C00;
+        }
+        #button-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>新詩書寫系統</h1>
+    <textarea id="input-area" placeholder="請輸入詞彙，用空格或換行分隔"></textarea>
+    <div id="button-container">
+        <button onclick="generatePoem('horizontal')">橫式新詩</button>
+        <button onclick="generatePoem('vertical')">直式新詩</button>
+        <button onclick="exportImage()">匯出PNG圖片</button>
+        <button onclick="exportPDF()">匯出PDF</button>
+        <button onclick="resetPoem()">重置</button>
+    </div>
+    <div id="poem-area"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let isDragging = false;
+        let currentBlock = null;
+        let offsetX, offsetY;
+        let currentMode = 'horizontal';
+        let snappedBlocks = new Set();
+
+        function generatePoem(mode) {
+            currentMode = mode;
+            const inputText = document.getElementById('input-area').value;
+            const words = inputText.split(/\s+/);
+            const poemArea = document.getElementById('poem-area');
+            
+            words.forEach((word, index) => {
+                if (word.trim() !== '') {
+                    const block = document.createElement('div');
+                    block.className = 'word-block';
+                    if (mode === 'vertical') {
+                        block.classList.add('vertical');
+                    }
+                    block.textContent = word;
+                    block.style.left = `${Math.random() * (poemArea.offsetWidth - 100)}px`;
+                    block.style.top = `${Math.random() * (poemArea.offsetHeight - 30)}px`;
+
+                    block.addEventListener('mousedown', startDragging);
+                    poemArea.appendChild(block);
+                }
+            });
+
+            document.getElementById('input-area').value = '';
+            updateBlocksMode();
+        }
+
+        function updateBlocksMode() {
+            const blocks = document.getElementsByClassName('word-block');
+            for (let block of blocks) {
+                if (currentMode === 'vertical') {
+                    block.classList.add('vertical');
+                } else {
+                    block.classList.remove('vertical');
+                }
+            }
+        }
+
+        function startDragging(e) {
+            isDragging = true;
+            currentBlock = e.target;
+            offsetX = e.clientX - currentBlock.getBoundingClientRect().left;
+            offsetY = e.clientY - currentBlock.getBoundingClientRect().top;
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', stopDragging);
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                const poemArea = document.getElementById('poem-area');
+                const poemRect = poemArea.getBoundingClientRect();
+                let newX = e.clientX - poemRect.left - offsetX;
+                let newY = e.clientY - poemRect.top - offsetY;
+
+                newX = Math.max(0, Math.min(newX, poemRect.width - currentBlock.offsetWidth));
+                newY = Math.max(0, Math.min(newY, poemRect.height - currentBlock.offsetHeight));
+
+                currentBlock.style.left = `${newX}px`;
+                currentBlock.style.top = `${newY}px`;
+
+                if (!snappedBlocks.has(currentBlock)) {
+                    snapToNearestBlock(currentBlock);
+                }
+            }
+        }
+
+        function stopDragging() {
+            isDragging = false;
+            document.removeEventListener('mousemove', drag);
+            document.removeEventListener('mouseup', stopDragging);
+        }
+
+        function snapToNearestBlock(block) {
+            const blocks = Array.from(document.getElementsByClassName('word-block'));
+            const snapDistance = 10; // 磁吸距離閾值
+
+            for (let otherBlock of blocks) {
+                if (block !== otherBlock && !snappedBlocks.has(otherBlock)) {
+                    const rect1 = block.getBoundingClientRect();
+                    const rect2 = otherBlock.getBoundingClientRect();
+
+                    if (currentMode === 'vertical') {
+                        const verticalDiff = Math.abs(rect1.bottom - rect2.top);
+                        if (verticalDiff < snapDistance) {
+                            block.style.top = `${parseFloat(otherBlock.style.top) + otherBlock.offsetHeight}px`;
+                            snappedBlocks.add(block);
+                            snappedBlocks.add(otherBlock);
+                            break;
+                        }
+                    } else {
+                        const horizontalDiff = Math.abs(rect1.right - rect2.left);
+                        if (horizontalDiff < snapDistance) {
+                            block.style.left = `${parseFloat(otherBlock.style.left) + otherBlock.offsetWidth}px`;
+                            snappedBlocks.add(block);
+                            snappedBlocks.add(otherBlock);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        function exportImage() {
+            html2canvas(document.getElementById('poem-area')).then(canvas => {
+                if (currentMode === 'vertical') {
+                    const ctx = canvas.getContext('2d');
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    canvas.width = canvas.height;
+                    canvas.height = imageData.width;
+                    ctx.putImageData(imageData, 0, 0);
+                }
+                const link = document.createElement('a');
+                link.download = '新詩.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        }
+
+        function exportPDF() {
+            html2canvas(document.getElementById('poem-area')).then(canvas => {
+                let imgData, pdf;
+                if (currentMode === 'vertical') {
+                    const ctx = canvas.getContext('2d');
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const newCanvas = document.createElement('canvas');
+                    newCanvas.width = canvas.height;
+                    newCanvas.height = canvas.width;
+                    const newCtx = newCanvas.getContext('2d');
+                    newCtx.putImageData(imageData, 0, 0);
+                    imgData = newCanvas.toDataURL('image/png');
+                    pdf = new jspdf.jsPDF({
+                        orientation: 'portrait',
+                        unit: 'px',
+                        format: [newCanvas.width, newCanvas.height]
+                    });
+                } else {
+                    imgData = canvas.toDataURL('image/png');
+                    pdf = new jspdf.jsPDF({
+                        orientation: 'landscape',
+                        unit: 'px',
+                        format: [canvas.width, canvas.height]
+                    });
+                }
+                pdf.addImage(imgData, 'PNG', 0, 0);
+                pdf.save('新詩.pdf');
+            });
+        }
+
+        function resetPoem() {
+            document.getElementById('poem-area').innerHTML = '';
+            document.getElementById('input-area').value = '';
+            snappedBlocks.clear();
+            currentMode = 'horizontal';
+        }
+    </script>
+</body>
+</html>

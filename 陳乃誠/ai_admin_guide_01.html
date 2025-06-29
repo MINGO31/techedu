@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI工具在學校行政工作應用指南</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #37352f;
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* 側邊欄 */
+        .sidebar {
+            width: 260px;
+            background-color: #f7f6f3;
+            border-right: 1px solid #e9e9e7;
+            padding: 16px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 8px 0 16px 0;
+            border-bottom: 1px solid #e9e9e7;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #37352f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #37352f;
+            margin-bottom: 2px;
+            transition: background-color 0.15s ease;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(55, 53, 47, 0.08);
+        }
+
+        .nav-item.active {
+            background-color: rgba(35, 131, 226, 0.14);
+            color: #2383e2;
+        }
+
+        .nav-icon {
+            margin-right: 8px;
+            width: 16px;
+            text-align: center;
+        }
+
+        /* 主內容區 */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 40px 80px;
+            max-width: 100%;
+        }
+
+        /* 頁面標題 */
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-title {
+            font-size: 40px;
+            font-weight: 700;
+            color: #37352f;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: rgba(55, 53, 47, 0.65);
+            margin-bottom: 16px;
+        }
+
+        /* 內容區塊 */
+        .content-block {
+            background: #ffffff;
+            border: 1px solid #e9e9e7;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: box-shadow 0.15s ease;
+        }
+
+        .content-block:hover {
+            box-shadow: 0 1px 3px rgba(15, 15, 15, 0.1);
+        }
+
+        .block-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e9e9e7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fafafa;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .block-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #37352f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .expand-icon {
+            color: rgba(55, 53, 47, 0.45);
+            transition: transform 0.15s ease;
+        }
+
+        .content-block.expanded .expand-icon {
+            transform: rotate(90deg);
+        }
+
+        .block-content {
+            padding: 20px;
+            display: none;
+        }
+
+        .content-block.expanded .block-content {
+            display: block;
+        }
+
+        /* 工具卡片 */
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .tool-card {
+            background: #ffffff;
+            border: 1px solid #e9e9e7;
+            border-radius: 8px;
+            padding: 20px;
+            transition: all 0.15s ease;
+        }
+
+        .tool-card:hover {
+            box-shadow: 0 2px 8px rgba(15, 15, 15, 0.1);
+            border-color: #d3d1cb;
+        }
+
+        .tool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .tool-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #2383e2;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .tool-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #37352f;
+        }
+
+        .tool-description {
+            font-size: 14px;
+            color: rgba(55, 53, 47, 0.65);
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        /* 功能列表 */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #37352f;
+        }
+
+        .feature-icon {
+            margin-top: 2px;
+            color: #2383e2;
+        }
+
+        /* 提示詞範例 */
+        .prompt-section {
+            margin-bottom: 24px;
+        }
+
+        .prompt-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #e9e9e7;
+        }
+
+        .prompt-tab {
+            padding: 8px 12px;
+            background: none;
+            border: none;
+            border-radius: 6px 6px 0 0;
+            cursor: pointer;
+            font-size: 14px;
+            color: rgba(55, 53, 47, 0.65);
+            transition: all 0.15s ease;
+        }
+
+        .prompt-tab.active {
+            background: #2383e2;
+            color: white;
+        }
+
+        .prompt-tab:hover:not(.active) {
+            background: rgba(55, 53, 47, 0.08);
+        }
+
+        .prompt-content {
+            display: none;
+        }
+
+        .prompt-content.active {
+            display: block;
+        }
+
+        .prompt-example {
+            background: #f7f6f3;
+            border: 1px solid #e9e9e7;
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 12px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 13px;
+        }
+
+        .prompt-label {
+            font-weight: 600;
+            color: #2383e2;
+            margin-bottom: 4px;
+        }
+
+        /* 步驟列表 */
+        .steps-list {
+            list-style: none;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #fafafa;
+            border-radius: 6px;
+            border-left: 3px solid #2383e2;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: #2383e2;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #37352f;
+            margin-bottom: 4px;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: rgba(55, 53, 47, 0.65);
+            line-height: 1.5;
+        }
+
+        /* 警告框 */
+        .callout {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: #fdf2e9;
+            border: 1px solid #faebcd;
+            border-radius: 6px;
+            margin-bottom: 16px;
+        }
+
+        .callout-icon {
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .callout-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #37352f;
+            margin-bottom: 4px;
+        }
+
+        .callout-content p {
+            font-size: 14px;
+            color: rgba(55, 53, 47, 0.65);
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        /* 表格樣式 */
+        .notion-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .notion-table th,
+        .notion-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border: 1px solid #e9e9e7;
+            font-size: 14px;
+        }
+
+        .notion-table th {
+            background: #f7f6f3;
+            font-weight: 600;
+            color: #37352f;
+        }
+
+        .notion-table td {
+            color: rgba(55, 53, 47, 0.65);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .tool-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .prompt-tabs {
+                flex-wrap: wrap;
+            }
+        }
+
+        /* 加載動畫 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 滾動條樣式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        /* 隱藏元素 */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 側邊欄 -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    🚀 AI行政工作指南
+                </div>
+            </div>
+            
+            <div class="nav-item active" onclick="scrollToSection('overview')">
+                <span class="nav-icon">📋</span>
+                工具概覽
+            </div>
+            
+            <div class="nav-item" onclick="scrollToSection('scenarios')">
+                <span class="nav-icon">🎯</span>
+                應用情境
+            </div>
+            
+            <div class="nav-item" onclick="scrollToSection('prompts')">
+                <span class="nav-icon">💡</span>
+                提示詞範例
+            </div>
+            
+            <div class="nav-item" onclick="scrollToSection('steps')">
+                <span class="nav-icon">🔧</span>
+                操作步驟
+            </div>
+            
+            <div class="nav-item" onclick="scrollToSection('warnings')">
+                <span class="nav-icon">⚠️</span>
+                注意事項
+            </div>
+        </nav>
+
+        <!-- 主內容區 -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">
+                    🚀 AI賦能學校行政工作
+                </h1>
+                <p class="page-subtitle">
+                    運用Gemini與Notebook LM，讓繁重的行政工作變得輕鬆高效，為教育工作者節省寶貴時間，專注於教學核心。
+                </p>
+            </div>
+
+            <!-- 工具概覽 -->
+            <section id="overview" class="content-block expanded">
+                <div class="block-header" onclick="toggleBlock(this)">
+                    <div class="block-title">
+                        📋 工具概覽
+                    </div>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="block-content">
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon">G</div>
+                                <div class="tool-name">Gemini Workspace</div>
+                            </div>
+                            <div class="tool-description">
+                                整合於Gmail、Google文件、試算表中的AI助手，協助信件撰寫、行程安排、文件生成等日常行政工作。
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    智慧信件撰寫與回覆
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    自動行程安排至日曆
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    表格與文件快速生成
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    多語言翻譯與校正
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon">N</div>
+                                <div class="tool-name">Notebook LM</div>
+                            </div>
+                            <div class="tool-description">
+                                強大的文件分析工具，可處理法規、會議記錄、研習影片等多元資料，成為您的專業知識助手。
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    法規專家查詢系統
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    會議錄音轉逐字稿
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    研習影片內容整理
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">✓</span>
+                                    多檔案交叉分析
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 應用情境 -->
+            <section id="scenarios" class="content-block">
+                <div class="block-header" onclick="toggleBlock(this)">
+                    <div class="block-title">
+                        🎯 五大應用情境
+                    </div>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="block-content">
+                    <div class="tool-grid">
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon" style="background: #10b981;">📋</div>
+                                <div class="tool-name">法規專家助手</div>
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    快速查詢教育法規條文
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    法規條文智慧比對分析
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    合規性檢查與建議
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    法規更新同步提醒
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon" style="background: #8b5cf6;">📝</div>
+                                <div class="tool-name">公文寫作助手</div>
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    公文格式自動生成
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    用語規範智慧建議
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    簽呈範本快速產生
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    發函格式自動調整
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon" style="background: #f59e0b;">👥</div>
+                                <div class="tool-name">學生事務管理</div>
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    校規智慧查詢系統
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    懲處建議自動生成
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    家長通知書製作
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    學生手冊快速檢索
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon" style="background: #ef4444;">🎤</div>
+                                <div class="tool-name">會議記錄處理</div>
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    錄音自動轉逐字稿
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    發言者智慧辨識
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    會議重點自動摘要
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    決議事項整理歸類
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="tool-card">
+                            <div class="tool-header">
+                                <div class="tool-icon" style="background: #06b6d4;">📚</div>
+                                <div class="tool-name">研習資料整理</div>
+                            </div>
+                            <ul class="feature-list">
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    YouTube影片內容提取
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    研習重點快速摘要
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    專業知識庫建立
+                                </li>
+                                <li class="feature-item">
+                                    <span class="feature-icon">•</span>
+                                    學習資源分類管理
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 提示詞範例 -->
+            <section id="prompts" class="content-block">
+                <div class="block-header" onclick="toggleBlock(this)">
+                    <div class="block-title">
+                        💡 實用提示詞範例
+                    </div>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="block-content">
+                    <div class="prompt-section">
+                        <div class="prompt-tabs">
+                            <button class="prompt-tab active" onclick="switchPromptTab('law')">法規查詢</button>
+                            <button class="prompt-tab" onclick="switchPromptTab('document')">公文寫作</button>
+                            <button class="prompt-tab" onclick="switchPromptTab('meeting')">會議記錄</button>
+                            <button class="prompt-tab" onclick="switchPromptTab('research')">研習整理</button>
+                        </div>
+
+                        <div class="prompt-content active" id="law">
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：查詢課業輔導收費規定</div>
+                                請幫我整理學校在辦理課業輔導課的時候應該注意的事項，特別是收費規定的部分。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：計算開班成本</div>
+                                如果班級人數是20人，參加課業輔導課，每週上4節，教師每節鐘點費550元，請問每位學生應收取多少費用才能收支平衡？
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：檢查文件合規性</div>
+                                請依據高級中等學校課業輔導實施要點內容，幫我檢查「家長通知書.pdf」需要修正或補充的地方。
+                            </div>
+                        </div>
+
+                        <div class="prompt-content" id="document">
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：撰寫邀請函</div>
+                                幫我寫一封邀請講師到學校演講的信件，主題是「AI在教育上的應用」，日期：112年12月15日，時間：下午2:00-4:00。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：需求簽呈</div>
+                                你是一位高中學校行政人員，學校最近有一個黑板的採購案，需要寫需求簽呈，請提供範本。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：發函給上級機關</div>
+                                你是一位高中行政組長，想要進行高中輔助學習計劃的結案，要發函給教育部國民學前署，請提供函的範本。
+                            </div>
+                        </div>
+
+                        <div class="prompt-content" id="meeting">
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：製作會議記錄</div>
+                                請幫我將來源資料建立成一個正式詳細的會議記錄，包含會議名稱、出席人員、討論事項、決議內容。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：逐字稿整理</div>
+                                請幫我將來源檔案製作成會議逐字稿，以表格輸出，欄位要有角色、逐字稿內容，角色以A、B、C、D呈現。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：會議摘要</div>
+                                請幫我摘要這次會議的重點決議，並列出需要後續追蹤的事項。
+                            </div>
+                        </div>
+
+                        <div class="prompt-content" id="research">
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：整理研習重點</div>
+                                請幫我整理出校園網路管理的重點，並以條列方式輸出主要管理策略。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：學習載具管理</div>
+                                請幫我列出這場研習中，講師分享的學習載具管理重點和實務經驗。
+                            </div>
+                            <div class="prompt-example">
+                                <div class="prompt-label">情境：專業知識整理</div>
+                                請將這些研習影片的內容整理成數位學習推動的專業知識庫，分類歸納重要概念。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 操作步驟 -->
+            <section id="steps" class="content-block">
+                <div class="block-header" onclick="toggleBlock(this)">
+                    <div class="block-title">
+                        🔧 Notebook LM 操作步驟
+                    </div>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="block-content">
+                    <ol class="steps-list">
+                        <li class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>建立Google文件</h4>
+                                <p>將法規內容複製到Google文件中，第一行放置來源網址，方便日後更新。避免使用PDF格式，以便快速同步更新。</p>
+                            </div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>匯入Notebook LM</h4>
+                                <p>開啟新筆記本，選擇Google文件匯入。系統會自動分析文件內容，建立可查詢的知識庫。</p>
+                            </div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>智慧提問查詢</h4>
+                                <p>使用具體明確的問句進行查詢，避免使用「可不可以」、「好不好」等決定性問題，讓AI提供參考而非決策。</p>
+                            </div>
+                        </li>
+                        <li class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>分享與協作</h4>
+                                <p>將有用的筆記本分享給同事，設定適當權限。付費版可使用聊天機器人模式，提供更簡潔的查詢介面。</p>
+                            </div>
+                        </li>
+                    </ol>
+
+                    <table class="notion-table">
+                        <thead>
+                            <tr>
+                                <th>檔案類型</th>
+                                <th>建議做法</th>
+                                <th>優點</th>
+                                <th>注意事項</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>法規文件</td>
+                                <td>使用Google文件</td>
+                                <td>可快速同步更新</td>
+                                <td>第一行需放置來源網址</td>
+                            </tr>
+                            <tr>
+                                <td>會議錄音</td>
+                                <td>上傳MP3格式</td>
+                                <td>辨識率最高</td>
+                                <td>避免機敏會議內容</td>
+                            </tr>
+                            <tr>
+                                <td>研習影片</td>
+                                <td>YouTube網址匯入</td>
+                                <td>自動轉逐字稿</td>
+                                <td>部分影片可能無法匯入</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 注意事項 -->
+            <section id="warnings" class="content-block">
+                <div class="block-header" onclick="toggleBlock(this)">
+                    <div class="block-title">
+                        ⚠️ 重要注意事項
+                    </div>
+                    <span class="expand-icon">▶</span>
+                </div>
+                <div class="block-content">
+                    <div class="callout">
+                        <div class="callout-icon">🔒</div>
+                        <div class="callout-content">
+                            <h4>資訊安全原則</h4>
+                            <p>機敏會議內容（如IEP、霸凌案件、個資相關）絕對不可上傳至AI工具。</p>
+                            <p>學校內部敏感資料應謹慎處理，避免外洩風險。</p>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <div class="callout-icon">🤖</div>
+                        <div class="callout-content">
+                            <h4>AI使用原則</h4>
+                            <p>不要將決定權交給AI，可請其提供參考資料和建議，但最終判斷仍需人工確認。</p>
+                            <p>避免詢問「可不可以」、「好不好」等決定性問題。</p>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <div class="callout-icon">✅</div>
+                        <div class="callout-content">
+                            <h4>品質檢核</h4>
+                            <p>AI生成的內容需要人工檢視，特別是涉及法規條文或重要決策的部分。</p>
+                            <p>建議與現行法規交叉比對，確保內容準確性。</p>
+                        </div>
+                    </div>
+
+                    <div class="callout">
+                        <div class="callout-icon">📊</div>
+                        <div class="callout-content">
+                            <h4>費用考量</h4>
+                            <p>Gemini Workspace整合功能需要額外付費訂閱。</p>
+                            <p>Notebook LM免費版功能已相當完整，可先行試用評估效果。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // 區塊展開/收合功能
+        function toggleBlock(header) {
+            const block = header.parentElement;
+            block.classList.toggle('expanded');
+        }
+
+        // 側邊欄導航
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.scrollIntoView({ behavior: 'smooth' });
+            
+            // 更新導航狀態
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // 自動展開對應區塊
+            const block = section.closest('.content-block');
+            if (block && !block.classList.contains('expanded')) {
+                block.classList.add('expanded');
+            }
+        }
+
+        // 提示詞分頁切換
+        function switchPromptTab(tabName) {
+            // 移除所有active類別
+            document.querySelectorAll('.prompt-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.prompt-content').forEach(content => content.classList.remove('active'));
+            
+            // 添加active到選中的分頁
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 預設展開第一個區塊
+            const firstBlock = document.querySelector('.content-block');
+            if (firstBlock) {
+                firstBlock.classList.add('expanded');
+            }
+            
+            // 添加淡入動畫
+            document.querySelectorAll('.tool-card, .step-item').forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    element.style.transition = 'all 0.3s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // 滾動時更新導航狀態
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            let currentSection = '';
+            
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    currentSection = section.id;
+                }
+            });
+            
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('onclick').includes(currentSection)) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

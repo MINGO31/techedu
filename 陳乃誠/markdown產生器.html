@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown 編輯器與預覽</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFF5E6;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        #input, #output {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        #input {
+            background-color: #FFE0B2;
+        }
+        #output {
+            background-color: #FFCC80;
+        }
+        textarea {
+            width: 100%;
+            height: calc(100% - 100px);
+            border: none;
+            background-color: #FFF5E6;
+            padding: 10px;
+            font-size: 16px;
+            resize: none;
+        }
+        h1 {
+            color: #FF9800;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #markdown-output {
+            background-color: #FFF5E6;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        #markdown-output h1, #markdown-output h2, #markdown-output h3, 
+        #markdown-output h4, #markdown-output h5, #markdown-output h6 {
+            color: #FF9800;
+        }
+        #markdown-output a {
+            color: #FF5722;
+        }
+        #markdown-output code {
+            background-color: #FFE0B2;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        #markdown-output pre {
+            background-color: #FFE0B2;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        button {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #F57C00;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="input">
+            <h1>Markdown 輸入</h1>
+            <textarea id="markdown-input" placeholder="在此輸入 Markdown 格式的文本..."></textarea>
+            <div class="button-container">
+                <button id="export-btn">匯出 MD 檔案</button>
+                <button id="save-btn">儲存</button>
+            </div>
+        </div>
+        <div id="output">
+            <h1>Markdown 預覽</h1>
+            <div id="markdown-output"></div>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('markdown-input');
+        const output = document.getElementById('markdown-output');
+        const exportBtn = document.getElementById('export-btn');
+        const saveBtn = document.getElementById('save-btn');
+
+        function updateOutput() {
+            const markdown = input.value;
+            const html = marked.parse(markdown);
+            output.innerHTML = html;
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const debouncedUpdate = debounce(updateOutput, 300);
+
+        input.addEventListener('input', debouncedUpdate);
+
+        // 匯出 MD 檔案功能
+        exportBtn.addEventListener('click', function() {
+            const markdown = input.value;
+            const blob = new Blob([markdown], {type: "text/markdown;charset=utf-8"});
+            const link = document.createElement("a");
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "markdown_export.md");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        });
+
+        // 儲存功能
+        saveBtn.addEventListener('click', function() {
+            localStorage.setItem('savedMarkdown', input.value);
+            alert('內容已儲存！');
+        });
+
+        // 載入儲存的內容
+        window.addEventListener('load', function() {
+            const savedContent = localStorage.getItem('savedMarkdown');
+            if (savedContent) {
+                input.value = savedContent;
+                updateOutput();
+            } else {
+                // 如果沒有儲存的內容，則載入預設的示例文本
+                input.value = `# Markdown 示例
+
+## 標題
+
+這是一個段落。您可以使用 **粗體** 或 *斜體* 來強調文字。
+
+### 列表
+
+無序列表：
+
+- 項目 1
+- 項目 2
+- 項目 3
+
+有序列表：
+
+1. 第一項
+2. 第二項
+3. 第三項
+
+### 鏈接和圖片
+
+[這是一個鏈接](https://www.example.com)
+
+![這是一個圖片佔位符](https://via.placeholder.com/150)
+
+### 引用
+
+> 這是一個引用。
+> - 引用中的作者
+
+### 代碼
+
+行內代碼：\`console.log('Hello, World!');\`
+
+代碼塊：
+
+\`\`\`javascript
+function greet(name) {
+    console.log('Hello, ' + name + '!');
+}
+greet('World');
+\`\`\`
+
+### 表格
+
+| 列 1 | 列 2 | 列 3 |
+|------|------|------|
+| 單元格 1 | 單元格 2 | 單元格 3 |
+| 單元格 4 | 單元格 5 | 單元格 6 |
+
+---
+
+這就是 Markdown 的基本語法示例。`;
+                updateOutput();
+            }
+        });
+
+        updateOutput();
+    </script>
+</body>
+</html>

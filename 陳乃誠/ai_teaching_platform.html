@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI在作文批改與語文教學的應用平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2d5016;
+            --secondary-green: #4a7c59;
+            --light-green: #8fbc8f;
+            --very-light-green: #f0f8f0;
+            --accent-green: #66bb6a;
+            --dark-text: #2e2e2e;
+            --light-text: #666;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, var(--very-light-green) 0%, #ffffff 100%);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.9);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            background: white;
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 0.7rem 1.5rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            padding: 2rem 0;
+        }
+
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid var(--accent-green);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--light-green));
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-green);
+            flex: 1;
+        }
+
+        .card-content {
+            color: var(--light-text);
+            line-height: 1.7;
+        }
+
+        .key-points {
+            background: var(--very-light-green);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .key-points h4 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .key-points ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .key-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .example-section {
+            background: linear-gradient(135deg, #ffffff, var(--very-light-green));
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border: 1px solid var(--light-green);
+        }
+
+        .example-title {
+            color: var(--secondary-green);
+            font-weight: bold;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            padding: 0.8rem 0;
+            position: relative;
+            padding-left: 3rem;
+            border-bottom: 1px solid rgba(143, 188, 143, 0.3);
+        }
+
+        .step-list li:last-child {
+            border-bottom: none;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0.8rem;
+            background: var(--accent-green);
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--accent-green), var(--secondary-green));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .highlight-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.1; }
+        }
+
+        .warning-section {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            border-left: 4px solid #f39c12;
+        }
+
+        .warning-title {
+            color: #856404;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .floating-action {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--accent-green);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-action:hover {
+            transform: scale(1.1);
+            background: var(--secondary-green);
+        }
+
+        .back-to-top {
+            display: none;
+        }
+
+        .back-to-top.show {
+            display: block;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-green);
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .search-container {
+                max-width: 100%;
+            }
+
+            .nav-tabs {
+                justify-content: center;
+            }
+
+            .topic-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .topic-card {
+                padding: 1.5rem;
+            }
+        }
+
+        .filter-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tag {
+            padding: 0.5rem 1rem;
+            background: var(--very-light-green);
+            border: 1px solid var(--light-green);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-tag:hover, .filter-tag.active {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    🎓 AI語文教學應用平台
+                </div>
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜尋教學內容...">
+                </div>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('overview')">概覽</button>
+                <button class="nav-tab" onclick="showSection('applications')">AI應用</button>
+                <button class="nav-tab" onclick="showSection('techniques')">溝通技巧</button>
+                <button class="nav-tab" onclick="showSection('tools')">工具平台</button>
+                <button class="nav-tab" onclick="showSection('practices')">實務操作</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- 概覽區段 -->
+            <section id="overview" class="content-section active">
+                <div class="highlight-box">
+                    <h2>🚀 AI在語文教學的革新應用</h2>
+                    <p>探索人工智慧如何協助國中語文教學，從作文批改到創意教學，全方位提升教學效率與學習體驗。</p>
+                </div>
+
+                <div class="filter-tags">
+                    <span class="filter-tag active" onclick="filterCards('all')">全部</span>
+                    <span class="filter-tag" onclick="filterCards('批改')">作文批改</span>
+                    <span class="filter-tag" onclick="filterCards('平台')">AI平台</span>
+                    <span class="filter-tag" onclick="filterCards('技巧')">溝通技巧</span>
+                    <span class="filter-tag" onclick="filterCards('安全')">帳號安全</span>
+                </div>
+
+                <div class="topic-grid" id="topicGrid">
+                    <div class="topic-card" data-category="批改">
+                        <div class="card-header">
+                            <div class="card-icon">📝</div>
+                            <h3 class="card-title">AI作文批改系統</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🎯 核心功能</h4>
+                                <ul>
+                                    <li>智能作文批改與評分</li>
+                                    <li>多維度評分標準（內容、結構、語法、錯字）</li>
+                                    <li>自動生成範文與建議</li>
+                                    <li>支援手機拍照上傳批改</li>
+                                </ul>
+                            </div>
+                            <p>康軒AI系統採用會考評分架構，能自動識別文章優缺點，提供客觀評分與改進建議，大幅提升批改效率。</p>
+                        </div>
+                    </div>
+
+                    <div class="topic-card" data-category="技巧">
+                        <div class="card-header">
+                            <div class="card-icon">💬</div>
+                            <h3 class="card-title">AI溝通四大技巧</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🔧 溝通策略</h4>
+                                <ul>
+                                    <li>設人設：明確指定AI角色</li>
+                                    <li>給目標：清楚說明任務需求</li>
+                                    <li>給限制：設定回應條件</li>
+                                    <li>加追問：深入優化結果</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">💡 實用範例</div>
+                                <p><strong>設人設：</strong>你是臺灣國中會考的作文批改老師<br>
+                                <strong>給目標：</strong>請批改這篇文章<br>
+                                <strong>給限制：</strong>提供三個優點、兩個建議、一個分數<br>
+                                <strong>加追問：</strong>請詳細說明第二點建議</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card" data-category="平台">
+                        <div class="card-header">
+                            <div class="card-icon">🌐</div>
+                            <h3 class="card-title">多元AI平台應用</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🛠️ 推薦平台</h4>
+                                <ul>
+                                    <li>Padlet：圖片生成與協作</li>
+                                    <li>Gemini Google：多功能AI助手</li>
+                                    <li>康軒AI：專業作文批改</li>
+                                    <li>PoE：自訂批改機器人</li>
+                                </ul>
+                            </div>
+                            <p>不同平台各有特色，Google在圖片辨識最強，康軒專精於教育應用，PoE提供高度客製化功能。</p>
+                        </div>
+                    </div>
+
+                    <div class="topic-card" data-category="安全">
+                        <div class="card-header">
+                            <div class="card-icon">🔒</div>
+                            <h3 class="card-title">帳號安全管理</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🛡️ 安全要點</h4>
+                                <ul>
+                                    <li>建議使用教育帳號登入</li>
+                                    <li>啟用二段認證提升安全</li>
+                                    <li>定期清理瀏覽器資料</li>
+                                    <li>妥善保管帳號密碼</li>
+                                </ul>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">⚠️ 注意事項</div>
+                                <p>教育帳號極具價值，許多AI工具僅開放教師使用。帳號遺失需聯繫學校或教育部協助找回。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI應用區段 -->
+            <section id="applications" class="content-section">
+                <h2 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">🤖 AI教學應用實務</h2>
+                
+                <div class="topic-grid">
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">🎨</div>
+                            <h3 class="card-title">AI圖片生成教學</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="example-section">
+                                <div class="example-title">📋 操作步驟</div>
+                                <ol class="step-list">
+                                    <li>進入Padlet平台，新增個人區段</li>
+                                    <li>選擇AI影像功能</li>
+                                    <li>輸入描述關鍵字（性別、地區、特徵、風格）</li>
+                                    <li>提交生成，可多次修改優化</li>
+                                    <li>保存圖片並分享至教學平台</li>
+                                </ol>
+                            </div>
+                            <div class="key-points">
+                                <h4>💡 教學應用</h4>
+                                <ul>
+                                    <li>學生自我介紹圖片製作</li>
+                                    <li>文學情境圖像創作</li>
+                                    <li>歷史人物形象重現</li>
+                                    <li>創意寫作靈感啟發</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">📖</div>
+                            <h3 class="card-title">AI詩詞創作指導</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="highlight-box">
+                                <h4>🎭 角色扮演範例</h4>
+                                <p>"你是唐代大詩人李白，請依照圖片中的風景，寫一首七言律詩，用繁體中文呈現，並加以解析。"</p>
+                            </div>
+                            <div class="key-points">
+                                <h4>🔄 優化流程</h4>
+                                <ul>
+                                    <li>設定明確詩人角色</li>
+                                    <li>指定詩詞格式與語言</li>
+                                    <li>要求提供詳細解析</li>
+                                    <li>追問修正古風用語</li>
+                                    <li>應用於閱讀理解教學</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">📊</div>
+                            <h3 class="card-title">AI出題與評量</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="example-section">
+                                <div class="example-title">⚙️ 功能特色</div>
+                                <ul>
+                                    <li><strong>素養導向：</strong>生成符合新課綱的題目</li>
+                                    <li><strong>多元題型：</strong>閱讀理解、語文應用</li>
+                                    <li><strong>自動解析：</strong>提供詳細答案說明</li>
+                                    <li><strong>批量生成：</strong>一次最多產出三題</li>
+                                </ul>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">⚠️ 使用建議</div>
+                                <p>建議一次生成三題後精選，避免題目品質參差不齊。生成內容需人工審核確保符合教學需求。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 溝通技巧區段 -->
+            <section id="techniques" class="content-section">
+                <h2 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">💡 AI溝通技巧深度解析</h2>
+                
+                <div class="topic-grid">
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">🎯</div>
+                            <h3 class="card-title">精準設定人設</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>👨‍🏫 角色定位策略</h4>
+                                <ul>
+                                    <li>明確專業背景（如：國中會考批改老師）</li>
+                                    <li>設定經驗層級（資深/新手）</li>
+                                    <li>指定專業領域（國文/數學/英文）</li>
+                                    <li>強調教學風格（嚴格/溫和/鼓勵）</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">✨ 優化前後對比</div>
+                                <p><strong>一般指令：</strong>幫我批改作文<br>
+                                <strong>優化指令：</strong>你是擁有10年經驗的國中國文老師，專精於會考作文指導，教學風格溫和而具建設性，請協助批改這篇作文</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">🎯</div>
+                            <h3 class="card-title">明確目標設定</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🎨 目標分類技巧</h4>
+                                <ul>
+                                    <li>評量類：批改、評分、檢測</li>
+                                    <li>創作類：生成、改寫、續寫</li>
+                                    <li>分析類：解析、比較、歸納</li>
+                                    <li>教學類：設計、規劃、指導</li>
+                                </ul>
+                            </div>
+                            <div class="highlight-box">
+                                <h4>🔍 目標細化範例</h4>
+                                <p>「請批改」→「請從內容豐富度、結構完整性、語言表達、創意亮點四個面向批改這篇作文」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">⚖️</div>
+                            <h3 class="card-title">合理限制條件</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>📏 限制類型</h4>
+                                <ul>
+                                    <li>數量限制：三個優點、兩個建議</li>
+                                    <li>格式限制：條列式、表格式</li>
+                                    <li>長度限制：50字內、一段話</li>
+                                    <li>範圍限制：僅針對語法、不討論內容</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">⚙️ 實用限制模板</div>
+                                <p>「請以表格形式呈現，包含：評分項目、得分、具體建議，每項建議不超過30字，總評分以5級分制評定」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">❓</div>
+                            <h3 class="card-title">深度追問技巧</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🔄 追問策略</h4>
+                                <ul>
+                                    <li>澄清追問：「你剛提到的○○是指什麼？」</li>
+                                    <li>深化追問：「請詳細說明第二點建議的具體做法」</li>
+                                    <li>擴展追問：「還有其他類似的改進方式嗎？」</li>
+                                    <li>應用追問：「這個建議如何在課堂上實施？」</li>
+                                </ul>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">💡 追問要訣</div>
+                                <p>每次追問針對一個重點，避免同時提出多個問題。利用追問逐步細化，達到最佳教學效果。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 工具平台區段 -->
+            <section id="tools" class="content-section">
+                <h2 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">🛠️ AI工具平台完整指南</h2>
+                
+                <div class="topic-grid">
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">📝</div>
+                            <h3 class="card-title">康軒AI批改系統</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="example-section">
+                                <div class="example-title">🔧 完整操作流程</div>
+                                <ol class="step-list">
+                                    <li>使用教育帳號登入系統</li>
+                                    <li>選擇作文批改功能</li>
+                                    <li>上傳作文圖片（支援多頁）</li>
+                                    <li>等待AI自動批改分析</li>
+                                    <li>檢視評分結果與建議</li>
+                                    <li>下載Word檔案或直接分享</li>
+                                </ol>
+                            </div>
+                            <div class="key-points">
+                                <h4>📊 評分架構</h4>
+                                <ul>
+                                    <li>立意取材：內容深度與創意</li>
+                                    <li>組織架構：文章結構邏輯</li>
+                                    <li>遣詞造句：語言表達能力</li>
+                                    <li>錯別字：文字正確性</li>
+                                </ul>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">💰 成本考量</div>
+                                <p>每次批改需消耗點數，建議重要作業才使用AI批改，日常練習可搭配其他方式。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">🤖</div>
+                            <h3 class="card-title">PoE自訂機器人</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="example-section">
+                                <div class="example-title">⚙️ 建置步驟</div>
+                                <ol class="step-list">
+                                    <li>登入PoE平台並啟用二段認證</li>
+                                    <li>選擇Claude作為AI引擎</li>
+                                    <li>撰寫詳細的引導語</li>
+                                    <li>建立知識庫（評分標準、範文）</li>
+                                    <li>測試機器人回應品質</li>
+                                    <li>生成QR Code供學生使用</li>
+                                </ol>
+                            </div>
+                            <div class="key-points">
+                                <h4>📚 知識庫內容建議</h4>
+                                <ul>
+                                    <li>國中會考作文評分標準</li>
+                                    <li>各級分作文範例</li>
+                                    <li>常見寫作錯誤與修正</li>
+                                    <li>文體特色與要求</li>
+                                </ul>
+                            </div>
+                            <div class="highlight-box">
+                                <h4>🎯 引導語範本</h4>
+                                <p>「你是國中國文老師，專精作文批改。請根據會考評分標準，提供具體建議。回應格式：三個優點、兩個改進建議、一個鼓勵話語。」</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">🌐</div>
+                            <h3 class="card-title">Gemini Google應用</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🎨 多元功能</h4>
+                                <ul>
+                                    <li>圖片生成：景點、人物、情境</li>
+                                    <li>文本創作：詩詞、故事、對話</li>
+                                    <li>圖片分析：OCR文字辨識</li>
+                                    <li>語音輸入：提升操作便利性</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">📸 圖片生成技巧</div>
+                                <p><strong>描述順序：</strong>主體 → 動作 → 場景 → 風格<br>
+                                <strong>範例：</strong>「台灣女學生，正在閱讀，坐在圖書館，水彩畫風格」</p>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">⚠️ 使用限制</div>
+                                <p>圖片辨識準確率約70-80%，重要文件建議人工校對。語音輸入在安靜環境下效果最佳。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">📋</div>
+                            <h3 class="card-title">Padlet協作平台</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>👥 教學應用</h4>
+                                <ul>
+                                    <li>學生作品展示牆</li>
+                                    <li>小組討論與分享</li>
+                                    <li>AI圖片生成練習</li>
+                                    <li>課堂即時互動</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">🎯 實務操作</div>
+                                <ol class="step-list">
+                                    <li>建立主題討論區</li>
+                                    <li>設定學生發表權限</li>
+                                    <li>引導學生上傳作品</li>
+                                    <li>進行同儕互評</li>
+                                    <li>教師總結回饋</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 實務操作區段 -->
+            <section id="practices" class="content-section">
+                <h2 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">⚡ 實務操作與最佳實踐</h2>
+                
+                <div class="topic-grid">
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">📱</div>
+                            <h3 class="card-title">行動裝置整合應用</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>📲 手機/平板操作優勢</h4>
+                                <ul>
+                                    <li>隨時拍照上傳學生作業</li>
+                                    <li>即時語音輸入批改意見</li>
+                                    <li>AirDrop快速檔案傳輸</li>
+                                    <li>課堂即時互動回饋</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">🔄 工作流程範例</div>
+                                <ol class="step-list">
+                                    <li>課堂上用平板拍攝學生作業</li>
+                                    <li>透過AirDrop傳送至批改系統</li>
+                                    <li>利用語音輸入快速評語</li>
+                                    <li>生成QR Code讓學生掃描查看</li>
+                                    <li>課後整理成完整批改記錄</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">🔄</div>
+                            <h3 class="card-title">對話記錄管理策略</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="highlight-box">
+                                <h4>📁 一話一事原則</h4>
+                                <p>每個對話只處理一項工作，確保記錄清晰、檢索容易、管理有效。</p>
+                            </div>
+                            <div class="key-points">
+                                <h4>🗂️ 分類管理技巧</h4>
+                                <ul>
+                                    <li>批改類：以學生姓名或日期命名</li>
+                                    <li>創作類：以主題或文體分類</li>
+                                    <li>圖片類：以用途或風格歸類</li>
+                                    <li>教案類：以課程單元整理</li>
+                                </ul>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">💾 備份與分享</div>
+                                <p>個人帳號可直接分享對話連結，學校帳號需匯出至Google文件後分享。務必登入帳號以保存記錄。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">⚖️</div>
+                            <h3 class="card-title">AI輔助vs人工把關</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🤝 協作分工原則</h4>
+                                <ul>
+                                    <li>AI負責：初步批改、格式檢查、範例生成</li>
+                                    <li>教師負責：專業判斷、情感回饋、個別指導</li>
+                                    <li>學生參與：自我評估、同儕互評、反思改進</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">✅ 品質控制流程</div>
+                                <ol class="step-list">
+                                    <li>AI完成初步批改與評分</li>
+                                    <li>教師檢視AI評分合理性</li>
+                                    <li>調整不符合實際的評語</li>
+                                    <li>增加個人化鼓勵與建議</li>
+                                    <li>確認無誤後提供給學生</li>
+                                </ol>
+                            </div>
+                            <div class="warning-section">
+                                <div class="warning-title">🎯 重要提醒</div>
+                                <p>AI評分僅供參考，最終評量應以教師專業判斷為準。注意保護學生隱私，適度使用AI工具。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="topic-card">
+                        <div class="card-header">
+                            <div class="card-icon">💡</div>
+                            <h3 class="card-title">創新教學應用案例</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="key-points">
+                                <h4>🚀 進階應用方式</h4>
+                                <ul>
+                                    <li>AI生成題目進行限時寫作</li>
+                                    <li>圖片詩詞創作與賞析</li>
+                                    <li>角色扮演對話練習</li>
+                                    <li>多版本範文比較學習</li>
+                                </ul>
+                            </div>
+                            <div class="example-section">
+                                <div class="example-title">📚 跨領域整合</div>
+                                <p><strong>歷史+國文：</strong>AI生成歷史人物，學生撰寫人物傳記<br>
+                                <strong>地理+國文：</strong>AI展示各地風景，創作地方特色詩詞<br>
+                                <strong>資訊+國文：</strong>程式邏輯思維應用於文章結構分析</p>
+                            </div>
+                            <div class="highlight-box">
+                                <h4>🏆 成功要素</h4>
+                                <p>明確學習目標、適度技術整合、保持教學溫度、重視學習成效</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <button class="floating-action back-to-top" id="backToTop" onclick="scrollToTop()">
+        ↑
+    </button>
+
+    <script>
+        // 搜尋功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.topic-card');
+            
+            cards.forEach(card => {
+                const content = card.textContent.toLowerCase();
+                if (content.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.3s ease-in';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        // 頁籤切換
+        function showSection(sectionId) {
+            // 隱藏所有區段
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 顯示指定區段
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 更新導航標籤狀態
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // 捲動到頂部
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // 篩選功能
+        function filterCards(category) {
+            const cards = document.querySelectorAll('.topic-card');
+            const filterTags = document.querySelectorAll('.filter-tag');
+            
+            // 更新篩選標籤狀態
+            filterTags.forEach(tag => tag.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    card.style.animation = 'fadeIn 0.3s ease-in';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 返回頂部功能
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // 滾動進度條
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        }
+
+        // 監聽滾動事件
+        window.addEventListener('scroll', function() {
+            updateProgressBar();
+            
+            // 控制返回頂部按鈕顯示
+            const backToTopBtn = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        });
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgressBar();
+        });
+
+        // 卡片hover效果增強
+        document.querySelectorAll('.topic-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

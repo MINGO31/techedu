@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數位科技融入國中教學之實踐研究專案報告</title>
+    <style>
+        :root {
+            --primary-color: #3a7ca5;
+            --secondary-color: #2f6690;
+            --accent-color: #d9dcd6;
+            --text-color: #333;
+            --light-bg: #f7f7f7;
+            --highlight: #e63946;
+        }
+        
+        body {
+            font-family: "Microsoft JhengHei", "微軟正黑體", "Heiti TC", "黑體-繁", sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        header p {
+            margin: 20px 0 0;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        nav {
+            background-color: var(--secondary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav li {
+            margin: 0;
+        }
+        
+        nav a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 15px 20px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        main {
+            padding: 40px 0;
+        }
+        
+        section {
+            margin-bottom: 60px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 40px;
+        }
+        
+        h3 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin-top: 30px;
+        }
+        
+        .quote {
+            background-color: var(--light-bg);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .highlight {
+            color: var(--highlight);
+            font-weight: bold;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .card h4 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+        
+        .key-points {
+            background-color: #e8f4f8;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .key-points ul {
+            padding-left: 20px;
+        }
+        
+        .key-points li {
+            margin-bottom: 10px;
+        }
+        
+        .example {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .example-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 12px;
+            vertical-align: top;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .challenges {
+            background-color: #fdf0f0;
+            border-left: 4px solid var(--highlight);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .solutions {
+            background-color: #f0f7f0;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .conclusion {
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            padding: 25px;
+            margin: 40px 0 20px;
+        }
+        
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav a {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>數位科技融入國中教學之實踐研究專案報告</h1>
+            <p>探索數位平臺於教學、書法課程設計與班級經營之創新實踐</p>
+        </div>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#intro">研究概述</a></li>
+            <li><a href="#digital-platform">數位教學平臺實踐</a></li>
+            <li><a href="#calligraphy-lesson">書法教學課例分析</a></li>
+            <li><a href="#classroom-management">班級經營策略</a></li>
+            <li><a href="#teacher-development">教師專業發展</a></li>
+            <li><a href="#conclusion">結論與建議</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <section id="intro">
+            <h2>研究概述</h2>
+            <p>本研究專案於2025年5月8日在新竹內湖國中進行，旨在探討數位科技如何有效融入國中教學現場，提升教學效能與學生參與度。研究團隊透過說課、觀課與議課三階段，系統性分析數位教學平臺的操作經驗、書法教學課例設計，以及有效的班級經營策略。</p>
+            
+            <div class="key-points">
+                <h3>研究重點</h3>
+                <ul>
+                    <li>數位教學平臺（如Draw It、NearPod）在教學現場的實際應用與挑戰</li>
+                    <li>書法教學中七種書體辨識與數位工具輔助教學的實踐案例</li>
+                    <li>數位環境下的班級經營創新策略與控班技巧</li>
+                    <li>教師專業成長路徑與行政協作模式探析</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="digital-platform">
+            <h2>數位教學平臺實踐研究</h2>
+            
+            <h3>專業引導與監控協助</h3>
+            <p>在數位教學平臺的應用中，專業引導與監控協助是確保教學順暢的關鍵。研究發現，當教師具備充分的平臺操作知識，能有效引導硬體操作並提供即時監控協助時，學生學習參與度明顯提升。</p>
+            
+            <div class="card">
+                <h4>平臺優勢分析</h4>
+                <ul>
+                    <li>免費平臺的高CP值，可提供豐富互動功能而不增加學校預算負擔</li>
+                    <li>即時回饋功能被認為是數位平臺最具價值的特性，有助於教師掌握學習成效</li>
+                    <li>課程內容可長期保存與重複使用，教師報告指出經典課程可重複利用長達三年</li>
+                </ul>
+            </div>
+            
+            <h3>教師操作與教學轉換挑戰</h3>
+            <p>數位平臺雖有諸多優勢，但研究也識別出教師在實際應用過程中面臨的多重挑戰。這些挑戰不僅涉及技術層面，更關乎教學內容的轉化與學生適應問題。</p>
+            
+            <div class="challenges">
+                <h4>主要挑戰</h4>
+                <ul>
+                    <li>教師需花費額外時間熟悉平臺操作，增加備課負擔</li>
+                    <li>將傳統教學內容轉換為數位平臺適用格式，要求教師具備內容重組能力</li>
+                    <li>同時協助學生適應平臺操作，延長有效教學時間的準備階段</li>
+                    <li>網路或硬體臨時故障時的應變能力不足，可能導致教學中斷</li>
+                </ul>
+            </div>
+            
+            <div class="solutions">
+                <h4>應對策略</h4>
+                <ul>
+                    <li>教師間建立互助網絡，分享平臺操作經驗與解決方案</li>
+                    <li>準備備用教案，以應對技術問題時能快速轉換教學模式</li>
+                    <li>制定標準化的學生平臺使用指引，減少每次課程的操作講解時間</li>
+                    <li>善用平臺監控功能，即時發現並協助解決學生操作問題</li>
+                </ul>
+            </div>
+            
+            <h3>平臺技術問題與解決方式</h3>
+            <p>研究中記錄到多個數位平臺在實際使用過程中出現的技術問題，這些問題雖不會完全阻礙教學，但會影響教學流暢度與效率。</p>
+            
+            <div class="example">
+                <div class="example-title">案例分析：Draw It平臺白屏問題</div>
+                <p>以Draw It平臺為例，投影畫面偶爾會出現白屏現象，需要重新整理網頁才能恢復正常顯示。研究參與教師表示，因平臺為免費使用，此類小問題可以接受。有趣的是，此問題僅影響教師端顯示，學生端不受影響且無需重新登入，這在一定程度上減輕了問題的嚴重性。</p>
+            </div>
+            
+            <h3>NearPod與CB平臺使用經驗比較</h3>
+            <p>不同數位平臺各有特色與限制，教師需根據教學目標與內容特性選擇適合的平臺。研究比較了NearPod與CB平臺的使用經驗，提供教師平臺選擇參考。</p>
+            
+            <table>
+                <tr>
+                    <th>平臺特性</th>
+                    <th>NearPod</th>
+                    <th>CB平臺</th>
+                </tr>
+                <tr>
+                    <td>檔案容量限制</td>
+                    <td>整體容量300M，單一簡報限40M</td>
+                    <td>容量較大，支援複雜內容</td>
+                </tr>
+                <tr>
+                    <td>模板應用</td>
+                    <td>模板容量大，使用模板後剩餘空間有限</td>
+                    <td>自定義彈性較高</td>
+                </tr>
+                <tr>
+                    <td>內容重複使用</td>
+                    <td>高度支援，適合經典課程保存</td>
+                    <td>支援度中等，需較多調整</td>
+                </tr>
+                <tr>
+                    <td>即時回饋功能</td>
+                    <td>功能完善，操作簡便</td>
+                    <td>功能較基礎，需額外設置</td>
+                </tr>
+                <tr>
+                    <td>教師適應性評價</td>
+                    <td>初期學習曲線陡峭，長期使用便利</td>
+                    <td>入門門檻較低，進階功能較少</td>
+                </tr>
+            </table>
+            
+            <div class="quote">
+                「若有即時回饋功能，會將課程內容保留以便未來使用。數位平臺的便利性在於課程可隨時編輯、儲存與重複利用，尤其對於經典課程內容。」—— 研究參與教師
+            </div>
+        </section>
+        
+        <section id="calligraphy-lesson">
+            <h2>書法教學課例深度分析</h2>
+            
+            <p>本研究觀察記錄了一堂融合數位工具的書法教學課程，該課程在內湖國中702班進行，主題為七種書體辨識與應用。課程設計兼顧理論知識與實作體驗，透過數位工具提升學生參與度與學習效果。</p>
+            
+            <div class="key-points">
+                <h3>課程設計要點</h3>
+                <ul>
+                    <li>採用混合式教學模式，結合理論講解、影片教學與平板互動活動</li>
+                    <li>設計精巧口訣協助記憶七種書體特徵</li>
+                    <li>運用數位平臺實現即時檢測與互動反饋</li>
+                    <li>透過實作活動（印章設計、書法生成）加深知識內化</li>
+                    <li>設計階段性任務與時間掌控策略，確保教學進度</li>
+                </ul>
+            </div>
+            
+            <h3>書法教學七種書體記憶策略</h3>
+            <p>課程針對七種書體特徵記憶設計了專屬口訣「獎金賺利益超開心」，對應曹、凱、邢等書體，有效提升學生記憶效率。教師透過四分鐘影片教學搭配六個即時提問，確保學生理解與注意力。</p>
+            
+            <h3>書體特徵辨識教學分析</h3>
+            <p>課程重點強調不同書體的特徵辨識，以確保學生能在實際應用中分辨不同風格的漢字書寫形式。</p>
+            
+            <div class="card">
+                <h4>書體特徵教學策略</h4>
+                <table>
+                    <tr>
+                        <th>書體</th>
+                        <th>關鍵特徵</th>
+                        <th>教學方法</th>
+                        <th>記憶輔助</th>
+                    </tr>
+                    <tr>
+                        <td>甲骨文</td>
+                        <td>線條較尖、較瘦</td>
+                        <td>身體部位指認活動</td>
+                        <td>「龜腹牛肩」材料記憶</td>
+                    </tr>
+                    <tr>
+                        <td>金文（經文）</td>
+                        <td>字形圓潤</td>
+                        <td>圖像比較與圈選</td>
+                        <td>「金元寶」圓形聯想</td>
+                    </tr>
+                    <tr>
+                        <td>小篆</td>
+                        <td>粗細一致，形體較瘦</td>
+                        <td>藝術印章實例展示</td>
+                        <td>李斯創建歷史背景</td>
+                    </tr>
+                    <tr>
+                        <td>隸書</td>
+                        <td>橫筆尾端「鴨子屁股」</td>
+                        <td>特徵部位圈選活動</td>
+                        <td>「方塊漢字基礎」定位</td>
+                    </tr>
+                    <tr>
+                        <td>楷書</td>
+                        <td>結構方正，筆畫規範</td>
+                        <td>與行書、草書比較</td>
+                        <td>「最整齊」定位</td>
+                    </tr>
+                    <tr>
+                        <td>行書</td>
+                        <td>介於楷書與草書之間</td>
+                        <td>三種書體對比展示</td>
+                        <td>「介於中間」定位</td>
+                    </tr>
+                    <tr>
+                        <td>草書</td>
+                        <td>筆畫連綿，形態自由</td>
+                        <td>整齊度比較</td>
+                        <td>「最亂」簡易記憶</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>數位工具輔助實作活動設計</h3>
+            <p>課程設計了兩項關鍵實作活動：個人印章設計與書法作品生成，均透過數位工具實現，既提升學生興趣，又強化知識應用能力。</p>
+            
+            <div class="example">
+                <div class="example-title">實作活動一：個人印章設計</div>
+                <p>學生運用指定網站設計個人印章，需輸入三個名字字元與一個年度代表字，選擇印章樣式（圓形、方形、長方形）與字體（如壯書）。這一活動不僅讓學生體驗印章製作流程，更引導學生思考「年度代表字」，將書法藝術與個人成長反思結合。</p>
+                <p>教師精心設計引導語：<span class="highlight">「你今年過得如何？我們來選一個你自己今年的代表字，不管你是喜、是悲、是勇敢的有、還是有點衰的衰。」</span>這一設計連結了書法藝術與學生生活經驗，提升學習意義感。</p>
+            </div>
+            
+            <div class="example">
+                <div class="example-title">實作活動二：書法作品生成與落款</div>
+                <p>學生利用線上書法生成工具，將自選小吃名稱轉換為書法作品，並進行落款。學生需選擇字體（如楷書、草書）與背景顏色，下載作品後上傳至課程平臺。此活動強化了書法應用能力與數位操作技能，同時教授了書法作品落款的文化知識。</p>
+            </div>
+            
+            <h3>書法藝術價值教育</h3>
+            <p>課程結尾，教師特別強調真正書法藝術的價值與精神。雖然課堂活動利用數位工具快速生成作品，但教師提醒學生真正書法藝術的不可替代性，培養尊重傳統藝術的態度。</p>
+            
+            <div class="quote">
+                <span class="highlight">「真正的書法藝術還是非常珍貴跟有價值的。」</span>—— 授課教師金句
+            </div>
+            
+            <div class="key-points">
+                <h3>課例教學成效評估</h3>
+                <ul>
+                    <li>學生能成功辨識七種書體特徵，掌握關鍵識別點</li>
+                    <li>透過實作活動強化知識應用，提升學習深度</li>
+                    <li>數位工具有效提升學生參與度與課堂互動性</li>
+                    <li>口訣與視覺輔助相結合，強化記憶效果</li>
+                    <li>知識與生活經驗連結，實現意義建構</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section id="classroom-management">
+            <h2>數位環境下的班級經營策略研究</h2>
+            
+            <p>數位教學環境為班級經營帶來新挑戰與機遇。本研究分析了數位環境下有效的班級經營策略，提出了針對性的控班技巧與情緒管理方法。</p>
+            
+            <div class="quote">
+                <span class="highlight">「班級秩序就像是一個軌道，課程就是火車，你軌道先鋪好，火車才能在上面走。」</span>—— 議課教師分享
+            </div>
+            
+            <h3>班級經營與控班技巧</h3>
+            <p>有效的班級經營是課堂順利進行的基礎。研究發現，數位環境下班級經營需特別注重學生情緒安撫、突發狀況處理及秩序維持技巧。</p>
+            
+            <div class="key-points">
+                <h3>控班核心策略</h3>
+                <ul>
+                    <li><strong>情緒優先處理原則</strong>：教師需先回應學生感受，安撫情緒，再解決技術或學習問題</li>
+                    <li><strong>溫柔堅定態度</strong>：保持溫和語調但立場堅定，增強班級掌控力</li>
+                    <li><strong>預設軌道理論</strong>：提前建立明確課堂規則，如同鋪設軌道，確保教學順暢進行</li>
+                    <li><strong>數位監控輔助</strong>：善用教室平板監控功能，即時掌握學生學習狀態</li>
+                </ul>
+            </div>
+            
+            <div class="example">
+                <div class="example-title">案例：學生情緒處理</div>
+                <p>當學生反映平板無法操作時，熟練教師的第一反應是說「沒事」，先安撫學生情緒，讓學生感到安全與被理解，進而穩定課堂氛圍，之後再協助解決技術問題。這一情緒優先的處理模式顯著提升了班級管理效能。</p>
+            </div>
+            
+            <h3>卡牌遊戲於課堂管理的創新應用</h3>
+            <p>研究記錄了一種創新的班級管理工具——卡牌激勵系統。這一系統巧妙結合遊戲機制與課堂管理，提升學生參與度與自律性。</p>
+            
+            <div class="card">
+                <h4>卡牌激勵系統設計</h4>
+                <ul>
+                    <li><strong>基本機制</strong>：學生答對問題或完成任務獲得卡牌，積累一定數量可兌換特權或加分</li>
+                    <li><strong>自主管理</strong>：學生自行領取卡牌，減少教師計分負擔</li>
+                    <li><strong>違規處理</strong>：學生違反課堂規則需上交卡牌，增強自律意識</li>
+                    <li><strong>榮譽感塑造</strong>：卡牌作為有形獎勵，強化學生成就感與榮譽感</li>
+                </ul>
+            </div>
+            
+            <h3>平板監控技術輔助班級管理</h3>
+            <p>數位環境提供了新型班級管理工具——教室平板監控系統。研究分析了這一技術在班級經營中的應用價值。</p>
+            
+            <div class="key-points">
+                <h3>平板監控應用優勢</h3>
+                <ul>
+                    <li>教師可即時查看每位學生平板使用狀況，掌握學習進度</li>
+                    <li>發現學生離題行為時可及時干預，提高課堂效率</li>
+                    <li>僅限學校平板可被監控，保護學生隱私</li>
+                    <li>提升教師掌控感與自信心，間接改善課堂氛圍</li>
+                </ul>
+            </div>
+            
+            <div class="quote">
+                <span class="highlight">「我覺得最厲害的一個境界其實就是，它的課程之中你不會感覺到非常的刻意，但是它就是有任有餘的在進行課程，而在上課的孩子也會被老師帶入那個情境之中。」</span>—— 議課教師觀察
+            </div>
+            
+            <div class="quote">
+                <span class="highlight">「就是溫柔的堅定感，對。」</span>—— 議課教師總結控班理念
+            </div>
+            
+            <h3>教師自信與班級經營藝術</h3>
+            <p>研究強調，無論採用何種管理工具或策略，教師的自信與態度是班級經營的核心要素。數位環境下，教師更需展現專業自信與靈活應變能力。</p>
+            
+            <div class="example">
+                <div class="example-title">教師自信培養建議</div>
+                <p>研究參與教師分享了「溫柔的堅定感」理念，即教師在態度上保持溫和，但在原則與立場上堅定不移。當學生情緒高漲時，選擇靜待其安定，展現教育的耐心與智慧。這種自信不是源於強勢控制，而是對教育專業的深刻理解與熟練掌握。</p>
+                <p>正如一位資深教師所說：<span class="highlight">「對自己要有自信一點。」</span>這簡單一句話背後，是對教師專業能力的肯定與鼓勵。</p>
+            </div>
+        </section>
+        
+        <section id="teacher-development">
+            <h2>教師專業發展與行政協作研究</h2>
+            
+            <p>本研究同時關注教師專業成長路徑與教學行政協作模式，探討如何在複雜的教育生態中促進教師發展並提升教學質量。</p>
+            
+            <h3>教學計畫與行政安排</h3>
+            <p>研究記錄了多項教育計畫的運作機制與行政安排，為理解教師工作環境提供了豐富背景。教師需同時應對多項計畫與行政任務，這些計畫各有不同時程與要求，形成教師工作的多重時間軸。</p>
+            
+            <div class="card">
+                <h4>教育計畫清單與時程</h4>
+                <ul>
+                    <li><strong>手把手計畫</strong>：協助教師撰寫與投稿教案，投稿時程通常於七月底報名</li>
+                    <li><strong>5G計畫</strong>：2025年6月需完成報告，聚焦數位技術應用</li>
+                    <li><strong>睿師計畫</strong>：2025年11月需報告，著重教師專業成長</li>
+                    <li><strong>新竹市計畫</strong>：包含公開觀議課、入校輔導、跨校合作等多元面向</li>
+                    <li><strong>數位領航員比賽</strong>：鼓勵教師投稿PBL（專題式學習）教案，需完成教案撰寫並進行投稿</li>
+                </ul>
+                

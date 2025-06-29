@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>新生入學重要資訊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', sans-serif;
+            background: linear-gradient(135deg, #fff8f3 0%, #ffeee6 100%);
+            color: #5c4033;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff7700 0%, #ff9933 50%, #ffb366 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(255, 119, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 6px solid #ff7700;
+            box-shadow: 0 4px 15px rgba(255, 119, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 119, 0, 0.2);
+        }
+
+        .info-card h3 {
+            color: #ff7700;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-card h3::before {
+            content: "📋";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .key-points {
+            background: #fff4e6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #ffcc99;
+        }
+
+        .key-points h4 {
+            color: #e65500;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .key-points ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .key-points li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .key-points li::before {
+            content: "🔸";
+            position: absolute;
+            left: 0;
+            color: #ff7700;
+        }
+
+        .important-dates {
+            background: linear-gradient(135deg, #ff9933 0%, #ffb366 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .important-dates h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .date-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .date-item h4 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .date-item .date {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #fff4e6;
+        }
+
+        .rules-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #ffcc99;
+            margin: 30px 0;
+        }
+
+        .rules-section h2 {
+            color: #ff7700;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .rule-item {
+            background: #fff8f3;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff9933;
+        }
+
+        .rule-item h4 {
+            color: #e65500;
+            margin-bottom: 10px;
+        }
+
+        .attention-box {
+            background: linear-gradient(135deg, #ff4d4d 0%, #ff6666 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+        }
+
+        .attention-box h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .contact-info {
+            background: linear-gradient(135deg, #ffb366 0%, #ffc699 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .contact-info h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header h1 {
+                font-size: 2em;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .date-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #ff7700;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(255, 119, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .scroll-top:hover {
+            background: #e65500;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 新生入學重要資訊</h1>
+            <p>歡迎加入我們的學習大家庭！請仔細閱讀以下重要資訊</p>
+        </header>
+
+        <div class="important-dates">
+            <h2>📅 重要日期提醒</h2>
+            <div class="date-grid">
+                <div class="date-item">
+                    <h4>營隊繳費截止</h4>
+                    <div class="date">5月26日當週</div>
+                </div>
+                <div class="date-item">
+                    <h4>新生返校日</h4>
+                    <div class="date">8月1日(五)</div>
+                    <p>上午半天</p>
+                </div>
+                <div class="date-item">
+                    <h4>新生訓練</h4>
+                    <div class="date">8月21-22日</div>
+                    <p>新鮮營（必到活動）</p>
+                </div>
+                <div class="date-item">
+                    <h4>正式開學日</h4>
+                    <div class="date">9月1日(一)</div>
+                </div>
+                <div class="date-item">
+                    <h4>作業抽查</h4>
+                    <div class="date">9月16日</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>暑假作業規定</h3>
+                <div class="key-points">
+                    <h4>重要注意事項：</h4>
+                    <ul>
+                        <li>現場發放，立即在封面頁寫上姓名</li>
+                        <li>班級與座號暫不填寫</li>
+                        <li>8月份公布正式班級座號後再補寫</li>
+                        <li>9月1-15日為批改期間</li>
+                        <li>9月16日進行作業抽查</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>答題卡填寫規則</h3>
+                <div class="key-points">
+                    <h4>填寫要點：</h4>
+                    <ul>
+                        <li>使用2B鉛筆填寫</li>
+                        <li>年級填「6」</li>
+                        <li>臨時班級填「05」</li>
+                        <li>座號依現場分配</li>
+                        <li>十位數不足需補「0」</li>
+                        <li>塗黑要確實，避免讀卡機無法辨識</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>考試流程</h3>
+                <div class="key-points">
+                    <h4>考試規定：</h4>
+                    <ul>
+                        <li>考試時間為1小時</li>
+                        <li>不可提早交卷</li>
+                        <li>遇問題需舉手詢問</li>
+                        <li>建議先畫卡再寫題目卷</li>
+                        <li>收卷時保持安靜，不可講話</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3>營隊資訊</h3>
+                <div class="key-points">
+                    <h4>可參加項目：</h4>
+                    <ul>
+                        <li>行進管樂團</li>
+                        <li>合唱團</li>
+                        <li>旗隊</li>
+                        <li>資料一人一份，不可拆開</li>
+                        <li>繳費時間：5月26日當週</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="rules-section">
+            <h2>📋 重要規則與注意事項</h2>
+            
+            <div class="rule-item">
+                <h4>🎯 座位確認與點名</h4>
+                <p>志工會逐一詢問學生姓名，確認座位。如有坐錯位置，志工會主動協助移動至正確座位。未到學生會記錄，並於進場時即時安排座位。</p>
+            </div>
+
+            <div class="rule-item">
+                <h4>📝 收卷規則</h4>
+                <p>題目卷兩張需摺在一起，第一張姓名朝外。答案卡與答案卷需分開放置於桌上。收卷時不可講話、交談或東張西望，違規會扣分。</p>
+            </div>
+
+            <div class="rule-item">
+                <h4>🚶‍♀️ 移動安排</h4>
+                <p>收卷後由志工帶隊，男生一排、女生一排，個子矮的排前面，高的排後面。</p>
+            </div>
+
+            <div class="rule-item">
+                <h4>🔧 技術問題處理</h4>
+                <p>遇到螢幕顯示異常等技術問題時，可嘗試調整電腦輸出頻率（如由30調整為60）。如需協助請主動尋求幫助。</p>
+            </div>
+        </div>
+
+        <div class="attention-box">
+            <h3>⚠️ 特別提醒</h3>
+            <p>證明文件如未帶齊，需於下週三前補交至警衛室或教務處</p>
+            <p>所有重要行程與日期均記載於暑假作業第一頁，如有疑問可電話詢問</p>
+        </div>
+
+        <div class="contact-info">
+            <h3>📞 聯絡資訊</h3>
+            <p>如有任何疑問，請主動聯繫學校</p>
+            <p>所有詳細資訊請參閱暑假作業第一頁</p>
+        </div>
+    </div>
+
+    <button class="scroll-top" onclick="scrollToTop()">↑</button>
+
+    <script>
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 顯示/隱藏回到頂部按鈕
+        window.addEventListener('scroll', function() {
+            const scrollTopBtn = document.querySelector('.scroll-top');
+            if (window.pageYOffset > 300) {
+                scrollTopBtn.style.display = 'block';
+            } else {
+                scrollTopBtn.style.display = 'none';
+            }
+        });
+
+        // 初始隱藏按鈕
+        document.querySelector('.scroll-top').style.display = 'none';
+
+        // 添加載入動畫
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.info-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+    </script>
+</body>
+</html>

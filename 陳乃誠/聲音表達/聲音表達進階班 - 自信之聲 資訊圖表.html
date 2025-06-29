@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音表達進階班 - 自信之聲 資訊圖表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #fff8f5 0%, #ffebe0 100%);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .infographic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 頭部資訊區 */
+        .header-info {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-info::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>') repeat;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-50px, -50px) rotate(360deg); }
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* 課程進度圓形圖 */
+        .progress-circle-container {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: #ffe0cc;
+            stroke-width: 15;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: #ff6b35;
+            stroke-width: 15;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 367;
+            transition: stroke-dashoffset 2s ease-in-out;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .progress-percentage {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        /* 學員特質雷達圖 */
+        .students-radar {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.1);
+        }
+
+        .radar-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .student-radar {
+            position: relative;
+            text-align: center;
+        }
+
+        .radar-chart {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 20px;
+        }
+
+        .radar-web {
+            fill: none;
+            stroke: #ffe0cc;
+            stroke-width: 1;
+        }
+
+        .radar-area {
+            fill: rgba(255, 107, 53, 0.3);
+            stroke: #ff6b35;
+            stroke-width: 2;
+        }
+
+        .radar-point {
+            fill: #ff6b35;
+            r: 4;
+        }
+
+        .radar-label {
+            font-size: 12px;
+            fill: #666;
+            text-anchor: middle;
+        }
+
+        /* 自信五要素圓餅圖 */
+        .confidence-wheel {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.1);
+        }
+
+        .wheel-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 30px auto;
+        }
+
+        .wheel-segment {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .wheel-segment:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+
+        .segment-content {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .segment-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .segment-1 { background: conic-gradient(from 0deg, #ff6b35, #ff8c42); }
+        .segment-2 { background: conic-gradient(from 72deg, #ff8c42, #ffab40); }
+        .segment-3 { background: conic-gradient(from 144deg, #ffab40, #ffc107); }
+        .segment-4 { background: conic-gradient(from 216deg, #ffc107, #ffcc02); }
+        .segment-5 { background: conic-gradient(from 288deg, #ffcc02, #ff6b35); }
+
+        /* 學習路徑時間軸 */
+        .learning-timeline {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.1);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, #ff6b35, #ffcc02);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+            padding-right: 40px;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+            padding-left: 40px;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff6b35;
+            border: 4px solid white;
+            border-radius: 50%;
+            top: 30px;
+            box-shadow: 0 0 10px rgba(255, 107, 53, 0.5);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-marker {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-marker {
+            left: -10px;
+        }
+
+        .timeline-content {
+            background: linear-gradient(135deg, #fff3e0, #ffe0cc);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ffb890;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #d84315;
+            margin-bottom: 10px;
+        }
+
+        /* 統計儀表板 */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b35;
+        }
+
+        /* 互動按鈕 */
+        .interactive-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .control-btn {
+            background: linear-gradient(135deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .control-btn:hover {
+            background: linear-gradient(135deg, #ff5722, #e65100);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                left: 0 !important;
+                text-align: left !important;
+                padding-left: 50px !important;
+                padding-right: 20px !important;
+            }
+
+            .timeline-marker {
+                left: 10px !important;
+                right: auto !important;
+            }
+
+            .wheel-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            .segment-content {
+                width: 60px;
+                height: 60px;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* 動畫效果 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .bounce-in {
+            animation: bounceIn 1s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* 工具提示 */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="infographic-container">
+        <!-- 頭部統計資訊 -->
+        <div class="header-info">
+            <h1 style="font-size: 2.5rem; text-align: center; margin-bottom: 20px;">
+                🎙️ 聲音表達進階班 - 自信之聲
+            </h1>
+            <p style="text-align: center; font-size: 1.2rem; opacity: 0.9; margin-bottom: 30px;">
+                課程數據分析 & 學習成果視覺化
+            </p>
+            
+            <div class="header-stats">
+                <div class="stat-item">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">位學員</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">堂課程</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">個自信來源</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">參與度</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 課程進度圓形圖 -->
+        <div class="progress-circle-container">
+            <div class="progress-circle">
+                <svg class="progress-ring" width="200" height="200">
+                    <circle class="progress-ring-bg" cx="100" cy="100" r="70"/>
+                    <circle class="progress-ring-fill" cx="100" cy="100" r="70"/>
+                </svg>
+                <div class="progress-text">
+                    <div class="progress-percentage">25%</div>
+                    <div style="color: #666; font-size: 0.9rem;">課程進度</div>
+                    <div style="color: #ff6b35; font-size: 0.8rem; margin-top: 5px;">2/8 堂</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 自信五要素輪盤 -->
+        <div class="confidence-wheel fade-in">
+            <h2 style="color: #d84315; margin-bottom: 20px;">🎯 自信之聲五大要素</h2>
+            <div class="wheel-container">
+                <div class="wheel-segment segment-1" onclick="showSegmentInfo('思考')">
+                    <div class="segment-content" style="top: 20px; left: calc(50% - 40px);">
+                        <div class="segment-icon">🤔</div>
+                        <div>思考</div>
+                    </div>
+                </div>
+                <div class="wheel-segment segment-2" onclick="showSegmentInfo('眼神')">
+                    <div class="segment-content" style="top: 60px; right: 20px;">
+                        <div class="segment-icon">👀</div>
+                        <div>眼神</div>
+                    </div>
+                </div>
+                <div class="wheel-segment segment-3" onclick="showSegmentInfo('發聲')">
+                    <div class="segment-content" style="bottom: 60px; right: 20px;">
+                        <div class="segment-icon">🎵</div>
+                        <div>發聲</div>
+                    </div>
+                </div>
+                <div class="wheel-segment segment-4" onclick="showSegmentInfo('身體')">
+                    <div class="segment-content" style="bottom: 20px; left: calc(50% - 40px);">
+                        <div class="segment-icon">🧍</div>
+                        <div>身體</div>
+                    </div>
+                </div>
+                <div class="wheel-segment segment-5" onclick="showSegmentInfo('臨場')">
+                    <div class="segment-content" style="top: 60px; left: 20px;">
+                        <div class="segment-icon">⚡</div>
+                        <div>臨場</div>
+                    </div>
+                </div>
+            </div>
+            <p style="color: #666; margin-top: 20px;">點擊各區塊查看詳細說明</p>
+        </div>
+
+        <!-- 學員表現統計 -->
+        <div class="stats-dashboard fade-in">
+            <div class="stat-card">
+                <div class="stat-icon">🎭</div>
+                <div class="stat-title">Emma</div>
+                <div class="stat-value tooltip" data-tooltip="知性導覽型">⭐⭐⭐⭐⭐</div>
+                <div style="color: #666; font-size: 0.8rem;">聲音特質展現</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">😊</div>
+                <div class="stat-title">憶慈</div>
+                <div class="stat-value tooltip" data-tooltip="親和關懷型">⭐⭐⭐⭐⭐</div>
+                <div style="color: #666; font-size: 0.8rem;">聲音特質展現</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-title">政倫</div>
+                <div class="stat-value tooltip" data-tooltip="穩定成長型">⭐⭐⭐⭐⭐</div>
+                <div style="color: #666; font-size: 0.8rem;">聲音特質展現</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✨</div>
+                <div class="stat-title">孟庭</div>
+                <div class="stat-value tooltip" data-tooltip="靈性藝術型">⭐⭐⭐⭐⭐</div>
+                <div style="color: #666; font-size: 0.8rem;">聲音特質展現</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🚀</div>
+                <div class="stat-title">Kathy</div>
+                <div class="stat-value tooltip" data-tooltip="探尋教練型">⭐⭐⭐⭐⭐</div>
+                <div style="color: #666; font-size: 0.8rem;">聲音特質展現</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🌟</div>
+                <div class="stat-title">Joy</div>
+                <div class="stat-value tooltip" data-tooltip="創造者型">⭐⭐⭐⭐⭐</div>
+                <div style="color: #666; font-size: 0.8rem;">聲音特質展現</div>
+            </div>
+        </div>
+
+        <!-- 學習時間軸 -->
+        <div class="learning-timeline fade-in">
+            <h2 style="text-align: center; color: #d84315; margin-bottom: 30px;">📚 課程學習路徑</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">課前暖身</div>
+                        <p>學員自我介紹與聲音展現，建立學習基礎</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">理論建構</div>
+                        <p>自信之聲五大要素：思考、眼神、發聲、身體、臨場</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">實戰演練</div>
+                        <p>台詞練習：「事情不來我不主動惹事...」</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">個人指導</div>
+                        <p>針對每位學員的聲音特質給予專業回饋</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">作業佈置</div>
+                        <p>「支持你的那一句話」- 3分鐘個人分享</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 互動控制面板 -->
+        <div class="interactive-controls">
+            <button class="control-btn" onclick="toggleAnimation()">
+                🎬 動畫效果
+            </button>
+            <button class="control-btn" onclick="showStudentRadar()">
+                📊 學員分析
+            </button>
+            <button class="control-btn" onclick="playDemoAudio()">
+                🎵 語音示範
+            </button>
+            <button class="control-btn" onclick="downloadReport()">
+                📥 下載報告
+            </button>
+            <button class="control-btn" onclick="shareResults()">
+                📤 分享成果
+            </button>
+        </div>
+
+        <!-- 核心金句 -->
+        <div style="background: linear-gradient(135deg, #fff3e0, #ffe0cc); border-radius: 20px; padding: 40px; text-align: center; margin: 30px 0; border: 3px solid #ffb890;">
+            <h3 style="color: #d84315; margin-bottom: 20px;">💎 課程核心金句</h3>
+            <blockquote style="font-size: 1.3rem; font-style: italic; color: #bf360c; line-height: 1.8; margin: 20px 0;">
+                "真正的自信並非來自於贏過別人，<br>
+                而是明白和相信自己的價值。"
+            </blockquote>
+            <p style="color: #666; margin-top: 20px;">- 周震宇老師</p>
+        </div>
+
+        <!-- 下次課程預告 -->
+        <div style="background: linear-gradient(135deg, #ff6b35, #f7931e); color: white; border-radius: 20px; padding: 30px; text-align: center; margin-top: 40px;">
+            <h3 style="margin-bottom: 15px;">🔮 下次課程預告</h3>
+            <h2 style="margin-bottom: 10px;">反擊之聲</h2>
+            <p style="opacity: 0.9;">學習在衝突與挑戰情境下的聲音運用</p>
+            <button class="control-btn" style="margin-top: 20px; background: rgba(255,255,255,0.2);" onclick="showNextLesson()">
+                查看詳情 →
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 頁面載入動畫
+        document.addEventListener('DOMContentLoaded', function() {
+            // 觸發進入動畫
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach(el => {
+                    el.classList.add('visible');
+                });
+            }, 500);
+
+            // 進度圓圈動畫
+            setTimeout(() => {
+                const progressRing = document.querySelector('.progress-ring-fill');
+                progressRing.style.strokeDashoffset = '330'; // 25% 的進度
+            }, 1000);
+
+            // 滾動觸發動畫
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('bounce-in');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.stat-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // 互動功能
+        function showSegmentInfo(segment) {
+            const info = {
+                '思考': '建立清晰的價值觀和處事原則，是自信的根本基礎',
+                '眼神': '穩定的眼神接觸，展現內在的篤定與真誠',
+                '發聲': '聲音的穩定性和一致性，避免中途降調或顫抖',
+                '身體': '適當的身體姿態，既不過度謙卑也不傲慢',
+                '臨場': '在實際情境中靈活運用所學，應對各種挑戰'
+            };
+            
+            alert(`${segment}的自信\n\n${info[segment]}`);
+        }
+
+        function toggleAnimation() {
+            const btn = event.target;
+            btn.classList.toggle('active');
+            
+            if (btn.classList.contains('active')) {
+                btn.textContent = '⏸️ 暫停動畫';
+                // 啟動所有動畫
+                document.body.style.animationPlayState = 'running';
+            } else {
+                btn.textContent = '🎬 動畫效果';
+                // 暫停所有動畫
+                document.body.style.animationPlayState = 'paused';
+            }
+        }
+
+        function showStudentRadar() {
+            alert('📊 學員聲音特質分析\n\n🎭 Emma: 知性導覽型 (⭐⭐⭐⭐⭐)\n😊 憶慈: 親和關懷型 (⭐⭐⭐⭐⭐)\n🎯 政倫: 穩定成長型 (⭐⭐⭐⭐⭐)\n✨ 孟庭: 靈性藝術型 (⭐⭐⭐⭐⭐)\n🚀 Kathy: 探尋教練型 (⭐⭐⭐⭐⭐)\n🌟 Joy: 創造者型 (⭐⭐⭐⭐⭐)');
+        }
+
+        function playDemoAudio() {
+            alert('🎵 播放課程語音示範\n\n"事情不來，我不主動惹事。\n事情來了，我也並不怕事。\n為人處事，無非就是兵來將擋，水來土掩。\n若是處處擔憂，心懷恐懼，那還活什麼勁啊？"');
+        }
+
+        function downloadReport() {
+            alert('📥 正在生成學習報告...\n\n包含內容：\n• 個人聲音分析報告\n• 學習進度追蹤\n• 改善建議方案\n• 練習音頻檔案');
+        }
+
+        function shareResults() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '聲音表達進階班學習成果',
+                    text: '我在聲音表達課程中的學習成果！',
+                    url: window.location.href
+                });
+            } else {
+                alert('📤 分享學習成果\n\n可分享至：\n• 社群媒體\n• 學習社群\n• 個人部落格');
+            }
+        }
+
+        function showNextLesson() {
+            alert('🔮 下次課程：反擊之聲\n\n📋 課程大綱：\n• 衝突情境下的聲音控制\n• 眼神與身體語言整合\n• 壓力下的臨場反應\n• 實戰角色扮演練習\n\n📅 時間：下週同一時間\n🎯 目標：學會在挑戰中保持聲音的力量與穩定');
+        }
+
+        // 滑鼠跟隨效果
+        document.addEventListener('mousemove', function(e) {
+            const cursor = document.querySelector('.cursor');
+            if (!cursor) {
+                const newCursor = document.createElement('div');
+                newCursor.className = 'cursor';
+                newCursor.style.cssText = `
+                    position: fixed;
+                    width: 20px;
+                    height: 20px;
+                    background: radial-gradient(circle, #ff6b35, transparent);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 9999;
+                    opacity: 0.6;
+                `;
+                document.body.appendChild(newCursor);
+            }
+            
+            document.querySelector('.cursor').style.left = e.clientX - 10 + 'px';
+            document.querySelector('.cursor').style.top = e.clientY - 10 + 'px';
+        });
+    </script>
+</body>
+</html>

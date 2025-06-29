@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>翻轉焦慮：老師必學的高效工作術</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2c1810;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe8d6 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #ff8c42 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(255, 107, 53, 0.3);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .event-info {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .event-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .event-info p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        main {
+            padding: 3rem 0;
+        }
+        
+        .section {
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.1);
+            border-left: 5px solid #ff6b35;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(255, 107, 53, 0.2);
+        }
+        
+        .section h2 {
+            color: #e55100;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ffcc80;
+            position: relative;
+        }
+        
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #ff6b35;
+        }
+        
+        .highlights {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border: 1px solid #ffcc80;
+        }
+        
+        .key-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .point-card {
+            background: #fff8f3;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ff8c42;
+            transition: all 0.3s ease;
+        }
+        
+        .point-card:hover {
+            background: #fff5f0;
+            transform: translateX(5px);
+        }
+        
+        .point-card h3 {
+            color: #e65100;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        .quotes {
+            background: linear-gradient(135deg, #fff8f3 0%, #ffeccb 100%);
+            border: 2px solid #ffab40;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quotes::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 6rem;
+            color: #ffab40;
+            opacity: 0.3;
+            font-family: serif;
+        }
+        
+        .quote-item {
+            background: white;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 3px solid #ff8c42;
+            box-shadow: 0 2px 10px rgba(255, 107, 53, 0.1);
+        }
+        
+        .quote-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #d84315;
+            margin-bottom: 0.5rem;
+        }
+        
+        .quote-author {
+            text-align: right;
+            color: #ff6b35;
+            font-weight: 600;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tool-card {
+            background: linear-gradient(135deg, white 0%, #fff8f3 100%);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 2px solid #ffcc80;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .tool-card:hover {
+            border-color: #ff8c42;
+            transform: scale(1.05);
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .suggestions {
+            background: linear-gradient(135deg, #e8f5e8 0%, #fff3e0 100%);
+            border: 2px solid #81c784;
+        }
+        
+        .suggestion-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .suggestion-list li {
+            background: white;
+            margin: 0.8rem 0;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #66bb6a;
+            transition: all 0.3s ease;
+        }
+        
+        .suggestion-list li:hover {
+            background: #f1f8e9;
+            transform: translateX(10px);
+        }
+        
+        .suggestion-list li::before {
+            content: "💡";
+            margin-right: 0.5rem;
+        }
+        
+        .chapters {
+            background: linear-gradient(135deg, #f3e5f5 0%, #fff3e0 100%);
+            border: 2px solid #ba68c8;
+        }
+        
+        .chapter-item {
+            background: white;
+            margin: 1rem 0;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #ab47bc;
+            box-shadow: 0 2px 8px rgba(171, 71, 188, 0.1);
+        }
+        
+        .chapter-title {
+            color: #7b1fa2;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+        
+        .chapter-content {
+            color: #4a148c;
+            background: #fce4ec;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+        }
+        
+        .chapter-points {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .chapter-points li {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .chapter-points li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: #ff8c42;
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #ff6b35 0%, #e65100 100%);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff8c42, #ffab40);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 1rem 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 140, 66, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 140, 66, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .header-content { flex-direction: column; text-align: center; }
+            .event-info { margin-top: 1rem; }
+            .key-points { grid-template-columns: 1fr; }
+            .tools-grid { grid-template-columns: 1fr; }
+        }
+        
+        .fade-in {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div>
+                    <h1>翻轉焦慮延期活動</h1>
+                    <div class="subtitle">老師必學的高效工作術，用數位工具搞定教學行政大小事</div>
+                </div>
+                <div class="event-info">
+                    <h3>講座資訊</h3>
+                    <p><strong>日期：</strong>2025-05-23 18:33</p>
+                    <p><strong>主講人：</strong>陳乃誠老師</p>
+                    <p><strong>地點：</strong>線上</p>
+                    <p><strong>參與：</strong>300+ 提問</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="section highlights fade-in">
+                <h2>📌 講座核心重點</h2>
+                <p style="font-size: 1.1rem; color: #e65100; margin-bottom: 1.5rem;">本次講座強調數位工具（如Notion、ChatGPT等AI平台）在教學與行政管理中的實際應用，建議教師根據自身需求客製化工具，提升工作效率與生活品質。</p>
+                
+                <div class="key-points">
+                    <div class="point-card">
+                        <h3>🤖 AI工具應用</h3>
+                        <p>ChatGPT、Prong優化大師可協助行政公告、課程評鑑、教學反思等多元應用</p>
+                    </div>
+                    <div class="point-card">
+                        <h3>📝 Notion客製化</h3>
+                        <p>需根據個人需求客製化，才能長期有效運用於教學與行政管理</p>
+                    </div>
+                    <div class="point-card">
+                        <h3>📅 時間管理</h3>
+                        <p>Dola平台與Line機器人可自動整合行事曆，提升時間管理效率</p>
+                    </div>
+                    <div class="point-card">
+                        <h3>🎓 教育版優勢</h3>
+                        <p>Notion教育版申請簡便，功能強大且免費，適合教師使用</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section quotes fade-in">
+                <h2>💬 金句精選</h2>
+                <div class="quote-item">
+                    <div class="quote-text">Notion這個東西啊一定要是自己做出來的你才會用得久。</div>
+                    <div class="quote-author">— 陳乃誠老師</div>
+                </div>
+                <div class="quote-item">
+                    <div class="quote-text">我們要跟AI溝通基本上引導語是很重要的。</div>
+                    <div class="quote-author">— 陳乃誠老師</div>
+                </div>
+                <div class="quote-item">
+                    <div class="quote-text">做出屬於你自己的機器人，你才會用的久。</div>
+                    <div class="quote-author">— 陳乃誠老師</div>
+                </div>
+                <div class="quote-item">
+                    <div class="quote-text">人生不是隻有工作而已。</div>
+                    <div class="quote-author">— 陳乃誠老師</div>
+                </div>
+                <div class="quote-item">
+                    <div class="quote-text">不要想太多做就對了遇到問題直接問這樣子升級就很快。</div>
+                    <div class="quote-author">— 陳乃誠老師</div>
+                </div>
+            </section>
+
+            <section class="section fade-in">
+                <h2>🛠️ 推薦數位工具</h2>
+                <div class="tools-grid">
+                    <div class="tool-card">
+                        <div class="tool-icon">AI</div>
+                        <h3>ChatGPT / Prong優化大師</h3>
+                        <p>協助行政公告、課程評鑑與教學反思</p>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">📝</div>
+                        <h3>Notion</h3>
+                        <p>專案管理與知識庫建立，教育版免費升級</p>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">📅</div>
+                        <h3>Dola</h3>
+                        <p>Line機器人自動行事曆整合</p>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">🎙️</div>
+                        <h3>聲音轉文字工具</h3>
+                        <p>紙本資料數位化處理</p>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">📊</div>
+                        <h3>Gamma</h3>
+                        <p>AI簡報製作工具</p>
+                    </div>
+                    <div class="tool-card">
+                        <div class="tool-icon">🔍</div>
+                        <h3>NotebookLM</h3>
+                        <p>深度研究與分析工具</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section chapters fade-in">
+                <h2>📚 課程章節重點</h2>
+                
+                <div class="chapter-item">
+                    <div class="chapter-title">1. AI工具於行政與教學應用</div>
+                    <div class="chapter-content">
+                        介紹如何運用ChatGPT及Prong優化大師等AI工具，協助行政人員與老師將公文、通知等制式文字轉化為適合不同平台的公告內容。
+                    </div>
+                    <ul class="chapter-points">
+                        <li>學校網站公告需符合無障礙規範</li>
+                        <li>強調引導語（Prompt）設計的重要性</li>
+                        <li>建議設定個人化背景以提升AI回應品質</li>
+                    </ul>
+                </div>
+
+                <div class="chapter-item">
+                    <div class="chapter-title">2. 課程評鑑與教學反思的AI應用</div>
+                    <div class="chapter-content">
+                        AI工具可協助老師進行教學反思、行政人員撰寫報告或社群回饋內容分析，特別適用於彈性課程評鑑。
+                    </div>
+                    <ul class="chapter-points">
+                        <li>學生回饋資料包含文字與數字評分（1-5分）</li>
+                        <li>AI可快速整理與分析回饋內容</li>
+                        <li>透過每學期評鑑持續優化課程</li>
+                    </ul>
+                </div>
+
+                <div class="chapter-item">
+                    <div class="chapter-title">3. Notion教育版申請與應用</div>
+                    <div class="chapter-content">
+                        Notion對教育人員提供免費升級至教育Plus版，功能包括模塊無上限、上傳容量提升至5G等。
+                    </div>
+                    <ul class="chapter-points">
+                        <li>使用EDU信箱註冊即可免費升級</li>
+                        <li>每個教育信箱可建立多個Workspace</li>
+                        <li>每月可省下12美金（約360-400元）</li>
+                    </ul>
+                </div>
+
+                <div class="chapter-item">
+                    <div class="chapter-title">4. 數位工具與時間管理</div>
+                    <div class="chapter-content">
+                        推薦Dola平台進行時間管理，支援Line且目前免費，可自動將行程寫入Google行事曆。
+                    </div>
+                    <ul class="chapter-points">
+                        <li>台灣95%以上的人使用Line，特別適合本地教師</li>
+                        <li>可自動偵測行程衝突</li>
+                        <li>免費版最多可串接三個日曆</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="section suggestions fade-in">
+                <h2>💡 實用建議</h2>
+                <ul class="suggestion-list">
+                    <li>建議老師根據自身需求打造專屬Notion系統，而非僅套用他人模板</li>
+                    <li>善用AI工具提升行政效率，並確保公告內容符合規範</li>
+                    <li>先花時間設定好適合自己需求的GPT prompt或機器人</li>
+                    <li>善用數位工具如Dola進行時間管理，減少重複性工作</li>
+                    <li>從記錄開始，逐步熟悉Notion資料庫功能</li>
+                    <li>持續練習與實作是熟悉數位工具的關鍵</li>
+                    <li>遇到問題直接詢問，不要想太多就開始做</li>
+                    <li>找到適合自己的工具才是最重要的</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <h3>📚 延伸學習資源</h3>
+            <p>Notion教育會所網站持續更新，提供模板、教學手冊、影片等資源</p>
+            <a href="https://notionedu.notion.site/" class="cta-button" target="_blank">前往Notion教育會所</a>
+            <a href="https://www.books.com.tw/products/0010958882" class="cta-button" target="_blank">Notion AI新書</a>
+            <p style="margin-top: 2rem; opacity: 0.9;">© 2025 陳乃誠老師 - 新竹市竹光國中資訊組</p>
+        </div>
+    </footer>
+
+    <script>
+        // 添加滾動動畫效果
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // 為所有section添加觀察
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(30px)';
+            section.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(section);
+        });
+
+        // 添加工具卡片懸浮效果
+        document.querySelectorAll('.tool-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.boxShadow = '0 10px 30px rgba(255, 107, 53, 0.3)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.boxShadow = '0 2px 10px rgba(255, 107, 53, 0.1)';
+            });
+        });
+    </script>
+</body>
+</html>

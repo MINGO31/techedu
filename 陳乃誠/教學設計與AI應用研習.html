@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教學設計與AI應用研習 - 資訊圖卡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff5f0 0%, #ffe8d6 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #ff6b35 0%, #f39c12 100%);
+            border-radius: 25px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #ff6b35;
+            border-radius: 25px;
+            color: #ff6b35;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #ff6b35;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .info-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 6px solid #ff6b35;
+        }
+
+        .info-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b35, #f39c12, #ff6b35);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .info-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(255, 107, 53, 0.2);
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff6b35, #f39c12);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            color: #ff6b35;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ff6b35;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #fff5f0, #ffe8d6);
+            color: #e65100;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 1px solid #ffccbc;
+        }
+
+        .comparison-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 25px;
+        }
+
+        .comparison-side {
+            padding: 20px;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .pbl-side {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            border-left: 4px solid #4caf50;
+        }
+
+        .ubd-side {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-left: 4px solid #2196f3;
+        }
+
+        .comparison-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .comparison-points {
+            list-style: none;
+        }
+
+        .comparison-points li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .comparison-points li::before {
+            content: '▶';
+            position: absolute;
+            left: 0;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+
+        .process-card {
+            position: relative;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            background: linear-gradient(135deg, #fff8f0, #fff0e6);
+            border-radius: 12px;
+            border-left: 4px solid #ff6b35;
+            transition: all 0.3s ease;
+        }
+
+        .process-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.2);
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff6b35, #f39c12);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .quote-card {
+            background: linear-gradient(135deg, #fff8e1, #ffe0b2);
+            border-left: 6px solid #ff8a50;
+            position: relative;
+        }
+
+        .quote-card::before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 6em;
+            color: #ff6b35;
+            opacity: 0.2;
+            font-family: serif;
+        }
+
+        .quote-text {
+            font-size: 1.3em;
+            font-style: italic;
+            color: #e65100;
+            padding-left: 60px;
+            line-height: 1.5;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #f0fff4, #e8f5e8);
+            border-top-color: #4caf50;
+        }
+
+        .action-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .action-list li {
+            margin: 12px 0;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #4caf50;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .action-list li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.2);
+        }
+
+        .action-list li::before {
+            content: '✓';
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4caf50;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .action-list li:hover::before {
+            opacity: 1;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border: 2px solid #ffcc80;
+            position: relative;
+        }
+
+        .highlight-box::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 1.2em;
+        }
+
+        .ai-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .ai-feature {
+            background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid #ce93d8;
+            transition: all 0.3s ease;
+        }
+
+        .ai-feature:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(206, 147, 216, 0.3);
+        }
+
+        .ai-feature-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .ai-feature-title {
+            font-weight: bold;
+            color: #7b1fa2;
+            margin-bottom: 8px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-summary {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff6b35, #f39c12);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-weight: 600;
+        }
+
+        .floating-summary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .comparison-card {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .ai-feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .floating-summary {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 16px;
+                font-size: 0.9em;
+            }
+        }
+
+        .card-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, #ff6b35, #f39c12);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 教學設計與AI應用研習</h1>
+        <p>將複雜理論轉化為實用的教學智慧 | 2025.05.26</p>
+    </div>
+
+    <div class="filter-tabs">
+        <button class="filter-btn active" onclick="filterCards('all')">全部內容</button>
+        <button class="filter-btn" onclick="filterCards('theory')">教學理論</button>
+        <button class="filter-btn" onclick="filterCards('ai')">AI應用</button>
+        <button class="filter-btn" onclick="filterCards('assessment')">評量設計</button>
+        <button class="filter-btn" onclick="filterCards('action')">行動方案</button>
+    </div>
+
+    <div class="cards-container">
+        <!-- 理論對比卡片 -->
+        <div class="info-card comparison-card" data-category="theory">
+            <div class="card-category">教學理論</div>
+            <div class="card-icon">🎯</div>
+            <div class="card-title">PBL vs UBD 教學設計比較</div>
+            <div class="card-subtitle">兩大主流教學設計方法解析</div>
+            
+            <div class="comparison-side pbl-side">
+                <div class="comparison-title">🌱 PBL 問題導向學習</div>
+                <ul class="comparison-points">
+                    <li>從真實問題出發</li>
+                    <li>學生主動探究</li>
+                    <li>教師扮演引導者</li>
+                    <li>重視學習歷程</li>
+                    <li>強調深層提問</li>
+                </ul>
+            </div>
+            
+            <div class="comparison-side ubd-side">
+                <div class="comparison-title">🎪 UBD 以終為始設計</div>
+                <ul class="comparison-points">
+                    <li>從學習目標出發</li>
+                    <li>預設明確成果</li>
+                    <li>教師主導規劃</li>
+                    <li>重視學習成果</li>
+                    <li>強調評量規準</li>
+                </ul>
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">課程設計</span>
+                <span class="tag">教學方法</span>
+                <span class="tag">學習理論</span>
+            </div>
+        </div>
+
+        <!-- AI協作流程卡片 -->
+        <div class="info-card process-card" data-category="ai">
+            <div class="card-category">AI應用</div>
+            <div class="card-icon">🤖</div>
+            <div class="card-title">AI協作學習三步驟</div>
+            <div class="card-subtitle">「發展→擴張→收斂」的理想學習歷程</div>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>發展個人想法</strong><br>
+                        從自己的思考與經驗出發，形成初步概念
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>AI協助擴張</strong><br>
+                        利用AI工具拓展思路，獲得更多面向的啟發
+                    </div>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>收斂為創作</strong><br>
+                        整合AI建議與個人見解，形成獨特的作品
+                    </div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>核心理念：</strong>AI是協作夥伴，不是替代工具。真正的學習來自於思考的過程。
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">AI協作</span>
+                <span class="tag">學習歷程</span>
+                <span class="tag">創意思考</span>
+            </div>
+        </div>
+
+        <!-- 金句卡片 -->
+        <div class="info-card quote-card" data-category="theory">
+            <div class="card-category">教學智慧</div>
+            <div class="card-icon">💬</div>
+            <div class="card-title">研習金句精選</div>
+            
+            <div class="quote-text">
+                "PBL是給你一個任務，你自己想辦法，UBD是老師決定好，然後告訴你怎麼做。"
+            </div>
+            
+            <div style="margin: 20px 0; padding: 15px; background: rgba(255,255,255,0.5); border-radius: 10px;">
+                <div class="quote-text" style="font-size: 1.1em;">
+                    "教案其實就是提供給下一個想要模仿這個課程的老師參考，所以它展現的是你的思考歷程。"
+                </div>
+            </div>
+            
+            <div style="padding: 15px; background: rgba(255,255,255,0.3); border-radius: 10px;">
+                <div class="quote-text" style="font-size: 1em;">
+                    "閱讀我們要教學生比較難的地方是瞭解他如何導出結論的歷程。"
+                </div>
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">教學心得</span>
+                <span class="tag">專業成長</span>
+                <span class="tag">教學反思</span>
+            </div>
+        </div>
+
+        <!-- 教案設計卡片 -->
+        <div class="info-card" data-category="theory">
+            <div class="card-category">教學設計</div>
+            <div class="card-icon">📝</div>
+            <div class="card-title">教案撰寫三種形式</div>
+            <div class="card-subtitle">依據不同需求選擇適合的格式</div>
+            
+            <div class="card-stats">
+                <div class="stat-item">
+                    <span class="stat-number">1</span>
+                    <div class="stat-label">練筆用表格<br><small>適合初學者</small></div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2</span>
+                    <div class="stat-label">臺大數科教案<br><small>完整課程記錄</small></div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">3</span>
+                    <div class="stat-label">數位辦公室<br><small>比賽專用格式</small></div>
+                </div>
+            </div>
+            
+            <div class="card-content">
+                <strong>選擇建議：</strong><br>
+                • 初次嘗試或單節課程 → 練筆用表格<br>
+                • 4-5節完整主題課程 → 臺大數科教案<br>
+                • 參加數位教案比賽 → 數位辦公室（需加入媒體素養）
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">教案格式</span>
+                <span class="tag">文件撰寫</span>
+                <span class="tag">比賽準備</span>
+            </div>
+        </div>
+
+        <!-- AI應用功能卡片 -->
+        <div class="info-card" data-category="ai">
+            <div class="card-category">AI應用</div>
+            <div class="card-icon">⚡</div>
+            <div class="card-title">AI在教學中的具體應用</div>
+            <div class="card-subtitle">從提問到評量的全方位協助</div>
+            
+            <div class="ai-feature-grid">
+                <div class="ai-feature">
+                    <span class="ai-feature-icon">❓</span>
+                    <div class="ai-feature-title">智能提問</div>
+                    <div>協助學生針對課程重點進行深度提問</div>
+                </div>
+                <div class="ai-feature">
+                    <span class="ai-feature-icon">📊</span>
+                    <div class="ai-feature-title">流程圖生成</div>
+                    <div>將複雜概念轉化為視覺化流程圖</div>
+                </div>
+                <div class="ai-feature">
+                    <span class="ai-feature-icon">📋</span>
+                    <div class="ai-feature-title">評分規準</div>
+                    <div>協助建立客觀的評量標準</div>
+                </div>
+                <div class="ai-feature">
+                    <span class="ai-feature-icon">🔍</span>
+                    <div class="ai-feature-title">內容檢核</div>
+                    <div>檢查AI回答的正確性與完整性</div>
+                </div>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>重要提醒：</strong>AI回答可能有誤，學生需要學會追問與驗證，這本身就是重要的學習技能！
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">數位工具</span>
+                <span class="tag">教學創新</span>
+                <span class="tag">學習輔助</span>
+            </div>
+        </div>
+
+        <!-- 評量設計卡片 -->
+        <div class="info-card" data-category="assessment">
+            <div class="card-category">評量設計</div>
+            <div class="card-icon">📊</div>
+            <div class="card-title">多元評量三重奏</div>
+            <div class="card-subtitle">自評、互評、師評的完美結合</div>
+            
+            <div class="card-content">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0;">
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; border-top: 3px solid #28a745;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">👤</div>
+                        <strong>學生自評</strong><br>
+                        <small>自我檢視<br>學習成果</small>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; border-top: 3px solid #007bff;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">👥</div>
+                        <strong>同儕互評</strong><br>
+                        <small>相互建議<br>共同成長</small>
+                    </div>
+                    <div style="text-align: center; padding: 15px; background: #f8f9fa; border-radius: 10px; border-top: 3px solid #ffc107;">
+                        <div style="font-size: 2em; margin-bottom: 10px;">👨‍🏫</div>
+                        <strong>教師回饋</strong><br>
+                        <small>專業指導<br>總結建議</small>
+                    </div>
+                </div>
+                
+                <strong>設計原則：</strong><br>
+                • 評分規準建議分為三個等級，避免過於複雜<br>
+                • 與學生共同討論評分標準，提升參與感<br>
+                • 不同班級可有不同規準，保持彈性調整
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">多元評量</span>
+                <span class="tag">學習評估</span>
+                <span class="tag">教學回饋</span>
+            </div>
+        </div>
+
+        <!-- 閱讀教學策略卡片 -->
+        <div class="info-card" data-category="theory">
+            <div class="card-category">教學策略</div>
+            <div class="card-icon">📖</div>
+            <div class="card-title">閱讀教學的證據導出法</div>
+            <div class="card-subtitle">從文本出發，建立邏輯思維</div>
+            
+            <div class="card-content">
+                <div style="background: linear-gradient(135deg, #e8f5e8, #c8e6c9); padding: 20px; border-radius: 12px; margin: 15px 0;">
+                    <strong>🎯 教學目標：</strong>區分文本內容與個人背景，強調用文章線索證明觀點
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <strong>📚 螺旋式進階設計：</strong><br>
+                    <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;">
+                        <div style="background: #fff3e0; padding: 10px; border-radius: 8px; flex: 1; min-width: 100px; text-align: center;">
+                            <strong>一年級</strong><br>
+                            <small>重文本閱讀</small>
+                        </div>
+                        <div style="background: #f3e5f5; padding: 10px; border-radius: 8px; flex: 1; min-width: 100px; text-align: center;">
+                            <strong>二年級</strong><br>
+                            <small>強調應用</small>
+                        </div>
+                        <div style="background: #e1f5fe; padding: 10px; border-radius: 8px; flex: 1; min-width: 100px; text-align: center;">
+                            <strong>三年級</strong><br>
+                            <small>生活+高層次思考</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <strong>🔍 實施策略：</strong><br>
+                • 當學生給出創意答案時，追問「作者有這樣講嗎？從哪裡知道？」<br>
+                • 要求用文章線索證明觀點，說明推理過程<br>
+                • 設計文體音架，教導結構遷移能力
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">閱讀理解</span>
+                <span class="tag">邏輯思考</span>
+                <span class="tag">文本分析</span>
+            </div>
+        </div>
+
+        <!-- 數位教案比賽卡片 -->
+        <div class="info-card" data-category="assessment">
+            <div class="card-category">比賽準備</div>
+            <div class="card-icon">🏆</div>
+            <div class="card-title">數位教案比賽成功要素</div>
+            <div class="card-subtitle">從內容到呈現的完整攻略</div>
+            
+            <div class="card-content">
+                <div style="background: linear-gradient(135deg, #fff8e1, #ffe0b2); padding: 20px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #ff8a50;">
+                    <strong>📋 必要條件：</strong><br>
+                    ✓ 加入媒體素養內容<br>
+                    ✓ 符合數位教學指引3.0<br>
+                    ✓ 結合多媒體資料（照片、影片）<br>
+                    ✓ 製作10分鐘教學影片
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <strong>🛠️ 推薦工具組合：</strong><br>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 10px;">
+                        <div style="background: #f0f9ff; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #bae6fd;">
+                            <div>📱</div>
+                            <small>因材網</small>
+                        </div>
+                        <div style="background: #f0fdf4; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #bbf7d0;">
+                            <div>🎮</div>
+                            <small>Minecraft</small>
+                        </div>
+                        <div style="background: #fef7ff; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #f3e8ff;">
+                            <div>📐</div>
+                            <small>Desmos</small>
+                        </div>
+                        <div style="background: #fffbeb; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #fed7aa;">
+                            <div>✏️</div>
+                            <small>Apple Pen</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">教案比賽</span>
+                <span class="tag">數位工具</span>
+                <span class="tag">媒體素養</span>
+            </div>
+        </div>
+
+        <!-- 行動方案卡片 -->
+        <div class="info-card action-card" data-category="action">
+            <div class="card-category">行動方案</div>
+            <div class="card-icon">🚀</div>
+            <div class="card-title">研習後的實踐計畫</div>
+            <div class="card-subtitle">將學習轉化為具體行動</div>
+            
+            <div class="action-list">
+                <li><strong>教案設計實踐</strong> - 選擇斷考期間適合的課程進行任務導向設計</li>
+                <li><strong>PBL課程轉換</strong> - 將現有教案轉為問題導向學習模式</li>
+                <li><strong>AI協作實驗</strong> - 設計學習單讓學生運用AI進行課程討論</li>
+                <li><strong>多媒體整合</strong> - 收集照片、影片等素材，豐富教案內容</li>
+                <li><strong>評量創新</strong> - 建立三重評量模式（自評、互評、師評）</li>
+                <li><strong>媒體素養融入</strong> - 在課程中加入媒體識讀相關內容</li>
+                <li><strong>歷程記錄</strong> - 使用padlet等平台完整記錄學習過程</li>
+            </div>
+            
+            <div class="highlight-box">
+                <strong>重要提醒：</strong>2025年6月2日（卓越基地）和6月11日（第一會議室）有瑞士社群報告，請做好準備！
+            </div>
+            
+            <div class="card-tags">
+                <span class="tag">實踐計畫</span>
+                <span class="tag">教學創新</span>
+                <span class="tag">專業成長</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-summary" onclick="showSummary()">
+        📋 研習摘要
+    </div>
+
+    <script>
+        function filterCards(category) {
+            const cards = document.querySelectorAll('.info-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // 更新按鈕狀態
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // 篩選卡片
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.classList.remove('hidden');
+                    card.classList.add('fade-in');
+                } else {
+                    card.classList.add('hidden');
+                    card.classList.remove('fade-in');
+                }
+            });
+        }
+
+        function showSummary() {
+            alert(`📚 研習核心摘要 📚
+
+🎯 核心理念：
+• PBL：問題導向，學生主導探究
+• UBD：目標導向，教師設計框架
+
+🤖 AI應用原則：
+發展個人想法 → AI協助擴張 → 收斂為創作
+
+📊 評量創新：
+自評 + 互評 + 師評 = 完整學習回饋
+
+🚀 實踐重點：
+將理論轉化為具體的教學行動方案
+
+💡 關鍵提醒：
+教案是思考歷程的展現，不是資料的堆疊！`);
+        }
+
+        // 添加卡片進入動畫
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.info-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('fade-in');
+                }, index * 100);
+            });
+        });
+
+        // 滾動時的視覺效果
+        window.addEventListener('scroll', function() {
+            const cards = document.querySelectorAll('.info-card');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (isVisible) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

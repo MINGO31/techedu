@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI教學應用互動式資訊圖表平台</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-green: #2d5016;
+            --secondary-green: #4a7c59;
+            --light-green: #8fbc8f;
+            --very-light-green: #f0f8f0;
+            --accent-green: #66bb6a;
+            --success-green: #4caf50;
+            --warning-orange: #ff9800;
+            --info-blue: #2196f3;
+            --dark-text: #2e2e2e;
+            --light-text: #666;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, var(--very-light-green) 0%, #ffffff 100%);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-green) 0%, var(--secondary-green) 100%);
+            color: white;
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .header-content {
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 0.8rem 2rem;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .content-section {
+            display: none;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border-left: 5px solid var(--accent-green);
+        }
+
+        .chart-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-green), var(--light-green), var(--success-green));
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-green), var(--success-green));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3);
+        }
+
+        .chart-title {
+            flex: 1;
+        }
+
+        .chart-title h3 {
+            font-size: 1.4rem;
+            color: var(--primary-green);
+            margin-bottom: 0.3rem;
+        }
+
+        .chart-title p {
+            color: var(--light-text);
+            font-size: 0.95rem;
+        }
+
+        .chart-canvas {
+            position: relative;
+            height: 300px;
+        }
+
+        .large-chart {
+            grid-column: 1 / -1;
+        }
+
+        .large-chart .chart-canvas {
+            height: 400px;
+        }
+
+        .flow-diagram {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-left: 5px solid var(--info-blue);
+        }
+
+        .flow-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .flow-step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+        }
+
+        .flow-step-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent-green), var(--success-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(102, 187, 106, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .flow-step:hover .flow-step-circle {
+            transform: scale(1.1);
+        }
+
+        .flow-step-title {
+            font-weight: bold;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-step-desc {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            font-size: 2rem;
+            color: var(--accent-green);
+            margin: 0 1rem;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        .table-responsive {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-responsive th,
+        .table-responsive td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(143, 188, 143, 0.3);
+        }
+
+        .table-responsive th {
+            background: linear-gradient(135deg, var(--very-light-green), #ffffff);
+            color: var(--primary-green);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+
+        .table-responsive tr:hover {
+            background: var(--very-light-green);
+        }
+
+        .progress-indicator {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .progress-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-item:hover {
+            background: var(--very-light-green);
+            transform: translateX(10px);
+        }
+
+        .progress-label {
+            flex: 1;
+            font-weight: 500;
+            color: var(--primary-green);
+        }
+
+        .progress-bar-container {
+            flex: 2;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0 1rem;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), var(--success-green));
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+
+        .progress-value {
+            font-weight: bold;
+            color: var(--accent-green);
+            min-width: 50px;
+        }
+
+        .interactive-timeline {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .timeline-container {
+            position: relative;
+            max-width: 100%;
+            margin: 2rem 0;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 0;
+            list-style: none;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-green), var(--success-green));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin: 3rem 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            flex: 1;
+            padding: 1.5rem;
+            background: var(--very-light-green);
+            border-radius: 15px;
+            margin: 0 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .timeline-point {
+            width: 20px;
+            height: 20px;
+            background: var(--accent-green);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            box-shadow: 0 0 0 4px white, 0 0 0 8px var(--accent-green);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid var(--light-green);
+            color: var(--primary-green);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 187, 106, 0.3);
+        }
+
+        .floating-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: var(--success-green);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--primary-green);
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            padding: 0.8rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-steps {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+                margin: 1rem 0;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: row;
+            }
+
+            .timeline-item:nth-child(odd) {
+                flex-direction: row;
+            }
+
+            .timeline-content {
+                margin-left: 3rem;
+                margin-right: 0;
+            }
+
+            .timeline-point {
+                left: 20px;
+            }
+
+            .floating-controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--light-text);
+            margin-bottom: 3rem;
+        }
+
+        .loading-spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--accent-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    📊 AI教學應用數據視覺化平台
+                </div>
+                <div class="subtitle">
+                    透過互動式圖表深度解析AI在語文教學的應用成效與趨勢
+                </div>
+                
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <span class="stat-number">8+</span>
+                        <span class="stat-label">AI應用場景</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">核心溝通技巧</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">推薦平台工具</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">70-80%</span>
+                        <span class="stat-label">AI辨識準確率</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="showSection('overview')">應用概覽</button>
+                <button class="nav-tab" onclick="showSection('platforms')">平台比較</button>
+                <button class="nav-tab" onclick="showSection('workflow')">操作流程</button>
+                <button class="nav-tab" onclick="showSection('effectiveness')">成效分析</button>
+                <button class="nav-tab" onclick="showSection('timeline')">發展時程</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- 應用概覽區段 -->
+            <section id="overview" class="content-section active">
+                <h2 class="section-title">🎯 AI教學應用全景分析</h2>
+                <p class="section-subtitle">深入了解各項AI工具在語文教學中的分布與應用頻率</p>
+
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">📝</div>
+                            <div class="chart-title">
+                                <h3>AI應用類型分布</h3>
+                                <p>各類型AI工具在教學中的使用比例</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="applicationTypeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">⭐</div>
+                            <div class="chart-title">
+                                <h3>教師滿意度評分</h3>
+                                <p>不同AI功能的教師滿意度統計</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="satisfactionChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container large-chart">
+                        <div class="chart-header">
+                            <div class="chart-icon">📈</div>
+                            <div class="chart-title">
+                                <h3>AI溝通技巧效果分析</h3>
+                                <p>四大溝通技巧對AI回應品質的影響程度</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="communicationSkillsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">🔍</div>
+                            <div class="chart-title">
+                                <h3>AI辨識準確率比較</h3>
+                                <p>不同平台的圖片文字辨識能力</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="accuracyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">💰</div>
+                            <div class="chart-title">
+                                <h3>成本效益分析</h3>
+                                <p>各平台的成本與效益比較</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="costBenefitChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-indicator">
+                    <h3 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">AI工具掌握程度指標</h3>
+                    <div class="progress-item">
+                        <div class="progress-label">帳號管理與安全設定</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 85%"></div>
+                        </div>
+                        <div class="progress-value">85%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">AI溝通技巧運用</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 92%"></div>
+                        </div>
+                        <div class="progress-value">92%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">作文批改系統操作</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 78%"></div>
+                        </div>
+                        <div class="progress-value">78%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">創意內容生成應用</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 88%"></div>
+                        </div>
+                        <div class="progress-value">88%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">跨平台整合運用</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 65%"></div>
+                        </div>
+                        <div class="progress-value">65%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 平台比較區段 -->
+            <section id="platforms" class="content-section">
+                <h2 class="section-title">🏆 AI平台深度比較分析</h2>
+                <p class="section-subtitle">全方位比較各大AI平台的功能特色與適用情境</p>
+
+                <div class="filter-controls">
+                    <button class="filter-btn active" onclick="filterPlatforms('all')">全部平台</button>
+                    <button class="filter-btn" onclick="filterPlatforms('free')">免費平台</button>
+                    <button class="filter-btn" onclick="filterPlatforms('education')">教育專用</button>
+                    <button class="filter-btn" onclick="filterPlatforms('advanced')">進階功能</button>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container large-chart">
+                        <div class="chart-header">
+                            <div class="chart-icon">⚖️</div>
+                            <div class="chart-title">
+                                <h3>平台綜合能力雷達圖</h3>
+                                <p>多維度評估各平台的綜合表現</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="platformRadarChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">👥</div>
+                            <div class="chart-title">
+                                <h3>平台使用者偏好</h3>
+                                <p>教師選擇各平台的比例分布</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="platformPreferenceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">⏱️</div>
+                            <div class="chart-title">
+                                <h3>學習曲線分析</h3>
+                                <p>各平台從入門到熟練所需時間</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="learningCurveChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comparison-table">
+                    <h3 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">📋 平台功能詳細比較表</h3>
+                    <table class="table-responsive">
+                        <thead>
+                            <tr>
+                                <th>平台名稱</th>
+                                <th>主要功能</th>
+                                <th>費用模式</th>
+                                <th>中文支援</th>
+                                <th>教育帳號</th>
+                                <th>推薦指數</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-category="education free">
+                                <td><strong>康軒AI</strong></td>
+                                <td>作文批改、出題評量</td>
+                                <td>點數制付費</td>
+                                <td>✅ 優秀</td>
+                                <td>✅ 必需</td>
+                                <td>⭐⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr data-category="free advanced">
+                                <td><strong>Gemini Google</strong></td>
+                                <td>圖片生成、文本創作</td>
+                                <td>免費使用</td>
+                                <td>✅ 良好</td>
+                                <td>📧 Google帳號</td>
+                                <td>⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr data-category="advanced">
+                                <td><strong>PoE</strong></td>
+                                <td>自訂機器人、批改</td>
+                                <td>分層收費</td>
+                                <td>✅ 良好</td>
+                                <td>❌ 不需要</td>
+                                <td>⭐⭐⭐⭐</td>
+                            </tr>
+                            <tr data-category="free">
+                                <td><strong>Padlet</strong></td>
+                                <td>協作、圖片生成</td>
+                                <td>免費+付費</td>
+                                <td>⚠️ 一般</td>
+                                <td>❌ 不需要</td>
+                                <td>⭐⭐⭐</td>
+                            </tr>
+                            <tr data-category="advanced">
+                                <td><strong>ChatGPT</strong></td>
+                                <td>對話、文本生成</td>
+                                <td>免費+Plus</td>
+                                <td>⚠️ 一般</td>
+                                <td>❌ 不需要</td>
+                                <td>⭐⭐⭐⭐</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 操作流程區段 -->
+            <section id="workflow" class="content-section">
+                <h2 class="section-title">⚡ 智能化操作流程圖</h2>
+                <p class="section-subtitle">視覺化展示AI教學應用的標準操作程序</p>
+
+                <div class="flow-diagram">
+                    <h3 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">🔄 AI溝通四步驟流程</h3>
+                    <div class="flow-steps">
+                        <div class="flow-step">
+                            <div class="flow-step-circle">1</div>
+                            <div class="flow-step-title">設人設</div>
+                            <div class="flow-step-desc">明確指定AI扮演的角色與專業背景</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-step-circle">2</div>
+                            <div class="flow-step-title">給目標</div>
+                            <div class="flow-step-desc">清楚說明希望AI完成的具體任務</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-step-circle">3</div>
+                            <div class="flow-step-title">給限制</div>
+                            <div class="flow-step-desc">設定回應的格式、數量與條件</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-step-circle">4</div>
+                            <div class="flow-step-title">加追問</div>
+                            <div class="flow-step-desc">深入追問以優化結果品質</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container large-chart">
+                        <div class="chart-header">
+                            <div class="chart-icon">📊</div>
+                            <div class="chart-title">
+                                <h3>作文批改流程時間分析</h3>
+                                <p>傳統批改vs AI輔助批改的時間對比</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="workflowTimeChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">🎯</div>
+                            <div class="chart-title">
+                                <h3>操作成功率統計</h3>
+                                <p>各操作步驟的成功完成率</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="successRateChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">⚠️</div>
+                            <div class="chart-title">
+                                <h3>常見問題分布</h3>
+                                <p>教師在使用過程中遇到的主要問題</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="issuesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flow-diagram">
+                    <h3 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">📱 行動裝置整合流程</h3>
+                    <div class="flow-steps">
+                        <div class="flow-step">
+                            <div class="flow-step-circle">📸</div>
+                            <div class="flow-step-title">拍照上傳</div>
+                            <div class="flow-step-desc">使用手機/平板拍攝學生作業</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-step-circle">📤</div>
+                            <div class="flow-step-title">檔案傳輸</div>
+                            <div class="flow-step-desc">透過AirDrop或雲端上傳</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-step-circle">🤖</div>
+                            <div class="flow-step-title">AI分析</div>
+                            <div class="flow-step-desc">系統自動批改與評分</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-step-circle">📋</div>
+                            <div class="flow-step-title">結果分享</div>
+                            <div class="flow-step-desc">生成QR Code供學生查看</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 成效分析區段 -->
+            <section id="effectiveness" class="content-section">
+                <h2 class="section-title">📈 AI教學成效深度分析</h2>
+                <p class="section-subtitle">量化分析AI工具對教學效率與學習成果的提升效果</p>
+
+                <div class="chart-grid">
+                    <div class="chart-container large-chart">
+                        <div class="chart-header">
+                            <div class="chart-icon">🚀</div>
+                            <div class="chart-title">
+                                <h3>教學效率提升分析</h3>
+                                <p>AI輔助前後各項教學任務的時間節省比較</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="efficiencyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">🎓</div>
+                            <div class="chart-title">
+                                <h3>學生成績改善率</h3>
+                                <p>使用AI輔助教學後學生成績變化</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="improvementChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">💡</div>
+                            <div class="chart-title">
+                                <h3>創新教學應用頻率</h3>
+                                <p>各類創新教學方法的使用頻率統計</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="innovationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <div class="chart-header">
+                            <div class="chart-icon">🔧</div>
+                            <div class="chart-title">
+                                <h3>工具組合使用效果</h3>
+                                <p>不同AI工具組合的協同效應分析</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="combinationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-container large-chart">
+                        <div class="chart-header">
+                            <div class="chart-icon">📝</div>
+                            <div class="chart-title">
+                                <h3>作文評分準確度比較</h3>
+                                <p>AI評分與教師評分的一致性分析</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="accuracyComparisonChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="progress-indicator">
+                    <h3 style="color: var(--primary-green); margin-bottom: 2rem; text-align: center;">🎯 關鍵指標達成率</h3>
+                    <div class="progress-item">
+                        <div class="progress-label">批改效率提升</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 75%"></div>
+                        </div>
+                        <div class="progress-value">75%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">學生參與度提升</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 68%"></div>
+                        </div>
+                        <div class="progress-value">68%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">教學創新程度</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 82%"></div>
+                        </div>
+                        <div class="progress-value">82%</div>
+                    </div>
+                    <div class="progress-item">
+                        <div class="progress-label">成本節省效益</div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 59%"></div>
+                        </div>
+                        <div class="progress-value">59%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 發展時程區段 -->
+            <section id="timeline" class="content-section">
+                <h2 class="section-title">⏰ AI教學發展時程軸</h2>
+                <p class="section-subtitle">回顧與展望AI在語文教學領域的發展歷程與未來趨勢</p>
+
+                <div class="interactive-timeline">
+                    <div class="timeline-container">
+                        <ul class="timeline">
+                            <li class="timeline-item">
+                                <div class="timeline-point"></div>
+                                <div class="timeline-content">
+                                    <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;">2023年初 - 基礎應用階段</h4>
+                                    <p><strong>主要發展：</strong>教師開始接觸ChatGPT等基礎AI工具</p>
+                                    <p><strong>應用範圍：</strong>簡單的文本生成與問答</p>
+                                    <p><strong>挑戰：</strong>缺乏系統性應用方法</p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-point"></div>
+                                <div class="timeline-content">
+                                    <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;">2023年中 - 專業化工具興起</h4>
+                                    <p><strong>主要發展：</strong>康軒AI等教育專用工具推出</p>
+                                    <p><strong>應用範圍：</strong>作文批改、智能出題</p>
+                                    <p><strong>突破：</strong>教育帳號整合，專業化程度提升</p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-point"></div>
+                                <div class="timeline-content">
+                                    <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;">2023年底 - 溝通技巧成熟</h4>
+                                    <p><strong>主要發展：</strong>AI溝通四大技巧體系建立</p>
+                                    <p><strong>應用範圍：</strong>精準的角色設定與任務指派</p>
+                                    <p><strong>成果：</strong>AI回應品質顯著提升</p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-point"></div>
+                                <div class="timeline-content">
+                                    <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;">2024年初 - 多平台整合</h4>
+                                    <p><strong>主要發展：</strong>PoE、Gemini等平台功能完善</p>
+                                    <p><strong>應用範圍：</strong>圖像生成、語音輸入、自訂機器人</p>
+                                    <p><strong>特色：</strong>跨平台協作與工具組合應用</p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-point"></div>
+                                <div class="timeline-content">
+                                    <h4 style="color: var(--primary-green); margin-bottom: 0.5rem;">2024年中 - 行動化普及</h4>
+                                    <p><strong>主要發展：</strong>手機/平板AI應用全面普及</p>
+                                    <p><strong>應用範圍：</strong>即時拍照批改、語音輸入、課堂互動</p>
+                                    <p><strong>優勢：</strong>隨時隨地的教學支援</p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-point"></div>
+                                <div class="timeline-content">
+                                    <h4 style="color: var(--success-green); margin-bottom: 0.5rem;">2024年底 - 現在</h4>
+                                    <p><strong>當前狀態：</strong>AI教學應用已趨成熟</p>
+                                    <p><strong>應用範圍：</strong>全方位教學支援，個性化學習</p>
+                                    <p><strong>成效：</strong>顯著提升教學效率與學習成果</p>
+                                </div>
+                            </li>
+                            <li class="timeline-item">
+                                <div class="timeline-point" style="background: var(--info-blue);"></div>
+                                <div class="timeline-content" style="background: linear-gradient(135deg, #e3f2fd, #ffffff);">
+                                    <h4 style="color: var(--info-blue); margin-bottom: 0.5rem;">2025年 - 未來展望</h4>
+                                    <p><strong>預期發展：</strong>AI與AR/VR結合的沈浸式教學</p>
+                                    <p><strong>技術突破：</strong>更精準的情感識別與個性化回饋</p>
+                                    <p><strong>願景：</strong>真正實現因材施教的智慧教育</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="chart-grid">
+                    <div class="chart-container large-chart">
+                        <div class="chart-header">
+                            <div class="chart-icon">📊</div>
+                            <div class="chart-title">
+                                <h3>AI教學工具發展趨勢</h3>
+                                <p>各類AI工具隨時間的普及率變化曲線</p>
+                            </div>
+                        </div>
+                        <div class="chart-canvas">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <div class="floating-controls">
+        <div class="tooltip">
+            <button class="control-btn" onclick="scrollToTop()">↑</button>
+            <span class="tooltiptext">返回頂部</span>
+        </div>
+        <div class="tooltip">
+            <button class="control-btn" onclick="toggleFullscreen()">⛶</button>
+            <span class="tooltiptext">全螢幕模式</span>
+        </div>
+        <div class="tooltip">
+            <button class="control-btn" onclick="exportData()">💾</button>
+            <span class="tooltiptext">匯出資料</span>
+        </div>
+    </div>
+
+    <div class="loading-spinner" id="loadingSpinner"></div>
+
+    <script>
+        // 全域變數
+        let charts = {};
+
+        // 頁籤切換功能
+        function showSection(sectionId) {
+            // 顯示載入動畫
+            document.getElementById('loadingSpinner').style.display = 'block';
+            
+            setTimeout(() => {
+                // 隱藏所有區段
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // 顯示指定區段
+                document.getElementById(sectionId).classList.add('active');
+                
+                // 更新導航標籤狀態
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                event.target.classList.add('active');
+
+                // 隱藏載入動畫
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+                // 重新繪製圖表（防止顯示問題）
+                setTimeout(() => {
+                    Object.values(charts).forEach(chart => {
+                        if (chart && typeof chart.resize === 'function') {
+                            chart.resize();
+                        }
+                    });
+                }, 100);
+
+                // 捲動到頂部
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }, 300);
+        }
+
+        // 篩選功能
+        function filterPlatforms(category) {
+            const rows = document.querySelectorAll('tbody tr');
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            
+            // 更新按鈕狀態
+            filterBtns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            rows.forEach(row => {
+                if (category === 'all' || row.dataset.category.includes(category)) {
+                    row.style.display = 'table-row';
+                    row.style.animation = 'slideIn 0.3s ease-out';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // 輔助功能
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function exportData() {
+            alert('匯出功能開發中，敬請期待！');
+        }
+
+        // 圖表初始化
+        function initCharts() {
+            // 應用類型分布圖
+            const ctx1 = document.getElementById('applicationTypeChart').getContext('2d');
+            charts.applicationTypeChart = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['作文批改', '圖片生成', '內容創作', '出題評量', '語音輸入', '其他'],
+                    datasets: [{
+                        data: [35, 20, 15, 12, 10, 8],
+                        backgroundColor: [
+                            '#4a7c59', '#66bb6a', '#8fbc8f', '#4caf50', '#81c784', '#a5d6a7'
+                        ],
+                        borderWidth: 3,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 滿意度評分圖
+            const ctx2 = document.getElementById('satisfactionChart').getContext('2d');
+            charts.satisfactionChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['康軒AI', 'Gemini', 'PoE', 'Padlet', 'ChatGPT'],
+                    datasets: [{
+                        label: '滿意度評分',
+                        data: [4.5, 4.2, 4.0, 3.8, 4.1],
+                        backgroundColor: 'rgba(102, 187, 106, 0.8)',
+                        borderColor: '#4a7c59',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 5,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // 溝通技巧效果分析圖
+            const ctx3 = document.getElementById('communicationSkillsChart').getContext('2d');
+            charts.communicationSkillsChart = new Chart(ctx3, {
+                type: 'radar',
+                data: {
+                    labels: ['設人設', '給目標', '給限制', '加追問', '語境理解', '回應精準度'],
+                    datasets: [{
+                        label: '使用前',
+                        data: [3, 4, 2, 2, 3, 3],
+                        borderColor: '#ff9800',
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        borderWidth: 2
+                    }, {
+                        label: '使用後',
+                        data: [8, 9, 8, 7, 8, 9],
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // AI辨識準確率比較圖
+            const ctx4 = document.getElementById('accuracyChart').getContext('2d');
+            charts.accuracyChart = new Chart(ctx4, {
+                type: 'line',
+                data: {
+                    labels: ['Google OCR', '康軒AI', 'ChatGPT', 'Gemini', 'PoE'],
+                    datasets: [{
+                        label: '準確率 (%)',
+                        data: [85, 78, 75, 80, 77],
+                        borderColor: '#4a7c59',
+                        backgroundColor: 'rgba(74, 124, 89, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#4caf50',
+                        pointBorderColor: '#2d5016',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 成本效益分析圖
+            const ctx5 = document.getElementById('costBenefitChart').getContext('2d');
+            charts.costBenefitChart = new Chart(ctx5, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'AI平台',
+                        data: [
+                            {x: 5, y: 4.5, platform: '康軒AI'},
+                            {x: 0, y: 4.2, platform: 'Gemini'},
+                            {x: 3, y: 4.0, platform: 'PoE'},
+                            {x: 1, y: 3.8, platform: 'Padlet'},
+                            {x: 2, y: 4.1, platform: 'ChatGPT'}
+                        ],
+                        backgroundColor: 'rgba(102, 187, 106, 0.7)',
+                        borderColor: '#4a7c59',
+                        borderWidth: 2,
+                        pointRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '成本指數'
+                            },
+                            max: 6
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '效益評分'
+                            },
+                            max: 5
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.platform + ': 成本' + context.raw.x + ', 效益' + context.raw.y;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 初始化其他圖表...
+            initPlatformCharts();
+            initWorkflowCharts();
+            initEffectivenessCharts();
+            initTimelineCharts();
+        }
+
+        function initPlatformCharts() {
+            // 平台雷達圖
+            const ctxRadar = document.getElementById('platformRadarChart').getContext('2d');
+            charts.platformRadarChart = new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['功能完整性', '易用性', '中文支援', '成本效益', '教育適用性', '技術支援'],
+                    datasets: [{
+                        label: '康軒AI',
+                        data: [9, 8, 10, 7, 10, 9],
+                        borderColor: '#4a7c59',
+                        backgroundColor: 'rgba(74, 124, 89, 0.2)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Gemini',
+                        data: [8, 9, 8, 10, 7, 8],
+                        borderColor: '#66bb6a',
+                        backgroundColor: 'rgba(102, 187, 106, 0.2)',
+                        borderWidth: 2
+                    }, {
+                        label: 'PoE',
+                        data: [7, 6, 8, 8, 8, 7],
+                        borderColor: '#8fbc8f',
+                        backgroundColor: 'rgba(143, 188, 143, 0.2)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 平台偏好圖
+            const ctxPreference = document.getElementById('platformPreferenceChart').getContext('2d');
+            charts.platformPreferenceChart = new Chart(ctxPreference, {
+                type: 'pie',
+                data: {
+                    labels: ['康軒AI', 'Gemini', 'PoE', 'ChatGPT', 'Padlet'],
+                    datasets: [{
+                        data: [40, 25, 15, 12, 8],
+                        backgroundColor: ['#4a7c59', '#66bb6a', '#8fbc8f', '#4caf50', '#81c784'],
+                        borderWidth: 3,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+
+            // 學習曲線圖
+            const ctxLearning = document.getElementById('learningCurveChart').getContext('2d');
+            charts.learningCurveChart = new Chart(ctxLearning, {
+                type: 'line',
+                data: {
+                    labels: ['第1週', '第2週', '第3週', '第4週', '第5週', '第6週'],
+                    datasets: [{
+                        label: '康軒AI',
+                        data: [20, 40, 60, 80, 90, 95],
+                        borderColor: '#4a7c59',
+                        backgroundColor: 'rgba(74, 124, 89, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }, {
+                        label: 'Gemini',
+                        data: [30, 55, 75, 85, 92, 96],
+                        borderColor: '#66bb6a',
+                        backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }, {
+                        label: 'PoE',
+                        data: [15, 35, 50, 70, 85, 90],
+                        borderColor: '#8fbc8f',
+                        backgroundColor: 'rgba(143, 188, 143, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '熟練度 (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initWorkflowCharts() {
+            // 工作流程時間圖
+            const ctxWorkflow = document.getElementById('workflowTimeChart').getContext('2d');
+            charts.workflowTimeChart = new Chart(ctxWorkflow, {
+                type: 'bar',
+                data: {
+                    labels: ['準備階段', '批改階段', '評語撰寫', '成績登錄', '學生回饋'],
+                    datasets: [{
+                        label: '傳統方式 (分鐘)',
+                        data: [10, 25, 15, 8, 12],
+                        backgroundColor: 'rgba(255, 152, 0, 0.7)',
+                        borderColor: '#ff9800',
+                        borderWidth: 2
+                    }, {
+                        label: 'AI輔助 (分鐘)',
+                        data: [5, 8, 5, 3, 4],
+                        backgroundColor: 'rgba(76, 175, 80, 0.7)',
+                        borderColor: '#4caf50',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '時間 (分鐘)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 成功率統計圖
+            const ctxSuccess = document.getElementById('successRateChart').getContext('2d');
+            charts.successRateChart = new Chart(ctxSuccess, {
+                type: 'doughnut',
+                data: {
+                    labels: ['帳號登入', '檔案上傳', 'AI批改', '結果分享', '學生查看'],
+                    datasets: [{
+                        data: [85, 92, 88, 95, 90],
+                        backgroundColor: ['#4a7c59', '#66bb6a', '#8fbc8f', '#4caf50', '#81c784'],
+                        borderWidth: 3,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // 常見問題分布圖
+            const ctxIssues = document.getElementById('issuesChart').getContext('2d');
+            charts.issuesChart = new Chart(ctxIssues, {
+                type: 'horizontalBar' in Chart ? 'horizontalBar' : 'bar',
+                data: {
+                    labels: ['帳號登入困難', '檔案格式問題', 'AI回應不準確', '網路連線問題', '操作流程不熟'],
+                    datasets: [{
+                        label: '問題發生頻率',
+                        data: [32, 18, 15, 22, 28],
+                        backgroundColor: 'rgba(255, 152, 0, 0.7)',
+                        borderColor: '#ff9800',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '發生次數'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function initEffectivenessCharts() {
+            // 效率提升圖
+            const ctxEfficiency = document.getElementById('efficiencyChart').getContext('2d');
+            charts.efficiencyChart = new Chart(ctxEfficiency, {
+                type: 'bar',
+                data: {
+                    labels: ['作文批改', '出題準備', '課程設計', '學習診斷', '個別指導'],
+                    datasets: [{
+                        label: '時間節省率 (%)',
+                        data: [65, 70, 45, 55, 50],
+                        backgroundColor: [
+                            'rgba(76, 175, 80, 0.8)',
+                            'rgba(102, 187, 106, 0.8)',
+                            'rgba(129, 199, 132, 0.8)',
+                            'rgba(165, 214, 167, 0.8)',
+                            'rgba(200, 230, 201, 0.8)'
+                        ],
+                        borderColor: '#4caf50',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 80,
+                            title: {
+                                display: true,
+                                text: '節省率 (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // 成績改善率圖
+            const ctxImprovement = document.getElementById('improvementChart').getContext('2d');
+            charts.improvementChart = new Chart(ctxImprovement, {
+                type: 'line',
+                data: {
+                    labels: ['9月', '10月', '11月', '12月', '1月', '2月'],
+                    datasets: [{
+                        label: '平均分數提升',
+                        data: [2, 5, 8, 12, 15, 18],
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#4caf50',
+                        pointBorderColor: '#2d5016',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '分數提升 (分)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 創新應用頻率圖
+            const ctxInnovation = document.getElementById('innovationChart').getContext('2d');
+            charts.innovationChart = new Chart(ctxInnovation, {
+                type: 'radar',
+                data: {
+                    labels: ['圖像創作', '詩詞生成', '角色扮演', '多媒體整合', '即時互動', '個性化學習'],
+                    datasets: [{
+                        label: '使用頻率',
+                        data: [8, 7, 6, 5, 9, 7],
+                        borderColor: '#66bb6a',
+                        backgroundColor: 'rgba(102, 187, 106, 0.2)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#66bb6a',
+                        pointBorderColor: '#4a7c59',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10
+                        }
+                    }
+                }
+            });
+
+            // 工具組合效果圖
+            const ctxCombination = document.getElementById('combinationChart').getContext('2d');
+            charts.combinationChart = new Chart(ctxCombination, {
+                type: 'bubble',
+                data: {
+                    datasets: [{
+                        label: '工具組合',
+                        data: [
+                            {x: 8, y: 9, r: 15, combo: '康軒+Gemini'},
+                            {x: 7, y: 8, r: 12, combo: 'PoE+Padlet'},
+                            {x: 6, y: 7, r: 10, combo: 'ChatGPT+Gemini'},
+                            {x: 9, y: 8, r: 18, combo: '康軒+PoE'},
+                            {x: 5, y: 6, r: 8, combo: '單一工具'}
+                        ],
+                        backgroundColor: 'rgba(102, 187, 106, 0.6)',
+                        borderColor: '#4a7c59',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '易用性'
+                            },
+                            max: 10
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '效果評分'
+                            },
+                            max: 10
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.raw.combo + ': 易用性' + context.raw.x + ', 效果' + context.raw.y;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 評分準確度比較圖
+            const ctxAccuracyComp = document.getElementById('accuracyComparisonChart').getContext('2d');
+            charts.accuracyComparisonChart = new Chart(ctxAccuracyComp, {
+                type: 'line',
+                data: {
+                    labels: ['1級分', '2級分', '3級分', '4級分', '5級分', '6級分'],
+                    datasets: [{
+                        label: 'AI評分',
+                        data: [85, 78, 82, 88, 90, 75],
+                        borderColor: '#66bb6a',
+                        backgroundColor: 'rgba(102, 187, 106, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#66bb6a',
+                        tension: 0.4
+                    }, {
+                        label: '教師評分',
+                        data: [90, 85, 87, 92, 95, 88],
+                        borderColor: '#4a7c59',
+                        backgroundColor: 'rgba(74, 124, 89, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#4a7c59',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '準確率 (%)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initTimelineCharts() {
+            // 發展趨勢圖
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            charts.trendChart = new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: ['2023/01', '2023/04', '2023/07', '2023/10', '2024/01', '2024/04', '2024/07', '2024/10'],
+                    datasets: [{
+                        label: '基礎AI工具',
+                        data: [10, 25, 40, 55, 65, 70, 75, 78],
+                        borderColor: '#ff9800',
+                        backgroundColor: 'rgba(255, 152, 0, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }, {
+                        label: '教育專用AI',
+                        data: [0, 5, 15, 30, 45, 60, 70, 80],
+                        borderColor: '#4caf50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }, {
+                        label: '多平台整合',
+                        data: [0, 0, 5, 15, 25, 40, 55, 65],
+                        borderColor: '#2196f3',
+                        backgroundColor: 'rgba(33, 150, 243, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }, {
+                        label: '行動化應用',
+                        data: [0, 0, 0, 5, 15, 30, 50, 70],
+                        borderColor: '#9c27b0',
+                        backgroundColor: 'rgba(156, 39, 176, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: '普及率 (%)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        // 頁面載入完成後初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+            
+            // 進度條動畫
+            setTimeout(() => {
+                document.querySelectorAll('.progress-bar-fill').forEach(bar => {
+                    bar.style.animation = 'none';
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.transition = 'width 2s ease-in-out';
+                        bar.style.width = bar.getAttribute('style').match(/width:\s*(\d+%)/)[1];
+                    }, 100);
+                });
+            }, 1000);
+        });
+
+        // 響應式處理
+        window.addEventListener('resize', function() {
+            Object.values(charts).forEach(chart => {
+                if (chart && typeof chart.resize === 'function') {
+                    chart.resize();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

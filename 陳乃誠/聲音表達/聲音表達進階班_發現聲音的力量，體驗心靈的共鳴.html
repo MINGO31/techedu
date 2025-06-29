@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聲音表達進階班 | 從心出發的聲音旅程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #ff9a8b 0%, #fad0c4 100%);
+            color: #2c2c2c;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 標題區塊 */
+        .hero {
+            text-align: center;
+            padding: 80px 0;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.05) 10px,
+                rgba(255,255,255,0.05) 20px
+            );
+            animation: wave 4s ease-in-out infinite;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            animation: fadeInUp 1s ease-out 0.3s both;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 導航標籤 */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: white;
+            border-radius: 50px;
+            padding: 10px;
+            margin: -30px auto 50px;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 25px;
+            text-align: center;
+            border: none;
+            background: transparent;
+            color: #ff6b35;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 40px;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .tab.active {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 107, 53, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* 內容區塊 */
+        .content-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 15px 35px rgba(255, 107, 53, 0.1);
+            animation: fadeInUp 0.8s ease-out;
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: #ff6b35;
+            margin-bottom: 25px;
+            text-align: center;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        /* 聲音檢測卡片 */
+        .voice-card {
+            background: linear-gradient(135deg, #fff5f3, #ffe8e1);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid #ff6b35;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .voice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 107, 53, 0.15);
+        }
+
+        .voice-card h3 {
+            color: #ff6b35;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* 顏色特質區塊 */
+        .color-traits {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .trait-card {
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trait-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .trait-card:hover::before {
+            left: 100%;
+        }
+
+        .trait-card:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        .red-trait {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+        }
+
+        .yellow-trait {
+            background: linear-gradient(135deg, #ffd93d, #ffb74d);
+            color: #333;
+        }
+
+        .blue-trait {
+            background: linear-gradient(135deg, #4fc3f7, #29b6f6);
+            color: white;
+        }
+
+        .green-trait {
+            background: linear-gradient(135deg, #66bb6a, #4caf50);
+            color: white;
+        }
+
+        .trait-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .trait-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* 練習區塊 */
+        .practice-area {
+            background: linear-gradient(135deg, #fff8f5, #ffefe7);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0;
+            border: 2px solid #ffb74d;
+        }
+
+        .practice-text {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.1);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .play-button {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+        }
+
+        /* 學員卡片 */
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .student-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #ff6b35;
+        }
+
+        .student-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 107, 53, 0.2);
+        }
+
+        .student-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 15px;
+        }
+
+        .student-description {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* 作業區塊 */
+        .homework-section {
+            background: linear-gradient(135deg, #ff9a8b, #fecfef);
+            color: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .homework-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .homework-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .step-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                border-radius: 15px;
+                margin: -20px 20px 30px;
+            }
+
+            .tab {
+                margin: 5px 0;
+                border-radius: 10px;
+            }
+
+            .content-section {
+                padding: 25px;
+                margin: 20px 10px;
+            }
+
+            .color-traits {
+                grid-template-columns: 1fr;
+            }
+
+            .student-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* 浮動按鈕 */
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <!-- 主標題區塊 -->
+    <div class="hero">
+        <div class="container">
+            <div class="hero-icon">🎤</div>
+            <h1>聲音表達進階班</h1>
+            <p>發現聲音的力量，體驗心靈的共鳴</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 導航標籤 -->
+        <div class="nav-tabs">
+            <button class="tab active" onclick="showTab('course-intro')">課程介紹</button>
+            <button class="tab" onclick="showTab('voice-test')">聲音檢測</button>
+            <button class="tab" onclick="showTab('students')">學員風采</button>
+            <button class="tab" onclick="showTab('practice')">練習素材</button>
+            <button class="tab" onclick="showTab('homework')">課後作業</button>
+        </div>
+
+        <!-- 課程介紹 -->
+        <div id="course-intro" class="content-section active">
+            <h2 class="section-title">課程核心理念</h2>
+            
+            <div class="voice-card">
+                <h3>🎯 從自我修煉到人際互動</h3>
+                <p>進階班不僅是技巧的精進，更是心態的轉換。我們要學會用聲音與他人建立深度連結，在不同情境中展現最適切的能量。</p>
+            </div>
+
+            <div class="voice-card">
+                <h3>🎭 六種聲音能量</h3>
+                <p>自信之聲、反擊之聲、智慧之聲、歡樂之聲、魅力之聲、暖心之聲 - 每一種都對應不同的人際情境與內在狀態。</p>
+            </div>
+
+            <div class="voice-card">
+                <h3>🎪 保持彈性的重要性</h3>
+                <p>我們練習的不是變成某一種形象，而是培養聲音的彈性。面對不同的人與情境，都能找到最合適的表達方式。</p>
+            </div>
+
+            <h3 style="color: #ff6b35; margin: 30px 0 20px;">決策循環：從不要到我要的六個階段</h3>
+            
+            <div class="homework-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4>抗拒階段</h4>
+                    <p>保護自己的本能反應</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4>願意聆聽</h4>
+                    <p>期待改變但保持觀望</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4>願意考慮</h4>
+                    <p>累積足夠的信任感</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4>願意行動</h4>
+                    <p>掌握資源與心理準備</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h4>持續執行</h4>
+                    <p>建立長期的一致性</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">6</div>
+                    <h4>內化成長</h4>
+                    <p>找到真實的意義感</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 聲音檢測 -->
+        <div id="voice-test" class="content-section">
+            <h2 class="section-title">聲音特質檢測</h2>
+            
+            <p style="text-align: center; margin-bottom: 30px; font-size: 1.1rem; color: #666;">
+                我們用兩個耳朵聽人說話：一個聽內容，一個聽聲音。聲音承載的情緒與能量，往往比文字本身更真實。
+            </p>
+
+            <div class="color-traits">
+                <div class="trait-card red-trait">
+                    <span class="trait-icon">🔥</span>
+                    <div class="trait-title">紅色特質 - 積極力量</div>
+                    <p>坑鏗有力、斬釘截鐵、中氣十足、氣宇軒昂。具備領導魅力與突破能量，敢於面對挑戰。</p>
+                </div>
+
+                <div class="trait-card yellow-trait">
+                    <span class="trait-icon">☀️</span>
+                    <div class="trait-title">黃色特質 - 活潑熱情</div>
+                    <p>外向活潑、熱情洋溢、語調豐富、具表現慾。擅長感染他人情緒，帶來歡樂與活力。</p>
+                </div>
+
+                <div class="trait-card blue-trait">
+                    <span class="trait-icon">🧠</span>
+                    <div class="trait-title">藍色特質 - 理性專業</div>
+                    <p>口齒清晰、思考縝密、邏輯清楚、專業穩重。重視準確性與條理性，值得信賴。</p>
+                </div>
+
+                <div class="trait-card green-trait">
+                    <span class="trait-icon">🌱</span>
+                    <div class="trait-title">綠色特質 - 溫和親切</div>
+                    <p>溫柔體貼、親切認真、有耐心包容。具備療癒能量，能夠安撫與支持他人。</p>
+                </div>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color: #ff6b35; margin-bottom: 20px;">聲音溫度檢測</h3>
+                <p>我們的聲音可以用四個維度來分析：<strong>快慢</strong>、<strong>冷熱</strong>、<strong>軟硬</strong>、<strong>高低</strong></p>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="play-button" onclick="playSound('fast')">⚡ 快節奏</button>
+                    <button class="play-button" onclick="playSound('slow')">🐌 慢節奏</button>
+                    <button class="play-button" onclick="playSound('warm')">🔥 溫暖</button>
+                    <button class="play-button" onclick="playSound('cool')">❄️ 冷靜</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 學員風采 -->
+        <div id="students" class="content-section">
+            <h2 class="section-title">學員風采展示</h2>
+            
+            <div class="student-grid">
+                <div class="student-card">
+                    <div class="student-name">文霙 - 作文老師</div>
+                    <div class="student-description">
+                        充滿活力的黃色特質，每週面對500位學生，深深體會到「得天下英才而教之一樂也」。熱愛教學，也熱愛追星，被偶像記住是最開心的事情！
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">Kyria - 國際教練</div>
+                    <div class="student-description">
+                        擁有豐富行銷經驗的國際市場教練，主持podcast節目「華麗職場不用力」。從巴黎連線上課，展現了學習的熱忱與國際視野。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">憶慈 - 思維敏銳</div>
+                    <div class="student-description">
+                        具備強烈的藍色與綠色特質，善於觀察與思考。喜歡深入分析，對聲音辨識特別有興趣，展現出細膩的感受力。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">Joy - 工程顧問</div>
+                    <div class="student-description">
+                        工程顧問業主管，具備隱藏的王者之聲。外表溫和但內在堅定，適合在專業領域發揮影響力，展現剛正不阿的特質。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">正倫 - 資深學長</div>
+                    <div class="student-description">
+                        10年前的老學員，這次回歸是為了與哥哥更好的溝通。相信學習是持續的過程，展現了終身學習的精神。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">思妤 - 多元探索者</div>
+                    <div class="student-description">
+                        豐富的人生歷練，從會計到櫃姐到世界旅行。勇於挑戰自己害怕的事物，正在學習美術館導覽，展現無限可能。
+                    </div>
+                </div>
+
+                <div class="student-card">
+                    <div class="student-name">Ivy - 保險專業</div>
+                    <div class="student-description">
+                        保險從業人員，即將面臨30分鐘大型演講挑戰。具備溫潤柔軟的聲線，適合一對一深度溝通，正在擴展舞台表達能力。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 練習素材 -->
+        <div id="practice" class="content-section">
+            <h2 class="section-title">多元練習素材</h2>
+            
+            <div class="practice-area">
+                <h3 style="color: #ff6b35;">📊 專業播報練習</h3>
+                <div class="practice-text">
+                    台北股市今天開低走低，收盤下跌209.84點，為23392.82點，跌幅1.34%，成交金額新台幣2022.01億元。
+                </div>
+                <button class="play-button" onclick="practiceMode('professional')">開始練習</button>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color: #ff6b35;">💖 溫馨廣告練習</h3>
+                <div class="practice-text">
+                    每一位孩子都是父母心中最美的天使，即使殘缺也不影響他們的光彩。我們始終相信你我的溫情可以化解這些障礙，並引導他們發揮潛能。
+                </div>
+                <button class="play-button" onclick="practiceMode('warm')">開始練習</button>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color: #ff6b35;">🎭 脫口秀練習</h3>
+                <div class="practice-text">
+                    人要是衰，走路兩粒蛋都會相撞。我一大早開車出來就往這裡衝，本來是不想載人的，哪知才出了八堵就看到一個長得不錯的馬子在對面招手...
+                </div>
+                <button class="play-button" onclick="practiceMode('comedy')">開始練習</button>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color: #ff6b35;">🌨️ 散文朗讀練習</h3>
+                <div class="practice-text">
+                    大雪整整下了一夜。今天早晨天放晴了，太陽出來了。推開門一看，哇，好大的雪啊！山川河流，樹木房屋，全都罩上一層厚厚的雪，萬里江山變成了粉妝玉砌的世界。
+                </div>
+                <button class="play-button" onclick="practiceMode('literature')">開始練習</button>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color: #ff6b35;">🛍️ 促銷廣告練習</h3>
+                <div class="practice-text">
+                    嘿！星光三越週年慶開始啦！全館消費滿5000就能立即獲得500元折扣，十大銀行更提供六期利率分期，星光三越卡友還有額外的週年慶回饋等你拿！
+                </div>
+                <button class="play-button" onclick="practiceMode('promotion')">開始練習</button>
+            </div>
+
+            <div class="practice-area">
+                <h3 style="color: #ff6b35;">🏛️ 霸王激勵練習</h3>
+                <div class="practice-text">
+                    將士們！我承諾你們，從今以後你們付出的一切都能夠得到回報，任何人觸犯軍法都將受到應有的懲罰，秦國的一切將是屬於你們和你們兒女的！
+                </div>
+                <button class="play-button" onclick="practiceMode('heroic')">開始練習</button>
+            </div>
+        </div>
+
+        <!-- 課後作業 -->
+        <div id="homework" class="content-section">
+            <div class="homework-section">
+                <div class="homework-title">📝 本週課後作業</div>
+                <p style="font-size: 1.2rem; margin-bottom: 30px;">
+                    透過實際練習與同儕回饋，深化聲音表達的學習效果
+                </p>
+                
+                <div class="homework-steps">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4>錄製心得</h4>
+                        <p>錄製3分鐘課後心得，分享今天的學習收穫與感動</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4>上傳Notion</h4>
+                        <p>將音檔上傳至Notion作業平台，方便同學聆聽</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4>聆聽回饋</h4>
+                        <p>聆聽每位同學的心得，製作聲音檢測表給予回饋</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4>互相成長</h4>
+                        <p>在同儕互動中發現更多聲音的可能性與魅力</p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.2); border-radius: 10px;">
+                    <h4>🎯 學習重點提醒</h4>
+                    <p>記住：下課比上課更重要！課堂只有2.5小時，但一週的練習時間是真正內化技巧的關鍵時刻。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 浮動按鈕 -->
+    <button class="floating-btn" onclick="scrollToTop()" title="回到頂部">↑</button>
+
+    <script>
+        // 切換標籤功能
+        function showTab(tabId) {
+            // 隱藏所有內容區塊
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 移除所有標籤的active狀態
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // 顯示選中的內容區塊
+            document.getElementById(tabId).classList.add('active');
+            
+            // 為點擊的標籤添加active狀態
+            event.target.classList.add('active');
+
+            // 添加淡入動畫
+            const activeSection = document.getElementById(tabId);
+            activeSection.style.animation = 'none';
+            setTimeout(() => {
+                activeSection.style.animation = 'fadeInUp 0.6s ease-out';
+            }, 10);
+        }
+
+        // 練習模式功能
+        function practiceMode(mode) {
+            const messages = {
+                professional: '🎯 專業播報模式：請保持沉穩、準確的語調，注意咬字清晰度',
+                warm: '💕 溫馨模式：用心感受文字的溫度，讓聲音充滿關懷',
+                comedy: '😄 幽默模式：輕鬆自然，帶點調皮的語氣',
+                literature: '📚 文學模式：優美流暢，營造畫面感',
+                promotion: '🛍️ 促銷模式：充滿活力與號召力',
+                heroic: '👑 霸王模式：氣勢磅礴，展現領袖風範'
+            };
+
+            alert(messages[mode] || '開始練習吧！');
+        }
+
+        // 聲音播放功能（模擬）
+        function playSound(type) {
+            const messages = {
+                fast: '⚡ 快節奏：語速明快，充滿活力！',
+                slow: '🐌 慢節奏：從容不迫，深思熟慮',
+                warm: '🔥 溫暖：親切友善，充滿人情味',
+                cool: '❄️ 冷靜：理性客觀，專業可靠'
+            };
+
+            // 創建動態提示
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(45deg, #ff6b35, #f7931e);
+                color: white;
+                padding: 20px 40px;
+                border-radius: 15px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                z-index: 10000;
+                box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+                animation: fadeInUp 0.5s ease-out;
+            `;
+            notification.textContent = messages[type];
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 2000);
+        }
+
+        // 回到頂部功能
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // 滾動時顯示/隱藏浮動按鈕
+        window.addEventListener('scroll', function() {
+            const btn = document.querySelector('.floating-btn');
+            if (window.pageYOffset > 300) {
+                btn.style.opacity = '1';
+                btn.style.transform = 'scale(1)';
+            } else {
+                btn.style.opacity = '0';
+                btn.style.transform = 'scale(0)';
+            }
+        });
+
+        // 頁面載入時的動畫效果
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.voice-card, .trait-card, .student-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.animation = `fadeInUp 0.6s ease-out ${index * 0.1}s both`;
+                }, 100);
+            });
+        });
+
+        // 滑鼠追蹤效果（為某些元素添加互動性）
+        document.addEventListener('mousemove', function(e) {
+            const cursor = e.clientX / window.innerWidth;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.background = `linear-gradient(${45 + cursor * 10}deg, #ff6b35, #f7931e)`;
+            }
+        });
+    </script>
+</body>
+</html>

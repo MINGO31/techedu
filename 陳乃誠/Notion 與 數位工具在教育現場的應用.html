@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notion與數位工具在教育現場的應用</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        :root {
+            --primary: #FF8C42;
+            --primary-light: #FFB995;
+            --primary-dark: #E56717;
+            --secondary: #FFC15E;
+            --secondary-light: #FFD591;
+            --accent: #FF5722;
+            --bg-light: #FFF8F0;
+            --bg-white: #FFFFFF;
+            --text-dark: #33272A;
+            --text-light: #594A4E;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+        }
+        
+        .section {
+            background-color: var(--bg-white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(255, 140, 66, 0.1);
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .card {
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.2rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .card h3 {
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+        }
+        
+        .card ul, .card ol {
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .card li {
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+        }
+        
+        .challenge-card {
+            border-left-color: var(--primary);
+        }
+        
+        .need-card {
+            border-left-color: var(--secondary);
+        }
+        
+        .solution-card {
+            border-left-color: var(--accent);
+        }
+        
+        .timeline {
+            margin-top: 2rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+            width: 4px;
+            background-color: var(--primary-light);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            padding-left: 2.5rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: 0;
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-white);
+            font-weight: bold;
+        }
+        
+        .timeline-item:nth-child(1)::before {
+            content: '1';
+        }
+        
+        .timeline-item:nth-child(2)::before {
+            content: '2';
+        }
+        
+        .timeline-item:nth-child(3)::before {
+            content: '3';
+        }
+        
+        .timeline-item:nth-child(4)::before {
+            content: '4';
+        }
+        
+        .timeline-content {
+            background-color: var(--bg-light);
+            border-radius: 8px;
+            padding: 1.2rem;
+        }
+        
+        .timeline-header {
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timeline-period {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: normal;
+        }
+        
+        .ai-feature {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-feature-icon {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .workflow-number {
+            background-color: var(--secondary-light);
+            color: var(--primary-dark);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        
+        .conclusion {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            border-radius: 12px;
+        }
+        
+        .conclusion h2 {
+            color: white;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .conclusion p {
+            margin-bottom: 1rem;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Notion與數位工具在教育現場的應用</h1>
+        </header>
+        
+        <!-- 第一部分：挑戰概況 -->
+        <section class="section">
+            <h2>教師面臨的數位挑戰</h2>
+            <div class="chart-container">
+                <canvas id="challengeChart"></canvas>
+            </div>
+            
+            <div class="grid">
+                <div class="card challenge-card">
+                    <h3>資料管理挑戰</h3>
+                    <ul>
+                        <li>文件追蹤困難，資料零散</li>
+                        <li>共備協作不易且耗時</li>
+                        <li>行政瑣碎文書資料管理</li>
+                        <li>題目收集與試卷製作</li>
+                    </ul>
+                </div>
+                
+                <div class="card challenge-card">
+                    <h3>學生相關挑戰</h3>
+                    <ul>
+                        <li>學生學習扶助個人檔案整理</li>
+                        <li>學生軼事與輔導紀錄管理</li>
+                        <li>學生作業訂正追蹤</li>
+                        <li>平日獎懲優缺點登記</li>
+                    </ul>
+                </div>
+                
+                <div class="card challenge-card">
+                    <h3>教學資源挑戰</h3>
+                    <ul>
+                        <li>彙整靈感資料庫</li>
+                        <li>教案與教學資源管理</li>
+                        <li>多班級教學進度紀錄</li>
+                        <li>不同年級科目備課資源整理</li>
+                    </ul>
+                </div>
+                
+                <div class="card challenge-card">
+                    <h3>行政工作挑戰</h3>
+                    <ul>
+                        <li>例行的行政事務處理</li>
+                        <li>計畫撰寫與資料彙整</li>
+                        <li>家長提問整理與回覆</li>
+                        <li>臨時交辦事項追蹤</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第二部分：需求分析 -->
+        <section class="section">
+            <h2>教師數位工具需求分析</h2>
+            <div class="chart-container">
+                <canvas id="needChart"></canvas>
+            </div>
+            
+            <div class="grid">
+                <div class="card need-card">
+                    <h3>實際案例操作</h3>
+                    <p>期望看見整個使用流程，能跟著做一遍，加深理解</p>
+                </div>
+                
+                <div class="card need-card">
+                    <h3>效率提升方法</h3>
+                    <p>尋求教學與行政更省時省力的數位工具與方法</p>
+                </div>
+                
+                <div class="card need-card">
+                    <h3>資料庫建置技巧</h3>
+                    <p>希望學習如何建立易用的資料庫管理系統</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第三部分：Notion解決方案 -->
+        <section class="section">
+            <h2>Notion解決方案</h2>
+            <div class="chart-container">
+                <canvas id="solutionChart"></canvas>
+            </div>
+            
+            <div class="grid">
+                <div class="card solution-card">
+                    <h3>教學資源管理</h3>
+                    <ul>
+                        <li>主題式資源庫，支援跨年級分類</li>
+                        <li>模板化教材與教案結構</li>
+                        <li>題目收集系統，可匯出CSV格式</li>
+                        <li>多班級教學進度統一管理</li>
+                    </ul>
+                </div>
+                
+                <div class="card solution-card">
+                    <h3>行政與班級管理</h3>
+                    <ul>
+                        <li>表單模板設計與重複使用</li>
+                        <li>學生檔案與輔導紀錄整合</li>
+                        <li>獎勵制度與作業訂正追蹤</li>
+                        <li>家長溝通管理平台</li>
+                    </ul>
+                </div>
+                
+                <div class="card solution-card">
+                    <h3>高效工作流程</h3>
+                    <ul>
+                        <li>任務優先順序與時間管理</li>
+                        <li>團隊協作與資料共享</li>
+                        <li>AI輔助內容生成與自動化</li>
+                        <li>跨平台雲端同步策略</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第四部分：實際案例總覽 -->
+        <section class="section">
+            <h2>實際案例操作教學</h2>
+            <div class="grid">
+                <div class="card" style="border-left-color: var(--secondary);">
+                    <h3>案例一：教學資源資料庫建置</h3>
+                    <p>建立完整教學資源管理系統，解決資料零散問題</p>
+                    <ol>
+                        <li>資料庫基本結構設計</li>
+                        <li>分類與標籤系統建立</li>
+                        <li>跨科目、跨年級資源整合</li>
+                        <li>模板與自動化流程設定</li>
+                    </ol>
+                </div>
+                
+                <div class="card" style="border-left-color: var(--secondary);">
+                    <h3>案例二：班級管理全流程</h3>
+                    <p>整合學生資料、作業追蹤與家長溝通平台</p>
+                    <ol>
+                        <li>學生檔案系統建置</li>
+                        <li>作業與評量追蹤系統</li>
+                        <li>獎懲記錄與學習歷程</li>
+                        <li>家長溝通平台設計</li>
+                    </ol>
+                </div>
+                
+                <div class="card" style="border-left-color: var(--secondary);">
+                    <h3>案例三：行政工作流程設計</h3>
+                    <p>優化行政工作流程，減少重複性工作</p>
+                    <ol>
+                        <li>任務管理與優先順序設定</li>
+                        <li>自動化提醒與追蹤系統</li>
+                        <li>團隊協作工作流設計</li>
+                        <li>表單模板與數據分析</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第五部分：AI整合與高效工作流 -->
+        <section class="section">
+            <h2>AI整合與高效工作流程</h2>
+            
+            <div class="grid">
+                <div class="card" style="border-left-color: var(--primary-dark);">
+                    <h3>AI輔助功能應用</h3>
+                    
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">✓</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">AI協作筆記</h4>
+                            <p>利用AI快速整理研習筆記與會議重點</p>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">✓</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">語音轉文字</h4>
+                            <p>教學構思與回饋快速記錄</p>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">✓</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">AI輔助簡報製作</h4>
+                            <p>快速生成教學簡報與視覺化內容</p>
+                        </div>
+                    </div>
+                    
+                    <div class="ai-feature">
+                        <div class="ai-feature-icon">✓</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">自動化表單填寫</h4>
+                            <p>減少重複性行政工作時間</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="border-left-color: var(--accent);">
+                    <h3>高效工作流程設計</h3>
+                    
+                    <div class="workflow-step">
+                        <div class="workflow-number">1</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">需求分析與系統規劃</h4>
+                            <p>找出真正痛點，規劃最小可行系統</p>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="workflow-number">2</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">資料庫結構設計</h4>
+                            <p>合理分類，保持擴展性與靈活性</p>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="workflow-number">3</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">自動化流程建立</h4>
+                            <p>設定提醒、連結與模板自動化</p>
+                        </div>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="workflow-number">4</div>
+                        <div>
+                            <h4 style="margin-bottom: 0.3rem;">持續優化與調整</h4>
+                            <p>定期檢視使用情況，調整不合理流程</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 1.5rem; border-left-color: var(--secondary);">
+                <h3>跨平台整合策略</h3>
+                <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <div style="background-color: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <h4 style="color: var(--primary-dark);">雲端同步工作流</h4>
+                        <p style="font-size: 0.9rem;">辦公室、家中、跑校無縫同步工作狀態</p>
+                    </div>
+                    
+                    <div style="background-color: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <h4 style="color: var(--primary-dark);">多工具整合</h4>
+                        <p style="font-size: 0.9rem;">Notion連結Google工具、NotebookLM、OneDrive</p>
+                    </div>
+                    
+                    <div style="background-color: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                        <h4 style="color: var(--primary-dark);">行動裝置同步</h4>
+                        <p style="font-size: 0.9rem;">手機、平板隨時查看與更新重要資訊</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 第六部分：行動計畫 -->
+        <section class="section">
+            <h2>行動計畫</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span>起步階段</span>
+                            <span class="timeline-period">1週</span>
+                        </div>
+                        <ul>
+                            <li>建立基本Notion帳戶</li>
+                            <li>了解基本功能與界面</li>
+                            <li>設定個人目標與需求優先順序</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span>建立基礎</span>
+                            <span class="timeline-period">2-3週</span>
+                        </div>
+                        <ul>
+                            <li>選擇一個核心需求開始(教學、行政或班級)</li>
+                            <li>建立符合需求的基本資料庫</li>
+                            <li>練習日常使用與資料輸入</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span>擴展應用</span>
+                            <span class="timeline-period">1-2個月</span>
+                        </div>
+                        <ul>
+                            <li>增加更多功能與連結</li>
+                            <li>整合其他數位工具</li>
+                            <li>建立工作流程自動化</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <span>優化分享</span>
+                            <span class="timeline-period">持續</span>
+                        </div>
+                        <ul>
+                            <li>定期檢視與調整系統</li>
+                            <li>與同事分享成功經驗</li>
+                            <li>持續學習新功能與最佳實踐</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 結語 -->
+        <section class="conclusion">
+            <h2>結語</h2>
+            <p>透過Notion建立個人化數位工作環境，逐步改善而非一次到位</p>
+            <p>應用數位工具，解放時間投入教學核心</p>
+            <p>持續學習與調整，使技術真正服務教育</p>
+        </section>
+    </div>
+    
+    <script>
+        // 教師面臨的數位挑戰數據
+        const challengeData = [
+            { name: '資料管理', value: 10 },
+            { name: '學生相關', value: 8 },
+            { name: '教學資源', value: 7 },
+            { name: '行政工作', value: 5 },
+            { name: 'AI應用', value: 4 }
+        ];
+        
+        // 教師需求分布數據
+        const needData = [
+            { name: '實際案例操作', value: 8 },
+            { name: '工具使用指南', value: 12 },
+            { name: '效率提升方法', value: 15 },
+            { name: 'AI整合應用', value: 7 },
+            { name: '資料庫建置', value: 10 }
+        ];
+        
+        // Notion解決方案分類
+        const solutionData = [
+            { name: '教學應用', value: 25 },
+            { name: '行政管理', value: 20 },
+            { name: '班級經營', value: 18 },
+            { name: 'AI整合', value: 15 },
+            { name: '協作共享', value: 22 }
+        ];
+        
+        // 挑戰圖表
+        const challengeCtx = document.getElementById('challengeChart').getContext('2d');
+        const challengeChart = new Chart(challengeCtx, {
+            type: 'bar',
+            data: {
+                labels: challengeData.map(item => item.name),
+                datasets: [{
+                    label: '提及次數',
+                    data: challengeData.map(item => item.value),
+                    backgroundColor: [
+                        '#FF8C42',
+                        '#FFA05E',
+                        '#FFB47A',
+                        '#FFC896',
+                        '#FFDBB2'
+                    ],
+                    borderColor: [
+                        '#E56717',
+                        '#E56717',
+                        '#E56717',
+                        '#E56717',
+                        '#E56717'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+        
+        // 需求圖表
+        const needCtx = document.getElementById('needChart').getContext('2d');
+        const needChart = new Chart(needCtx, {
+            type: 'pie',
+            data: {
+                labels: needData.map(item => item.name),
+                datasets: [{
+                    data: needData.map(item => item.value),
+                    backgroundColor: [
+                        '#FF8C42',
+                        '#FFA05E',
+                        '#FFB47A',
+                        '#FFC896',
+                        '#FFDBB2'
+                    ],
+                    borderColor: [
+                        '#E56717',
+                        '#E56717',
+                        '#E56717',
+                        '#E56717',
+                        '#E56717'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.raw || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${percentage}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // 解決方案圖表
+        const solutionCtx = document.getElementById('solutionChart').getContext('2d');
+        const solutionChart = new Chart(solutionCtx, {
+            type: 'bar',
+            data: {
+                labels: solutionData.map(item => item.name),
+                datasets: [{
+                    label: '應用價值',
+                    data: solutionData.map(item => item.value),
+                    backgroundColor: '#FF8C42',
+                    borderColor: '#E56717',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+</body>
+</html>

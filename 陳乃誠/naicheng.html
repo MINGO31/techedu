@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陳乃誠老師：教育創新與AI賦能先鋒</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Visualization & Content Choices:
+        - Hero: Profile summary. Goal: Inform. Viz: HTML/CSS. Justification: Strong visual intro.
+        - Philosophy & Methods: Core beliefs (HTML cards), 7 Habits (HTML/CSS radial diagram), PBL (HTML/CSS step diagram). Goal: Organize, Inform. Justification: Visual structure for abstract concepts and processes. (NO SVG/Mermaid)
+        - AI & Tools: AI cycle (HTML/CSS 3-stage diagram), Tool Categories (Chart.js Donut - Canvas). Goal: Organize, Compare. Justification: Process flow and part-to-whole comparison. (NO SVG/Mermaid)
+        - Impact & Recognition: Awards (HTML styled text), '乃神' (HTML styled text), YouTube Views (Chart.js Bar - Canvas). Goal: Inform, Compare. Justification: Highlight achievements and specific metrics. (NO SVG/Mermaid)
+        - Timeline: Key milestones (HTML/CSS vertical timeline). Goal: Change. Justification: Chronological progression. (NO SVG/Mermaid)
+        - All Chart.js instances include label wrapping and custom tooltip configuration. Chart containers are styled for responsiveness.
+    -->
+    <style>
+        body { font-family: 'Inter', 'Noto Sans TC', sans-serif; background-color: #FEFBF6; color: #073B4C; scroll-behavior: smooth; }
+        .hero-bg { background: linear-gradient(135deg, #FF6B6B, #FFD166); }
+        .section-title { color: #FF6B6B; border-bottom: 3px solid #FFD166; padding-bottom: 0.5rem; font-weight: 700; }
+        .card { background-color: white; border-radius: 0.75rem; box-shadow: 0 10px 20px rgba(0,0,0,0.08), 0 6px 6px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; transition: transform 0.3s ease; }
+        .card:hover { transform: translateY(-5px); }
+        .stat-number { font-size: 3rem; font-weight: 800; color: #118AB2; }
+        .chart-container { position: relative; width: 100%; max-width: 500px; margin-left: auto; margin-right: auto; height: 320px; max-height: 350px; padding: 1rem; }
+        @media (min-width: 768px) { .chart-container { height: 350px; max-height: 400px;} }
+        .btn-primary { background-color: #06D6A0; color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: background-color 0.3s ease; }
+        .btn-primary:hover { background-color: #05C08D; }
+        .timeline-item::before { content: ''; position: absolute; left: -30px; top: 0; width: 20px; height: 20px; border-radius: 50%; background-color: #FF6B6B; border: 3px solid #FFD166; z-index: 1; }
+        .timeline-line { position: absolute; left: -21px; top: 0; bottom: 0; width: 4px; background-color: #FFD166; }
+        .habit-circle { width: 100px; height: 100px; border-radius: 50%; background-color: #118AB2; color: white; display: flex; align-items: center; justify-content: center; text-align: center; padding: 5px; font-size: 0.8rem; margin: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s ease; }
+        .habit-circle:hover { transform: scale(1.1); }
+        .process-step { border-left: 4px solid #06D6A0; padding-left: 1rem; margin-bottom: 1rem; }
+        .tool-highlight-card { background-color: #EFFFFB; border: 1px solid #06D6A0; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="hero-bg text-white py-16 px-4 text-center">
+        <div class="container mx-auto">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4">陳乃誠老師</h1>
+            <p class="text-xl md:text-2xl mb-2 font-light">教育創新領航者 · AI賦能實踐家</p>
+            <p class="text-lg max-w-2xl mx-auto">人稱「<span class="font-semibold text-yellow-300">乃神</span>」，致力於將AI與數位科技融入教學，推動自主學習，影響深遠。</p>
+            <div class="mt-8">
+                <span class="inline-block bg-white text-[#073B4C] px-6 py-2 rounded-full text-lg font-semibold shadow-lg">超過 10 年教育創新深耕</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+
+        <section id="profile" class="my-12">
+            <h2 class="text-3xl md:text-4xl section-title mb-8 text-center">教育家身影：專業背景與核心專長</h2>
+            <p class="text-center text-lg text-gray-700 mb-10 max-w-3xl mx-auto">陳乃誠老師不僅是新竹市竹光國中的國文教師與資訊組長，更是畢業於國立清華大學教育與學習科技研究所的專才。他的雙重角色與學術背景，使其成為教育科技領域的佼佼者。</p>
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <div class="card">
+                    <div class="text-5xl mb-3">👨‍🏫</div>
+                    <h3 class="text-xl font-semibold text-[#118AB2] mb-2">雙重角色</h3>
+                    <p class="text-gray-600">國文教師 & 資訊組長，完美結合教學實踐與科技推廣。</p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-3">🎓</div>
+                    <h3 class="text-xl font-semibold text-[#118AB2] mb-2">學術背景</h3>
+                    <p class="text-gray-600">清大教育與學習科技碩士，奠定深厚理論基礎。</p>
+                </div>
+                <div class="card">
+                    <div class="text-5xl mb-3">💡</div>
+                    <h3 class="text-xl font-semibold text-[#118AB2] mb-2">核心專長</h3>
+                    <p class="text-gray-600">AI教育應用、數位學習整合、自主學習推廣。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="philosophy" class="my-16">
+            <h2 class="text-3xl md:text-4xl section-title mb-8 text-center">教學哲思：點燃學習的內在火焰</h2>
+            <p class="text-center text-lg text-gray-700 mb-10 max-w-3xl mx-auto">陳老師的教學理念強調學習的本質與學生的主體性，透過創新的教學方法，將抽象概念化為生動實踐。</p>
+            
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-[#073B4C] mb-6 text-center">核心教育信念</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="card text-center p-4">🌟<p class="font-medium mt-1">學習即獎賞與動機</p></div>
+                    <div class="card text-center p-4">✍️<p class="font-medium mt-1">學習是輸出的過程</p></div>
+                    <div class="card text-center p-4">❤️<p class="font-medium mt-1">重視生命教育連結</p></div>
+                    <div class="card text-center p-4">🌳<p class="font-medium mt-1">境教大於身教</p></div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="card">
+                    <h3 class="text-2xl font-semibold text-[#073B4C] mb-4">「自我領導力」課程：七習慣的實踐</h3>
+                    <p class="text-gray-600 mb-4">此特色彈性課程以史蒂芬·柯維的「七個習慣」為核心，陳老師運用AI工具將其生活化，引導學生內化並實踐。</p>
+                    <div class="flex flex-wrap justify-center">
+                        <div class="habit-circle">主動積極</div>
+                        <div class="habit-circle">以終為始</div>
+                        <div class="habit-circle">要事第一</div>
+                        <div class="habit-circle">雙贏思維</div>
+                        <div class="habit-circle">知彼解己</div>
+                        <div class="habit-circle">統合綜效</div>
+                        <div class="habit-circle">不斷更新</div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4 text-center">透過情境化學習，培養學生未來關鍵能力。</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-semibold text-[#073B4C] mb-4">問題導向學習 (PBL)：知彼解己</h3>
+                    <p class="text-gray-600 mb-4">陳老師透過PBL公開課，針對學生溝通問題設計「知彼解己」活動，流程如下：</p>
+                    <div class="space-y-3">
+                        <div class="process-step"><strong>步驟一：</strong>學生獨立設計訪談問題。</div>
+                        <div class="process-step"><strong>步驟二：</strong>進行模擬訪談並錄影。</div>
+                        <div class="process-step"><strong>步驟三：</strong>觀看影片自我評估與反思。</div>
+                        <div class="process-step"><strong>輔助：</strong>運用平板、語音輸入等數位工具。</div>
+                        <div class="process-step"><strong>模式：</strong>自學 → 共學 → 教師總結。</div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">此教學法結合科技，深化學生溝通與自主學習能力。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-tools" class="my-16">
+            <h2 class="text-3xl md:text-4xl section-title mb-8 text-center">AI賦能：教學的得力助手</h2>
+            <p class="text-center text-lg text-gray-700 mb-10 max-w-3xl mx-auto">陳老師視AI為輔助教師、提升效率的夥伴，並將其系統性地應用於備課、課中、課後完整教學週期。</p>
+            
+            <div class="mb-12">
+                <h3 class="text-2xl font-semibold text-[#073B4C] mb-6 text-center">AI融入教學三部曲</h3>
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div class="card p-5">
+                        <div class="text-4xl mb-2">📚</div>
+                        <h4 class="text-lg font-semibold text-[#118AB2]">課前準備</h4>
+                        <p class="text-sm text-gray-600">AI整理教材、分析資料，高效備課。</p>
+                    </div>
+                    <div class="card p-5">
+                        <div class="text-4xl mb-2">💻</div>
+                        <h4 class="text-lg font-semibold text-[#118AB2]">課中實施</h4>
+                        <p class="text-sm text-gray-600">Poe AI機器人互動、AI繪圖詮釋文本。</p>
+                    </div>
+                    <div class="card p-5">
+                        <div class="text-4xl mb-2">📊</div>
+                        <h4 class="text-lg font-semibold text-[#118AB2]">課後評量與反思</h4>
+                        <p class="text-sm text-gray-600">Notion數位筆記，系統化整理與反思。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="card">
+                    <h3 class="text-2xl font-semibold text-[#073B4C] mb-4">AI工具應用光譜</h3>
+                     <p class="text-gray-600 mb-4">陳老師靈活運用多種AI工具，涵蓋內容生成、教學設計、互動輔助、多媒體創作、知識管理及資訊搜尋等面向，以下為其常用工具類別分佈：</p>
+                    <div class="chart-container h-72 md:h-80">
+                        <canvas id="toolCategoriesChart"></canvas>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2 text-center">此圖表呈現陳老師常用AI工具的多元性。</p>
+                </div>
+                <div class="card">
+                    <h3 class="text-2xl font-semibold text-[#073B4C] mb-4">精選AI工具亮點</h3>
+                    <p class="text-gray-600 mb-4">他不僅使用工具，更關注媒體識讀與資訊安全，培養學生數位素養。</p>
+                    <div class="space-y-3">
+                        <div class="tool-highlight-card p-3 rounded-md"><strong>Claude & ChatGPT:</strong> 強大文本處理、內容生成。</div>
+                        <div class="tool-highlight-card p-3 rounded-md"><strong>Notion:</strong> 教學知識管理、學生數位筆記。</div>
+                        <div class="tool-highlight-card p-3 rounded-md"><strong>Poe Platform:</strong> AI機器人課堂互動。</div>
+                        <div class="tool-highlight-card p-3 rounded-md"><strong>Gamma & Difft:</strong> 簡報生成與教材設計。</div>
+                        <div class="tool-highlight-card p-3 rounded-md"><strong>Suno & Ideogram:</strong> AI音樂與圖像創作。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="impact" class="my-16">
+            <h2 class="text-3xl md:text-4xl section-title mb-8 text-center">影響力與榮耀：教育界的肯定</h2>
+            <p class="text-center text-lg text-gray-700 mb-10 max-w-3xl mx-auto">陳老師的卓越貢獻獲得官方與社群的高度評價，其影響力不僅在校內，更擴及全台教育界。</p>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="card text-center">
+                    <h3 class="text-2xl font-semibold text-[#073B4C] mb-4">重要獎項肯定</h3>
+                    <div class="mb-4">
+                        <p class="text-4xl">🏆</p>
+                        <p class="text-lg font-medium text-[#118AB2]">教育部113年數位學習績優人員「卓越獎」</p>
+                        <p class="text-sm text-gray-500">國家級最高認可</p>
+                    </div>
+                    <div>
+                        <p class="text-4xl">🏆</p>
+                        <p class="text-lg font-medium text-[#118AB2]">109年度「閱讀磐石獎」</p>
+                        <p class="text-sm text-gray-500">閱讀推廣貢獻卓著</p>
+                    </div>
+                </div>
+                <div class="card text-center">
+                    <h3 class="text-2xl font-semibold text-[#073B4C] mb-2">「乃神」美譽</h3>
+                    <p class="text-6xl font-extrabold text-[#FF6B6B] my-3">乃神</p>
+                    <p class="text-gray-600">教育社群對其專業能力、無私分享與引領潮流的高度敬佩與肯定。</p>
+                    <p class="text-sm text-gray-500 mt-3">「乃誠老師，真的好神！」— 學員讚譽</p>
+                </div>
+            </div>
+            <div class="card mt-10">
+                <h3 class="text-2xl font-semibold text-[#073B4C] mb-4 text-center">數位影響力：YouTube觀看數比較</h3>
+                <p class="text-gray-600 mb-4 text-center">陳老師的教學分享影片在YouTube上亦有相當的關注度，展現其數位傳播的影響力。</p>
+                <div class="chart-container h-64 md:h-72">
+                    <canvas id="youtubeViewsChart"></canvas>
+                </div>
+                <p class="text-sm text-gray-500 mt-2 text-center">比較其不同主題分享影片的觀看次數。</p>
+            </div>
+        </section>
+
+        <section id="timeline" class="my-16">
+            <h2 class="text-3xl md:text-4xl section-title mb-12 text-center">創新里程：持續演進的教育足跡</h2>
+            <p class="text-center text-lg text-gray-700 mb-10 max-w-3xl mx-auto">從早期合作學習的探索，到引領AI教學浪潮，陳老師的教育創新之路不斷向前。</p>
+            <div class="relative max-w-2xl mx-auto">
+                <div class="timeline-line hidden md:block"></div>
+                <div class="space-y-10">
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8">
+                            <div class="card p-5">
+                                <p class="font-semibold text-lg text-[#118AB2]">約10年前 (2014~)</p>
+                                <p class="text-gray-600">投入「1Know」平台國文課創新教學，強調生命教育與內在動機。</p>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-8 md:hidden"></div>
+                    </div>
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center md:flex-row-reverse">
+                         <div class="md:w-1/2 md:pl-8 md:text-right">
+                           <div class="card p-5">
+                                <p class="font-semibold text-lg text-[#118AB2]">2014-2015年</p>
+                                <p class="text-gray-600">密集參與十數場教學分享，主題含分組合作學習、教師專業發展。</p>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 md:pr-8 md:hidden"></div>
+                    </div>
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center">
+                        <div class="md:w-1/2 md:pr-8">
+                            <div class="card p-5">
+                                <p class="font-semibold text-lg text-[#118AB2]">2023-2024年</p>
+                                <p class="text-gray-600">AI教育應用成為分享核心，主講多場AI備課、AI融入教學工作坊。</p>
+                            </div>
+                        </div>
+                         <div class="md:w-1/2 md:pl-8 md:hidden"></div>
+                    </div>
+                    <div class="timeline-item relative pl-8 md:pl-0 md:flex md:items-center md:flex-row-reverse">
+                        <div class="md:w-1/2 md:pl-8 md:text-right">
+                            <div class="card p-5">
+                                <p class="font-semibold text-lg text-[#118AB2]">2025年 (預告)</p>
+                                <p class="text-gray-600">PBL問題導向學習公開觀議課「知彼解己」，持續深化教學創新。</p>
+                            </div>
+                        </div>
+                        <div class="md:w-1/2 md:pr-8 md:hidden"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#073B4C] text-white text-center py-8 mt-12">
+        <p class="mb-2">陳乃誠老師：不斷學習，樂於分享，引領教育新未來。</p>
+        <p class="text-sm opacity-75">&copy; <span id="currentYear"></span> 此資訊圖表根據公開研究報告製作，為概念展示。</p>
+    </footer>
+
+<script>
+    document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+    function wrapLabel(str, maxWidth) {
+        if (typeof str !== 'string') return str;
+        const words = str.split(''); // Split by characters for Chinese
+        let lines = [];
+        let currentLine = '';
+        for (let i = 0; i < words.length; i++) {
+            if (currentLine.length + words[i].length <= maxWidth) {
+                currentLine += words[i];
+            } else {
+                lines.push(currentLine);
+                currentLine = words[i];
+            }
+        }
+        lines.push(currentLine);
+        return lines.length > 1 ? lines : str; // Return array only if multiline
+    }
+    
+    const commonChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#073B4C',
+                    font: { size: 12 }
+                }
+            },
+            tooltip: {
+                backgroundColor: '#073B4C',
+                titleColor: '#FFD166',
+                bodyColor: '#FEFBF6',
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        if (Array.isArray(label)) {
+                          return label.join('');
+                        } else {
+                          return label;
+                        }
+                    }
+                }
+            }
+        },
+        scales: {
+            y: {
+                ticks: { color: '#073B4C', font: { size: 12 } },
+                grid: { color: 'rgba(7,59,76,0.1)' }
+            },
+            x: {
+                ticks: { color: '#073B4C', font: { size: 12 } },
+                grid: { display: false }
+            }
+        }
+    };
+
+    // Tool Categories Donut Chart
+    const toolCategoriesCtx = document.getElementById('toolCategoriesChart').getContext('2d');
+    const toolCategoriesData = {
+        labels: ['內容生成與整理', '教學設計與評量', '互動AI', '圖像與多媒體', '知識管理', '資訊搜尋'],
+        datasets: [{
+            label: 'AI工具類別分佈',
+            data: [5, 2, 1, 5, 1, 1], // Based on analysis: Content:5, Design:2, Interactive:1, Media:5, KM:1, Search:1
+            backgroundColor: ['#FF6B6B', '#FFD166', '#06D6A0', '#118AB2', '#EF476F', '#F78C6B'],
+            borderColor: '#FEFBF6',
+            borderWidth: 2,
+            hoverOffset: 4
+        }]
+    };
+    new Chart(toolCategoriesCtx, {
+        type: 'doughnut',
+        data: toolCategoriesData,
+        options: { ...commonChartOptions, cutout: '60%' }
+    });
+
+    // YouTube Views Bar Chart
+    const youtubeViewsCtx = document.getElementById('youtubeViewsChart').getContext('2d');
+    const youtubeViewsData = {
+        labels: [wrapLabel('國文課的創新教學(1Know)', 10), wrapLabel('運用Notion進行教學知識管理', 10)],
+        datasets: [{
+            label: 'YouTube影片觀看次數',
+            data: [5800, 2600],
+            backgroundColor: ['#FF6B6B', '#FFD166'],
+            borderColor: ['#E55A5A', '#E5B85A'],
+            borderWidth: 1,
+            borderRadius: 5
+        }]
+    };
+    new Chart(youtubeViewsCtx, {
+        type: 'bar',
+        data: youtubeViewsData,
+        options: { ...commonChartOptions, indexAxis: 'y' }
+    });
+
+</script>
+</body>
+</html>

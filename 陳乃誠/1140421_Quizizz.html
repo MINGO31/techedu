@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>數位測驗工具應用研習筆記</title>
+    <style>
+        :root {
+            --primary-color: #FF8C42;
+            --secondary-color: #FFF4E0;
+            --accent-color: #E85D04;
+            --dark-color: #994D15;
+            --light-color: #FFEFE0;
+            --text-color: #4A3933;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Apple LiGothic Medium', sans-serif;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: var(--dark-color);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .nav-link:hover {
+            background-color: var(--accent-color);
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        h3 {
+            color: var(--dark-color);
+            margin: 25px 0 15px;
+            font-size: 20px;
+        }
+
+        p, li {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            padding-left: 25px;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            background-color: var(--light-color);
+            padding: 15px;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+
+        .code-block {
+            background-color: #f6f8fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            margin: 15px 0;
+            white-space: pre;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-color);
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: var(--accent-color);
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-step {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 22%;
+            min-width: 200px;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .flow-step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent-color);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .collapse-section {
+            margin-bottom: 15px;
+        }
+
+        .collapse-header {
+            background-color: var(--light-color);
+            padding: 12px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .collapse-header:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .collapse-content {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            display: none;
+        }
+
+        .show-content {
+            display: block;
+        }
+
+        footer {
+            background: linear-gradient(to right, var(--accent-color), var(--primary-color));
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .flow-step {
+                width: 100%;
+            }
+            
+            .flow-step:not(:last-child)::after {
+                content: "↓";
+                right: 50%;
+                bottom: -20px;
+                top: auto;
+                transform: translateX(50%);
+            }
+            
+            .flow-diagram {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>數位測驗工具應用研習詳細筆記</h1>
+            <p class="subtitle">Quizizz與Quizlet操作與應用設計多元化數位測驗題型</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#activity-info" class="nav-link">活動資訊</a>
+                <a href="#notebooklm" class="nav-link">NotebookLM</a>
+                <a href="#claude-ai" class="nav-link">Claude AI</a>
+                <a href="#quizizz" class="nav-link">Quizizz</a>
+                <a href="#quizlet" class="nav-link">Quizlet</a>
+                <a href="#integration" class="nav-link">跨平台整合</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section id="activity-info" class="section">
+            <h2>活動資訊</h2>
+            <div class="card">
+                <div class="card-title">基本資料</div>
+                <ul>
+                    <li><strong>主題</strong>：數位測驗 Quizizz 和 Quizlet 的操作與應用設計多元化數位測驗題型</li>
+                    <li><strong>時間</strong>：2025年4月</li>
+                    <li><strong>講師</strong>：竹光國中陳乃誠老師</li>
+                    <li><strong>課程平台</strong>：使用Padlet存放講義</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">參與人員</div>
+                <p>吳沛臻、巧伶、陳怡舟、沛臻、雯娟校長、乃誠、奕安、嬿云、嬿如、孟臻、育伶、憶齡、少玲、麗婷、淳憶、展浩等教師</p>
+                <div>
+                    <span class="tag">國中教師</span>
+                    <span class="tag">教育工作者</span>
+                    <span class="tag">數位教學</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="notebooklm" class="section">
+            <h2>NotebookLM 素養導向出題實作</h2>
+            
+            <h3>1. 基本設定與檔案上傳</h3>
+            <p>NotebookLM允許上傳多種類型的參考資料，以協助生成更精準的題目：</p>
+            <ul>
+                <li>教材文本（如：朱自清的《背影》）</li>
+                <li>會考試題（如：113年國中教育會考國文科試題本）</li>
+                <li>其他參考資料</li>
+            </ul>
+            <p>支援的檔案格式包括PDF文件、Word文件等多種常見格式。</p>
+
+            <h3>2. 引導語設計技巧</h3>
+            <p>清晰的引導語是成功生成高品質題目的關鍵：</p>
+            <div class="code-block">請設計素養導向的國文選擇題五題
+內容依照朱自清的背影
+題目參考113國中教育會考國文科試題本內容
+題目格式使用Quizizz的格式
+給我三個版本</div>
+            
+            <div class="highlight">
+                <strong>提示：</strong>引導語應明確指定題型、數量、參考資料及輸出格式，越具體越能獲得符合需求的結果。
+            </div>
+
+            <h3>3. 題目匯入方式比較</h3>
+            <table>
+                <tr>
+                    <th>匯入方式</th>
+                    <th>優點</th>
+                    <th>缺點</th>
+                    <th>建議操作</th>
+                </tr>
+                <tr>
+                    <td>貼上問題</td>
+                    <td>操作簡便快速</td>
+                    <td>中英文轉換問題</td>
+                    <td>不適合中文題目</td>
+                </tr>
+                <tr>
+                    <td>匯入工作表</td>
+                    <td>格式固定一致</td>
+                    <td>AI生成品質不佳</td>
+                    <td>避免使用內建AI</td>
+                </tr>
+                <tr>
+                    <td>檔案上傳</td>
+                    <td>可選擇輸出語言</td>
+                    <td>操作步驟較多</td>
+                    <td>最佳選擇，選擇繁體中文</td>
+                </tr>
+            </table>
+
+            <h3>4. 最佳實踐流程</h3>
+            <ol>
+                <li>將AI生成的題目先貼到Google文件</li>
+                <li>下載成Word檔(.docx)</li>
+                <li>使用「檔案」功能上傳到NotebookLM</li>
+                <li>選擇「繁體中文」作為輸出語言</li>
+                <li>點擊「生成」按鈕進行處理</li>
+            </ol>
+        </section>
+
+        <section id="claude-ai" class="section">
+            <h2>Claude AI高級應用技巧</h2>
+            
+            <h3>1. 最新功能介紹</h3>
+            <div class="card">
+                <div class="card-title">深層研究能力</div>
+                <p>Claude AI提供強大的文本處理能力，可以處理大量資料並進行深入分析。</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">專業版更新</div>
+                <ul>
+                    <li><strong>費用</strong>：100美金/月</li>
+                    <li><strong>用量</strong>：一般版本的5-20倍</li>
+                    <li><strong>適合對象</strong>：企業用戶、研究人員</li>
+                </ul>
+            </div>
+
+            <h3>2. 文件處理能力</h3>
+            <ul>
+                <li>可處理整本教材（約1萬多字的會考題本）</li>
+                <li>支援多種檔案格式：PDF、Word等</li>
+                <li>雲端整合：可連接雲端硬碟、Gmail進行搜尋</li>
+            </ul>
+
+            <h3>3. 個人化寫作風格設定</h3>
+            <p>Claude AI可根據您的需求設定不同的寫作風格：</p>
+            <ul>
+                <li><strong>預設風格</strong>：
+                    <ul>
+                        <li>解釋性（教育家風格）</li>
+                        <li>學習之旅</li>
+                        <li>成長故事</li>
+                    </ul>
+                </li>
+                <li><strong>自定義風格</strong>：上傳自己的寫作文本，AI會學習並模仿該風格</li>
+            </ul>
+
+            <h3>4. 專業應用案例</h3>
+            <div class="collapse-section">
+                <div class="collapse-header">
+                    <span>觀課筆記整理</span>
+                    <span>+</span>
+                </div>
+                <div class="collapse-content">
+                    <ol>
+                        <li>將原始觀課記錄上傳至Claude AI</li>
+                        <li>要求生成詳細、結構化的觀課記錄</li>
+                        <li>要求提供字句稿佐證，保證內容準確性</li>
+                        <li>檢視生成結果，必要時進行調整</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="collapse-section">
+                <div class="collapse-header">
+                    <span>中文排版與錯字修正</span>
+                    <span>+</span>
+                </div>
+                <div class="collapse-content">
+                    <ol>
+                        <li>使用QBT的「中文排版與錯字修正AI助手」</li>
+                        <li>上傳需修正的文本</li>
+                        <li>指定任務：「純粹修正錯別字與標點符號」</li>
+                        <li>AI會分段檢查並標示所有修改內容</li>
+                        <li>檢視修正結果，確認無誤後採用</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <section id="quizizz" class="section">
+            <h2>Quizizz平台完整操作指南</h2>
+            
+            <h3>1. 題目建立完整流程</h3>
+            <p><strong>進入路徑</strong>：點擊「建立評估」→選擇匯入方式</p>
+            
+            <div class="highlight">
+                <strong>匯入選項詳解</strong>：
+                <ul>
+                    <li><strong>匯入工作表</strong>：不建議使用內建AI功能（題目質量不高）</li>
+                    <li><strong>貼上問題</strong>：會有英文轉中文問題，需後續處理</li>
+                    <li><strong>檔案</strong>：推薦方式，上傳Word檔並選擇繁體中文</li>
+                </ul>
+            </div>
+
+            <h3>2. 格式設定要點</h3>
+            <p>Quizizz要求使用特定格式來確保題目正確匯入：</p>
+            <div class="code-block">題目
+選項A
+選項B
+選項C
+選項D
+正確答案：#（1-4之間的數字）</div>
+            
+            <p><strong>注意事項</strong>：</p>
+            <ul>
+                <li>選項過長時字體會變小（不推薦用Word）</li>
+                <li>答案必須標明是第幾個選項（1-4）</li>
+            </ul>
+
+            <h3>3. 測驗發布與設定</h3>
+            <ul>
+                <li><strong>年級設定</strong>：選擇「繁體八年級」</li>
+                <li><strong>可見性</strong>：公開可見</li>
+                <li><strong>發布方式</strong>：點擊「發布」按鈕取得連結</li>
+                <li><strong>成績統計</strong>：系統自動記錄學生作答情況與分數</li>
+            </ul>
+
+            <h3>4. 其他功能介紹</h3>
+            <div class="card">
+                <div class="card-title">雲端表單</div>
+                <p>類似eSale功能，提供多種問題類型與回答方式。</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">模板選項</div>
+                <ul>
+                    <li>選擇題</li>
+                    <li>勾選題</li>
+                    <li>填空題</li>
+                    <li>開放式問題</li>
+                    <li>投票</li>
+                    <li>繪圖題</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">圖片題設計</div>
+                <p>需先上傳圖檔，再進行題目設計與連結。</p>
+            </div>
+        </section>
+
+        <section id="quizlet" class="section">
+            <h2>Quizlet閃卡平台深度應用</h2>
+            
+            <h3>1. 平台概述與功能</h3>
+            <ul>
+                <li><strong>核心功能</strong>：閃卡學習、互動測驗</li>
+                <li><strong>帳號類型</strong>：教育帳號（付費）vs 一般帳號</li>
+                <li><strong>班級管理</strong>：可建立班級、指派學習卡片</li>
+            </ul>
+
+            <h3>2. 互動模式詳解</h3>
+            <div class="collapse-section">
+                <div class="collapse-header">
+                    <span>個人賽模式</span>
+                    <span>+</span>
+                </div>
+                <div class="collapse-content">
+                    <ul>
+                        <li><strong>機制</strong>：答對12題獲勝，答錯回原點</li>
+                        <li><strong>操作</strong>：點擊連結或掃碼進入，輸入暱稱（限英文數字）</li>
+                        <li><strong>畫面</strong>：教師端可看到所有學生答題進度</li>
+                        <li><strong>適用場景</strong>：課堂即時互動、複習測驗</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="collapse-section">
+                <div class="collapse-header">
+                    <span>分組賽模式</span>
+                    <span>+</span>
+                </div>
+                <div class="collapse-content">
+                    <ul>
+                        <li><strong>新功能</strong>：發射式答題模式</li>
+                        <li><strong>操作方式</strong>：點擊答案進行「發射」</li>
+                        <li><strong>計分方式</strong>：根據答題速度和正確率計算</li>
+                        <li><strong>適用場景</strong>：團隊合作學習、班級競賽</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>3. 題目建立詳細步驟</h3>
+            <ol>
+                <li><strong>AI生成內容</strong>：
+                    <ul>
+                        <li>明確指令：「給我50個動物成語，一行是題目，另一行是答案和解釋」</li>
+                        <li>格式要求：去除數字編號，保持題目-答案對應</li>
+                    </ul>
+                </li>
+                <li><strong>試算表整理</strong>：
+                    <ul>
+                        <li>複製AI生成內容到試算表</li>
+                        <li>選擇「資料」→「文字分隔成不同欄位」</li>
+                        <li>A欄放題目，B欄放答案</li>
+                    </ul>
+                </li>
+                <li><strong>匯入Quizlet</strong>：
+                    <ul>
+                        <li>全選整理好的內容複製</li>
+                        <li>點擊「匯入」按鈕貼上</li>
+                        <li>選擇「繁體中文」語言</li>
+                        <li>命名學習卡（如「動物成語」）</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>4. 實用應用範例</h3>
+            <div class="card">
+                <div class="card-title">國文教學應用</div>
+                <ul>
+                    <li><strong>三國人物關係</strong>：邂逅羽（適合文學課程）</li>
+                    <li><strong>對聯練習</strong>：上聯對下聯（適合古文學習）</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">課堂活動設計</div>
+                <ul>
+                    <li><strong>下課前五分鐘活動</strong>：使用閃卡進行快速複習</li>
+                    <li><strong>分組競賽</strong>：增加課堂參與度和學習動機</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="integration" class="section">
+            <h2>跨平台整合與最佳實踐</h2>
+            
+            <h3>1. AI與測驗平台整合流程</h3>
+            <div class="flow-diagram">
+                <div class="flow-step">AI生成內容</div>
+                <div class="flow-step">格式整理（試算表）</div>
+                <div class="flow-step">匯入測驗平台</div>
+                <div class="flow-step">發布測驗</div>
+            </div>
+
+            <h3>2. 教學建議與注意事項</h3>
+            <ul>
+                <li><strong>時間管理</strong>：AI生成節省備課時間，但需預留修改時間</li>
+                <li><strong>格式一致性</strong>：確保題目、選項格式符合平台要求</li>
+                <li><strong>語言設定</strong>：繁體中文環境下操作，避免轉換問題</li>
+                <li><strong>檔案處理</strong>：優先使用檔案上傳而非直接貼文字</li>
+                <li><strong>互動設計</strong>：善用不同平台特色，設計多元互動模式</li>
+            </ul>
+
+            <h3>3. 後續課程資訊</h3>
+            <div class="highlight">
+                <ul>
+                    <li>研習錄影將上傳至classroom</li>
+                    <li>實體分享活動：6月2日或6月11日（待調查決定）</li>
+                    <li>更多分享內容將持續在教師社群更新</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>數位測驗工具應用研習筆記 | 竹光國中陳乃誠老師授課 | 2025年4月</p>
+        </div>
+    </footer>
+
+    <script>
+        // 折疊區域交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const collapseHeaders = document.querySelectorAll('.collapse-header');
+            
+            collapseHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    content.classList.toggle('show-content');
+                    
+                    // 更改顯示的符號
+                    const symbol = this.querySelector('span:last-child');
+                    if (content.classList.contains('show-content')) {
+                        symbol.textContent = '-';
+                    } else {
+                        symbol.textContent = '+';
+                    }
+                });
+            });
+            
+            // 平滑滾動到錨點
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

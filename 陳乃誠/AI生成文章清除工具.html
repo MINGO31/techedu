@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 生成文章清理工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: linear-gradient(120deg, #fdf2e9 0%, #ffecd2 100%);
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <div class="container mx-auto px-4 py-8 flex-grow flex flex-col">
+        <h1 class="text-4xl font-bold text-center text-orange-800 mb-8">AI 生成文章清理工具</h1>
+        <div class="bg-white rounded-lg p-6 custom-shadow flex-grow flex flex-col">
+            <div class="flex flex-grow gap-6">
+                <div class="flex-1 flex flex-col">
+                    <label for="input" class="text-lg font-semibold text-orange-700 mb-2">輸入文字：</label>
+                    <textarea id="input" class="flex-grow p-3 border-2 border-orange-300 rounded-md resize-none focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition duration-300" placeholder="在此貼上需要清理的文字..."></textarea>
+                </div>
+                <div class="flex-1 flex flex-col">
+                    <label for="output" class="text-lg font-semibold text-orange-700 mb-2">清理後的文字：</label>
+                    <textarea id="output" class="flex-grow p-3 border-2 border-orange-300 rounded-md bg-orange-50 resize-none" readonly></textarea>
+                </div>
+            </div>
+            <div class="flex justify-center space-x-4 mt-6">
+                <button id="cleanBtn" class="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50">刪除符號 (-, *, #)</button>
+                <button id="copyBtn" class="px-6 py-2 bg-orange-400 hover:bg-orange-500 text-white rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50">複製結果</button>
+                <button id="resetBtn" class="px-6 py-2 bg-orange-300 hover:bg-orange-400 text-white rounded-full transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-opacity-50">重置</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const inputText = document.getElementById('input');
+        const outputText = document.getElementById('output');
+        const cleanBtn = document.getElementById('cleanBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        cleanBtn.addEventListener('click', () => {
+            let paragraphs = inputText.value.split('\n');
+            let cleaned = paragraphs.map((paragraph, index) => {
+                // 如果是最後一段，只刪除 "*" 和 "-" 符號
+                if (index === paragraphs.length - 1) {
+                    return paragraph.replace(/[\*-]/g, '');
+                }
+                // 其他段落刪除 "*"、"#" 和 "-" 符號
+                return paragraph.replace(/[\*#-]/g, '');
+            });
+            outputText.value = cleaned.join('\n');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            outputText.select();
+            document.execCommand('copy');
+            alert('已複製到剪貼簿！');
+        });
+
+        resetBtn.addEventListener('click', () => {
+            inputText.value = '';
+            outputText.value = '';
+        });
+    </script>
+</body>
+</html>

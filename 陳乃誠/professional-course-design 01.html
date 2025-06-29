@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>閱讀理解與數位教學創新研討會：多文本教案設計實務</title>
+  <style>
+    :root {
+      --primary-color: #FF7A45;
+      --secondary-color: #FFA77C;
+      --tertiary-color: #FFE2D6;
+      --text-color: #333333;
+      --heading-color: #FF5B14;
+      --light-bg: #FFF5F0;
+      --accent-color: #FF8B59;
+      --border-color: #FFD0B8;
+    }
+    
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: #FFFFFF;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 30px 0;
+      text-align: center;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      padding-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      font-weight: normal;
+    }
+    
+    h2 {
+      color: var(--heading-color);
+      font-size: 1.8rem;
+      margin-top: 40px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--border-color);
+    }
+    
+    h3 {
+      color: var(--primary-color);
+      font-size: 1.4rem;
+      margin-top: 30px;
+    }
+    
+    .section {
+      margin: 40px 0;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(255, 122, 69, 0.1);
+      overflow: hidden;
+    }
+    
+    .section-header {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 15px 25px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+    
+    .section-content {
+      padding: 25px;
+    }
+    
+    .highlight-box {
+      background-color: var(--light-bg);
+      border-left: 5px solid var(--primary-color);
+      padding: 15px 20px;
+      margin: 20px 0;
+    }
+    
+    .task-list {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    
+    .task-list li {
+      position: relative;
+      padding-left: 30px;
+      margin-bottom: 12px;
+    }
+    
+    .task-list li:before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      color: var(--accent-color);
+      font-size: 1.2rem;
+    }
+    
+    .discussion-point {
+      margin-bottom: 15px;
+      padding-left: 20px;
+      border-left: 3px solid var(--tertiary-color);
+    }
+    
+    .speaker {
+      font-weight: bold;
+      color: var(--accent-color);
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    
+    table, th, td {
+      border: 1px solid var(--border-color);
+    }
+    
+    th {
+      background-color: var(--tertiary-color);
+      color: var(--heading-color);
+      padding: 10px;
+      text-align: left;
+    }
+    
+    td {
+      padding: 10px;
+    }
+    
+    .recommendation-box {
+      background-color: var(--tertiary-color);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+    
+    .recommendation-title {
+      color: var(--heading-color);
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .course-timeline {
+      display: flex;
+      justify-content: space-between;
+      margin: 30px 0;
+      position: relative;
+    }
+    
+    .course-timeline:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: var(--secondary-color);
+      z-index: 1;
+    }
+    
+    .timeline-item {
+      background-color: white;
+      border: 2px solid var(--primary-color);
+      border-radius: 8px;
+      padding: 15px;
+      width: 22%;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    
+    .timeline-title {
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+    
+    footer {
+      background-color: var(--primary-color);
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      margin-top: 50px;
+    }
+    
+    @media (max-width: 768px) {
+      .course-timeline {
+        flex-direction: column;
+      }
+      
+      .timeline-item {
+        width: auto;
+        margin-bottom: 15px;
+      }
+      
+      .course-timeline:after {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>閱讀理解與數位教學創新研討會</h1>
+      <p class="subtitle">多文本教案設計實務與AI輔助教學應用</p>
+    </div>
+  </header>
+  
+  <div class="container">
+    <div class="section">
+      <div class="section-header">研討會概述</div>
+      <div class="section-content">
+        <p>本次研討會著重於閱讀教案優化、數位工具應用策略及多文本課程設計，特別探討KWL閱讀策略、自主學習與合作學習模式、AI工具在教學中的應用，以及如何引導學生從文本閱讀擴展至尊重多元差異的品德養成。</p>
+        
+        <div class="highlight-box">
+          <p><strong>會議日期：</strong>2025年5月10日</p>
+          <p><strong>研討主題：</strong>閱讀教案優化與數位工具應用策略、AI輔助教學設計與多文本課程規劃</p>
+          <p><strong>教學對象：</strong>國中九年級學生（會考後）</p>
+          <p><strong>課程架構：</strong>三個單元的系列課程，聚焦文本閱讀理解、思辨能力培養與差異尊重</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">教學設計理念與目標</div>
+      <div class="section-content">
+        <p>課程整體理念是通過文本閱讀為起點，逐步引導學生從單一文本理解擴展到尊重多元差異，最終將閱讀所學轉化為日常品德。教學設計強調將閱讀理解與數位工具有機結合，提升學生的思辨能力與自主學習能力。</p>
+        
+        <h3>課程單元架構</h3>
+        <div class="course-timeline">
+          <div class="timeline-item">
+            <div class="timeline-title">第一單元</div>
+            <p>文本閱讀理解</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">第二單元</div>
+            <p>思辨能力培養</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">第三單元</div>
+            <p>差異尊重與包容</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-title">成果展現</div>
+            <p>差異之美倡議</p>
+          </div>
+        </div>
+        
+        <h3>核心教學目標</h3>
+        <ul>
+          <li>培養學生多元文本閱讀理解能力，包括紙本與多媒體閱讀</li>
+          <li>引導學生從文本分析中思考「標籤」議題的影響與意義</li>
+          <li>促進學生思辨能力發展，學會打破思維框架，尊重多元觀點</li>
+          <li>培養學生將閱讀理解轉化為具體行動，實踐尊重包容理念</li>
+          <li>整合數位工具於教學流程，提升教學效果與學生參與度</li>
+        </ul>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：閱讀包含語文和同理尊重的議題，但因為課題本身是閱讀，所以要以閱讀維持主軸。不只有紙本閱讀，還應該有多媒體閱讀或多文本閱讀，讓閱讀文本具有多元性。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 3</span>：課程整體目標是引導學生尊重和包容彼此的差異，最終應該回到19項議題的多元差異。</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">文本選擇與閱讀核心</div>
+      <div class="section-content">
+        <p>本課程精心選擇兩個核心文本進行跨文本閱讀探討，分別是張愛玲的《天才夢》與《多肉女子的生存指導》影片。這些文本作為引導學生探討「標籤」、「多元差異」等主題的媒介，並能與學生生活產生有意義的連結。</p>
+        
+        <table>
+          <tr>
+            <th>文本名稱</th>
+            <th>類型</th>
+            <th>核心主題</th>
+            <th>教學價值</th>
+          </tr>
+          <tr>
+            <td>《天才夢》（張愛玲）</td>
+            <td>文字文本</td>
+            <td>探討有才華有天賦的人如何保有獨特性而不成為異類</td>
+            <td>引導學生思考自我認同與社會期待的平衡</td>
+          </tr>
+          <tr>
+            <td>《多肉女子的生存指導》</td>
+            <td>影片文本</td>
+            <td>面對身材標籤的正向思維轉換</td>
+            <td>探討如何面對社會偏見並發展自我認同</td>
+          </tr>
+        </table>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：選擇的文本應能與學生生活連結並涵蓋課程主題。《天才夢》核心是探討有才華有天賦的人如何保有獨特不變成異類。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 3</span>：文本選擇應該是作為引導學生探討主題的媒介。文本只是當作一個藉口，去閱讀接觸那些與想要倡議主題有關聯性的內容。</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">KWL閱讀策略教學設計</div>
+      <div class="section-content">
+        <p>本課程採用KWL閱讀策略作為基礎教學架構，透過三個階段引導學生進行文本理解與深度思考，同時整合數位工具提升學習效果。</p>
+        
+        <h3>KWL策略實施流程</h3>
+        <table>
+          <tr>
+            <th>階段</th>
+            <th>代表意義</th>
+            <th>閱讀策略</th>
+            <th>實施活動</th>
+            <th>數位工具應用</th>
+          </tr>
+          <tr>
+            <td><strong>K</strong></td>
+            <td>已知的知識<br>(Know)</td>
+            <td>摘要策略</td>
+            <td>學生連結既有知識，對文本中「標籤」的了解</td>
+            <td>NotebookLM、Google表單</td>
+          </tr>
+          <tr>
+            <td><strong>W</strong></td>
+            <td>想知道的問題<br>(Want to know)</td>
+            <td>預測策略</td>
+            <td>學生提出想知道的問題，引導認識相關領域</td>
+            <td>ChatGPT GPTS、Padlet</td>
+          </tr>
+          <tr>
+            <td><strong>L</strong></td>
+            <td>學習到的內容<br>(Learned)</td>
+            <td>反思策略</td>
+            <td>學生確認從文本中學到的內容，進行成果展示</td>
+            <td>Napkin、Padlet</td>
+          </tr>
+        </table>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 3</span>：KWL是適合用於第一單元的基礎閱讀策略。K部分可以透過摘要策略將舊有知識簡述，W部分可以使用預測策略讓學生提出疑惑和預測，L部分適合用反思策略和監控理解。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：學生閱讀文本應先自學，再進行小組討論，透過KWL閱讀策略進行學習。</p>
+        </div>
+        
+        <h3>教學流程設計</h3>
+        <ol>
+          <li><strong>學生自學階段</strong>：學生閱讀文本/觀看影片（約5-8分鐘）</li>
+          <li><strong>組內共學討論</strong>：探討老師提供的閱讀任務（約20-25分鐘）</li>
+          <li><strong>各組發表</strong>：上傳學習成果並派代表發表（每組約1分鐘）</li>
+          <li><strong>教師導學</strong>：整合觀點並引導核心概念理解</li>
+        </ol>
+        
+        <div class="highlight-box">
+          <p><strong>注意事項：</strong>決定刪除影響力地圖，只保留組內共學內容填寫，簡化學習單內容，避免與主題不符及內容過多造成負擔。</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">數位工具在教學中的選擇與應用</div>
+      <div class="section-content">
+        <p>課程設計整合多種數位工具，支援學生閱讀理解、意見表達與互動討論，同時兼顧實用性與教學效果。工具選擇以解決教學現場問題為原則，特別是協助收集與整合學生觀點。</p>
+        
+        <h3>推薦數位工具與應用場景</h3>
+        <table>
+          <tr>
+            <th>數位工具</th>
+            <th>主要功能</th>
+            <th>應用場景</th>
+            <th>優勢</th>
+          </tr>
+          <tr>
+            <td>Padlet</td>
+            <td>互動式佈告欄</td>
+            <td>學生意見收集、四角辯論活動</td>
+            <td>視覺效果佳、操作簡便、互動性強</td>
+          </tr>
+          <tr>
+            <td>NotebookLM</td>
+            <td>文本分析工具</td>
+            <td>文本理解、提供限制式對話</td>
+            <td>有憑有據的內容理解、限制式對話</td>
+          </tr>
+          <tr>
+            <td>ChatGPT GPTS</td>
+            <td>AI對話模型</td>
+            <td>創建專用機器人（如張愛玲專用機器人）</td>
+            <td>個性化AI助手、語音輸入校正</td>
+          </tr>
+          <tr>
+            <td>Napkin</td>
+            <td>文字轉視覺化工具</td>
+            <td>將KWL策略學習結果視覺化</td>
+            <td>快速產生視覺化呈現、多種匯出格式</td>
+          </tr>
+          <tr>
+            <td>EB Cafe</td>
+            <td>AI自動出題平台</td>
+            <td>影片學習檢測</td>
+            <td>快速產生題目與解析、記錄學生作答</td>
+          </tr>
+          <tr>
+            <td>Quizizz</td>
+            <td>遊戲化測驗平台</td>
+            <td>總結性評量</td>
+            <td>高遊戲化程度、可亂速選項</td>
+          </tr>
+        </table>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：數位工具應能高效整合學生意見並促進討論。數位工具可以幫助快速收集學生的觀點和意見，理想的工具能把學生在平台上的發言整合成條列式或共識板形式，使用AI工具能節省教師統整意見的時間。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：一堂課不應使用太多不同的數位平台，太多平台會造成切換困擾。Padlet平台產出清晰完整，適合教學使用，其他平台目前找不到像Padlet產出這麼清楚完整的。</p>
+        </div>
+        
+        <div class="highlight-box">
+          <p><strong>工具使用注意事項：</strong></p>
+          <ul>
+            <li>Napkin工具僅適用於筆電，平板可能無法使用，建議採用分組方式，每組準備筆電供學生使用</li>
+            <li>EB Cafe平台有額度限制，來自新加坡，可記錄最多40個回覆，適合一班學生</li>
+            <li>語音輸入的正確率約七至八成，需搭配GPTS校正功能，但需解決登錄問題</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">第一單元：文本閱讀理解與AI工具應用</div>
+      <div class="section-content">
+        <p>第一單元聚焦於文本閱讀理解，以張愛玲的《天才夢》為主要教材，透過KWL閱讀策略引導學生理解文本內容，特別是「標籤」議題的探討。整合數位工具輔助學生閱讀理解，提高學習效率。</p>
+        
+        <h3>教學活動設計</h3>
+        <ol>
+          <li><strong>自學階段</strong>：學生閱讀《天才夢》，使用KWL策略初步理解文本</li>
+          <li><strong>組內共學</strong>：討論標籤意義、文本中角色面對標籤的態度</li>
+          <li><strong>AI工具輔助</strong>：使用NotebookLM或ChatGPT GPTS解決閱讀迷思</li>
+          <li><strong>成果彙整</strong>：小組將討論成果上傳至Padlet並發表</li>
+        </ol>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：閱讀教學需從文本理解開始，數位工具應輔助閱讀理解策略。數位工具應幫助閱讀策略加速、升等或更新，而不是取代文本閱讀。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：學生可以使用NotebookLM等AI工具輔助文本理解。NotebookLM提供限制式對話，學生透過對話能獲得有憑有據的內容理解。可以建立專門的ChatGPT GPTS模型，創建張愛玲專用機器人。</p>
+        </div>
+        
+        <h3>標籤議題的教學設計</h3>
+        <p>引導學生從文本中找出標籤相關內容，再延伸討論現實生活中標籤的正負面影響，最終引導學生以開闊思維看待標籤，學會尊重差異。</p>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：標籤不一定完全是負面的，關鍵是個人如何看待和轉化。例如：耐克品牌的鉤形標誌給人進步、向上的印象，穿耐克打球可能會讓人聯想到「有錢人」的標籤。人如果都長一樣，世界就不會漂亮、繽紛。在同溫層社會中，人們習慣只聽相似的聲音，缺乏對不同觀點的尊重。</p>
+        </div>
+        
+        <div class="task-list">
+          <li>設計問題讓學生找出文本中提到的標籤</li>
+          <li>讓學生討論標籤的影響，包括正面與負面影響</li>
+          <li>引導學生思考如何以正向方式轉化負面標籤</li>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">第二單元：影片閱讀與思辨能力培養</div>
+      <div class="section-content">
+        <p>第二單元聚焦於觀看《多肉女子的生存指導》影片後的多元觀點思辨，運用數位工具輔助學生快速表達觀點、收集意見並進行組織分析，培養學生思辨能力與多元視角。</p>
+        
+        <h3>教學活動設計</h3>
+        <ol>
+          <li><strong>影片觀看</strong>：學生觀看《多肉女子的生存指導》影片（可1.5倍速，縮短為8分鐘）</li>
+          <li><strong>基礎檢測</strong>：使用EB Cafe平台進行5題基礎理解檢測（控制在5分鐘內）</li>
+          <li><strong>四角辯論</strong>：在Padlet上針對「是否能從負面標籤找到力量」進行立場表達</li>
+          <li><strong>觀點整合</strong>：教師引導總結，幫助學生聚焦討論</li>
+        </ol>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：數位工具應該幫助學生在影片閱讀後進行有質感的文本產出。閱讀課程重要的是收集多元觀點並產生學生的思辨能力，需要能快速收集和彙整學生意見的數位工具，如Padlet或支援四角辯論的平台。</p>
+        </div>
+        
+        <h3>四角辯論設計</h3>
+        <p>四角辯論分為同意、不同意、不確定、看見你等立場，學生需清楚陳述理由，符合邏輯，教師最後進行導學與意見收束。</p>
+        
+        <div class="highlight-box">
+          <p><strong>四角辯論操作流程：</strong></p>
+          <ol>
+            <li>在Padlet上以四個區塊直接發表立場</li>
+            <li>使用語音輸入方式呈現，減少打字負擔</li>
+            <li>每個立場選出代表發表，或挑選特殊答案進行討論</li>
+            <li>詢問學生是否因他人發言而改變立場，追問原因</li>
+          </ol>
+        </div>
+        
+        <div class="recommendation-box">
+          <div class="recommendation-title">影片教學設計建議</div>
+          <ul>
+            <li>提供影片逐字稿協助學生理解，並轉為繁體中文</li>
+            <li>針對國中九年級學生設計配套問題與解析</li>
+            <li>確認題目與解析的正確性，避免題目與解析不符</li>
+            <li>控制題目數量為5題，避免學生負擔過重</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">第三單元：差異之美的倡議與實踐</div>
+      <div class="section-content">
+        <p>第三單元著重在幫助學生將閱讀所學轉化為日常行為，通過差異觀察和倡議設計，培養尊重每個人獨特性和差異性的意識。學生將創作「差異之美」創意卡，實踐尊重多元價值的理念。</p>
+        
+        <h3>教學活動設計</h3>
+        <ol>
+          <li><strong>差異觀察</strong>：引導學生觀察校園中被忽略的差異</li>
+          <li><strong>深入描述</strong>：用文字或視覺方式描述這些差異</li>
+          <li><strong>創意卡設計</strong>：使用Canva或AI工具設計「差異之美」的倡議作品</li>
+          <li><strong>價值表達</strong>：強調每個人的獨特性和差異是人之所以為人的價值</li>
+        </ol>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 1</span>：閱讀的最終目標是培養學生的品德與日常行為。閱讀最大的意義是潛移默化地做思想改造與品德提升，希望學生將課堂所學類化到日常生活中，如不給他人貼標籤。</p>
+        </div>
+        
+        <div class="recommendation-box">
+          <div class="recommendation-title">創意卡設計方案</div>
+          <p>可考慮使用以下工具進行設計：</p>
+          <ul>
+            <li><strong>Canva套模板</strong>：操作簡便，有豐富模板可供選擇</li>
+            <li><strong>AI生成圖</strong>：透過GPT生成符合學生想像的圖片，體驗未來AI圖文編輯的可能性</li>
+          </ul>
+          <p>引導學生觀察校園中的差異之美，並透過創意卡呈現尊重包容的理念。</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">學生學習成果與回饋機制</div>
+      <div class="section-content">
+        <p>設計多元的學生學習成果呈現方式與回饋機制，促進學生互動與深度思考，同時培養正向溝通能力。</p>
+        
+        <h3>學習成果的數位呈現方式</h3>
+        <p>學生透過KWL策略學習後的文字內容可以使用Napkin等工具轉換成視覺化呈現，有助於學生整理思考和發表。視覺化呈現可以是心智圖、表格或其他形式，能將複雜的思考過程清晰呈現。</p>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：Napkin是一個好用的免費文字轉圖像工具。在Napkin中只要貼上文字就能產生圖像，可以將圖像下載為PNG、SVG、PDF或PPT格式，無需修改就能直接產出具體的圖文呈現。</p>
+        </div>
+        
+        <h3>學生回饋機制設計</h3>
+        <p>學生回饋機制採用正向、建設性的表達方式，教師須具備良好的聲音覺察和同理心傾聽能力，以有效促進師生溝通。</p>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：學生發表時應使用正向回饋架構，應強調優點、可改進之處、與他人不同的特點。應該使用"建議"而非"缺點"等負面詞彙，使用「正向管教」方式。</p>
+        </div>
+        
+        <div class="highlight-box">
+          <p><strong>正向回饋架構：</strong></p>
+          <ol>
+            <li><strong>優點</strong>：先肯定作品/表達的優點</li>
+            <li><strong>建議</strong>：提供可改進的建設性建議</li>
+            <li><strong>特點</strong>：指出與他人不同的特色或亮點</li>
+          </ol>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：同理心傾聽是最高層次的溝通技巧。史蒂芬柯韋《與成功有約》《七個習慣》中提到傾聽分五個層次，同理心的傾聽是站在別人角度去聽後再回饋，同理心回饋需要分四個部分才能達成習慣式的雙贏。</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">AI工具在教案設計中的應用</div>
+      <div class="section-content">
+        <p>研討會探討了AI工具在教案設計與教學實踐中的應用價值與方法，包括使用ChatGPT、Claude等工具協助教案設計，以及在課堂中運用AI分身增強互動。</p>
+        
+        <h3>AI輔助教案設計</h3>
+        <p>教師可利用AI工具如ChatGPT、Claude等協助教案設計，提升效率與創新性。不同AI工具各有優勢，可根據需求選擇使用。</p>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 3</span>：使用ChatGPT比Claude更方便。ChatGPT比較活潑，Claude有文字量限制，有時會中斷提供材料。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：Claude在某些方面優於ChatGPT。Claude可以改變語氣，文字呈現更符合教育圈需求，可以使用自己的寫作風格，有"教育類的延伸解釋"風格選項。</p>
+        </div>
+        
+        <h3>AI分身在課堂中的應用</h3>
+        <p>AI分身可作為課堂互動角色，協助學生討論文本內容，提升課堂互動性與文本討論深度。</p>
+        
+        <div class="recommendation-box">
+          <div class="recommendation-title">AI分身應用建議</div>
+          <ul>
+            <li>可設定為張愛玲等作家，與學生進行互動對話</li>
+            <li>記錄學生對話內容，方便教師檢視學生回應</li>
+            <li>注意AI回答可能過於專業，需考慮學生理解能力，適度調整回應內容</li>
+          </ul>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：教師的專業解讀是AI無法提供的。</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="section">
+      <div class="section-header">未來教學共備模式展望</div>
+      <div class="section-content">
+        <p>研討會對未來教師共備模式進行了展望，提出結合傳統課程設計與AI輔助，並採用自學與面對面教學相結合的模式，提升教學效果與針對性。</p>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：現在的討論代表未來教師共備的基本模式，結合課程設計、領域的閱讀理解以及AI輔助，數位平台用於備課和即時回饋。</p>
+        </div>
+        
+        <div class="discussion-point">
+          <p><span class="speaker">Speaker 4</span>：結合自學與面對面教學是有效的教學模式。先提供邏輯性的自學教材，透過學生自學結果了解學習情況，再針對學生學習需求設計面對面教學，自學與預習是不同的概念。</p>
+        </div>
+        
+        <div class="recommendation-box">
+          <div class="recommendation-title">未來教學趨勢</div>
+          <ul>
+            <li>AI輔助教學設計將成為主流，提升教案設計效率與創新性</li>
+            <li>數位工具與傳統教學方法的融合將更加緊密</li>
+            <li>自主學習與合作學習模式將更加平衡，避免數位教學淪為個人化學習</li>
+            <li>教師角色轉變為教練與引導者，促進學生間的互動與討論</li>
+            <li>AI圖文編輯等新職業領域可能出現，值得關注</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <footer>
+    <div class="container">
+      <p>© 2025 閱讀理解與數位教學創新研討會 | 國中國文教育研究團隊</p>
+    </div>
+  </footer>
+</body>
+</html>
